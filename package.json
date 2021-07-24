@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "discord.js": "^13.0.0-dev.5e70694.1626955541",
+    "dotenv": "^10.0.0"
+  },
+  "name": "outfox-discord-bot",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "author": "Jorge Luiz Souza Xavier",
+  "license": "ISC",
+  "description": ""
+}
