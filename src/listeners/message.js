@@ -14,12 +14,12 @@ const commandList = Object.keys(commands)
  * @param {Discord.Message} message 
  * @param {Object<string, new language.LanguageInstance>} languages
  */
-exports.main = async (message, languages) => {
+exports.main = async (message, languages, { Sheet }) => {
     if (!message.content.startsWith(process.env.PREFIX)) return
 
-    const content = message.content.split(process.env.PREFIX)[1]
+    const content = message.content.split(process.env.PREFIX).join('').split(' ')[0]
 
     if (!commandList.includes(content)) return
     console.log(`Running command ${content}`)
-    commands[content].run(message, languages['pt-br'])
+    commands[content].run(message, languages['en'], { Sheet })
 }

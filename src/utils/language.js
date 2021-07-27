@@ -12,6 +12,7 @@ exports.LanguageInstance = class {
         this.fallbackLanguage = process.env.FALLBACKLANGUAGE
         this.language = lang || this.fallbackLanguage
         this.languageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.language}.ini`), 'utf-8'))
+        this.fallbackLanguageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.fallbackLanguage}.ini`), 'utf-8'))
     }
 
     /**
@@ -37,15 +38,24 @@ exports.LanguageInstance = class {
 
         let line = this.languageFile[group][key] 
 
-        if (!line) return ''
+        const applyContext = () => {
+            const keys = Object.keys(context)
+            for (let i = 0; i < keys.length; i++) {
+                const currentKeyValue = context[keys[i]]
+                line = line.replace(`{{${keys[i]}}}`, currentKeyValue)
+            }
+        }
+
+        if (!line) {
+            line = this.fallbackLanguageFile[group][key]
+            if (!context) return line 
+            applyContext()
+            return line
+        }
 
         if (!context) return line
                
-        const keys = Object.keys(context)
-        for (let i = 0; i < keys.length; i++) {
-            const currentKeyValue = context[keys[i]]
-            line = line.replace(`{{${keys[i]}}}`, currentKeyValue)
-        }
+        applyContext()
 
         return line
     }

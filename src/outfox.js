@@ -4,6 +4,7 @@ const Discord = require('discord.js')
 // Files
 const message = require('./listeners/message.js')
 const language = require('./utils/language.js')
+const sheets = require('./utils/sheets.js')
 // const indexCommand = require('./commands/index.js')
 
 // Variables
@@ -19,6 +20,7 @@ const slashCommandsArr = []
 
 /**
  * 
+ * @async
  * @param {Discord.Client} client 
  */
 exports.main = async (client) => {
@@ -38,9 +40,15 @@ exports.main = async (client) => {
     await client.guilds.cache.get(process.env.DEVSERVER)?.commands.set(slashCommandsArr)
     */
 
+
+    const Sheet = new sheets.SheetInstance()
+
+    await Sheet.initAuth()
+    Sheet.doc.loadInfo()
+
     console.log('OutFoxing messages')
 
     client.on('messageCreate', (msg) => {
-        message.main(msg, languages)
+        message.main(msg, languages, { Sheet })
     })
 }
