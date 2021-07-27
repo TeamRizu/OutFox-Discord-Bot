@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "discord.js": "^13.0.0-dev.5e70694.1626955541",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "ini": "^2.0.0"
   },
   "name": "outfox-discord-bot",
   "version": "1.0.0",
