@@ -21,5 +21,26 @@ exports.main = async (message, languages, { Sheet }) => {
 
     if (!commandList.includes(content)) return
     console.log(`Running command ${content}`)
-    commands[content].run(message, languages['en'], { Sheet })
+
+    const sh = Sheet.doc.sheetsByTitle['guild_languages']
+    const ush = Sheet.doc.sheetsByTitle['user_languages']
+    const rows = await sh.getRows()
+    const urows = await ush.getRows()
+    let language = process.env.FALLBACKLANGUAGE
+
+    const userDefined = urows.find(element => element.user === message.author.id)
+
+    if (userDefined) {
+        language = userDefined.language
+    }
+
+    if (!userDefined) {
+        const guildDefined = rows.find(element => element.guild === message.guild.id)
+
+        if (guildDefined) {
+            language = guildDefined.language
+        }
+    }
+
+    commands[content].run(message, languages[language], { Sheet })
 }

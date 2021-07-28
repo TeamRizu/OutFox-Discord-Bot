@@ -40,11 +40,11 @@ exports.main = async (client) => {
     await client.guilds.cache.get(process.env.DEVSERVER)?.commands.set(slashCommandsArr)
     */
 
-
+    console.log('Init Sheet Instance')
     const Sheet = new sheets.SheetInstance()
 
     await Sheet.initAuth()
-    Sheet.doc.loadInfo()
+    await Sheet.doc.loadInfo()
 
     console.log('OutFoxing messages')
 
