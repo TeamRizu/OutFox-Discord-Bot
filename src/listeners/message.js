@@ -4,6 +4,7 @@ const Discord = require('discord.js')
 // Files
 const indexCommand = require('../commands/index.js')
 const language = require('../utils/language.js')
+const argument = require('../utils/argument.js')
 
 // Variables
 const { commands } = indexCommand
@@ -17,11 +18,11 @@ const commandList = Object.keys(commands)
 exports.main = async (message, languages, { Sheet }) => {
     if (!message.content.startsWith(process.env.PREFIX)) return
 
-    const content = message.content.split(process.env.PREFIX).join('').split(' ')[0]
+    const args = argument.filterArguments(message)// message.content.split(process.env.PREFIX).join('').split(' ')[0]
 
-    if (!commandList.includes(content)) return
-    console.log(`Running command ${content}`)
-
+    if (!commandList.includes(args.commandName[0])) return
+    console.log(`Running command ${args.commandName[0]}`)
+    console.log(args)
     const sh = Sheet.doc.sheetsByTitle['guild_languages']
     const ush = Sheet.doc.sheetsByTitle['user_languages']
     const rows = await sh.getRows()
@@ -42,5 +43,5 @@ exports.main = async (message, languages, { Sheet }) => {
         }
     }
 
-    commands[content].run(message, languages[language], { Sheet })
+    commands[args.commandName[0]].run(message, languages[language], { Sheet, args })
 }
