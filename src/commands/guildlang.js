@@ -3,17 +3,18 @@ const Discord = require('discord.js')
 
 // Files
 const languageFile = require('../utils/language.js')
-
+const messageFile = require('../listeners/message.js')
 // Variables
 const cooldown = new Set()
 
 /**
- * Executes a function which tests the delay on editing a message after sending one.
- * @async
+ * 
  * @param {Discord.Message} message 
- * @param {new languageFile.LanguageInstance} language
+ * @param {Object<string, languageFile.LanguageInstance>} languages
+ * @param {Discord.Client} client
+ * @param {messageFile.OptionalParams} param3
  */
-exports.run = async (message, language, { Sheet, args }) => {
+exports.run = async (message, language, _, { Sheet, args }) => {
 
     if (!message.guild.members.resolve(message.author.id)) {
         message.reply({ content: language.readLine('guildlang', 'UnableToVerifyMember') })
@@ -89,4 +90,6 @@ exports.run = async (message, language, { Sheet, args }) => {
             cooldown.delete(message.guild.id)
         }, 18000)
     }
+
+    return true
 }

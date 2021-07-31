@@ -1,6 +1,4 @@
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const fs = require('fs')
-const path = require('path')
+const { GoogleSpreadsheet } = require('google-spreadsheet')
 
 exports.SheetInstance = class {
     constructor () {

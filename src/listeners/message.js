@@ -2,38 +2,47 @@
 const Discord = require('discord.js')
 
 // Files
-const indexCommand = require('../commands/index.js')
 const language = require('../utils/language.js')
-const argument = require('../utils/argument.js')
+const sheets = require('../utils/sheets.js')
 
 // Variables
-const { commands } = indexCommand
-const commandList = Object.keys(commands)
+
+const userCooldown = new Set()
+const busyState = new Set()
+
+/**
+ * Optional params
+ * @typedef {Object} OptionalParams
+ * @property {sheets.SheetInstance} OptionalParams.Sheet
+ * @property {Map<any, any>} OptionalParams.sheetCache
+ * @property {Object} args
+ * @property {string[]} args.commandName
+ * @property {string[]} [args.argument]
+ * @property {string[]} [args.flag]
+ */
+
+/**
+ * Message params
+ * @typedef {Object} MessageEventParams
+ * @function
+ * @param {Discord.Message} message 
+ * @param {Object<string, language.LanguageInstance>} languages 
+ * @param {Discord.Client} client 
+ * @param {OptionalParams} param3 
+ */
 
 /**
  * 
  * @param {Discord.Message} message 
- * @param {Object<string, new language.LanguageInstance>} languages
+ * @param {Object<string, language.LanguageInstance>} languages
  * @param {Discord.Client} client
+ * @param {OptionalParams} param3
  */
-exports.main = async (message, languages, client, { Sheet }) => {
-    if (!message.content.toLowerCase().startsWith(process.env.PREFIX)) return
-    if (!message.guild) return
-        console.log(message.channel.type)
-    if (message.channel.type !== 'GUILD_TEXT') return
-    if (!message.channel.permissionsFor(client.user.id)?.has('SEND_MESSAGES')) return
-    if (message.author.bot) return
-
-    const args = argument.filterArguments(message)
-    // message.content.split(process.env.PREFIX).join('').split(' ')[0]
-
-    if (!commandList.includes(args.commandName[0])) return
+exports.main = async (message, languages, client, { Sheet, sheetCache, args, commands }) => {
     console.log(`Running command ${args.commandName[0]}`)
     console.log(args)
-    const sh = Sheet.doc.sheetsByTitle['guild_languages']
-    const ush = Sheet.doc.sheetsByTitle['user_languages']
-    const rows = await sh.getRows()
-    const urows = await ush.getRows()
+    const rows = await sheetCache.get('guild_languages').getRows()
+    const urows = await sheetCache.get('user_languages').getRows()
     let language = process.env.FALLBACKLANGUAGE
 
     const userDefined = urows.find(element => element.user === message.author.id)
@@ -50,5 +59,27 @@ exports.main = async (message, languages, client, { Sheet }) => {
         }
     }
 
-    commands[args.commandName[0]].run(message, languages[language], { Sheet, args })
+    const commandLanguage = languages[language]
+    if (userCooldown.has(message.author.id)) {
+        message.reply({
+            content: commandLanguage.readLine('generic', 'UsingCommandsTooFast')
+        })
+        return
+    }
+
+    if (busyState.has(message.author.id)) {
+        message.reply({
+            content: commandLanguage.readLine('generic', 'AnotherCommandStillProcessing')
+        })
+        return
+    }
+
+    busyState.add(message.author.id)
+    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args })
+    userCooldown.add(message.author.id)
+    setTimeout(() => {
+        userCooldown.delete(message.author.id)
+    }, 3000)
+    busyState.delete(message.author.id)
+
 }

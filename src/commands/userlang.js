@@ -2,18 +2,20 @@
 const Discord = require('discord.js')
 
 // Files
+const messageFile = require('../listeners/message.js')
 const languageFile = require('../utils/language.js')
 
 // Variables
 const cooldown = new Set()
 
 /**
- * Executes a function which tests the delay on editing a message after sending one.
- * @async
+ * 
  * @param {Discord.Message} message 
- * @param {new languageFile.LanguageInstance} language
+ * @param {Object<string, languageFile.LanguageInstance>} languages
+ * @param {Discord.Client} client
+ * @param {messageFile.OptionalParams} param3
  */
-exports.run = async (message, language, { Sheet, args }) => {
+exports.run = async (message, language, _, { Sheet, args }) => {
     if (cooldown.has(message.author.id)) {
         message.reply({ content: language.readLine('userlang', 'UserOnCooldown') })
         return
@@ -70,4 +72,6 @@ exports.run = async (message, language, { Sheet, args }) => {
             cooldown.delete(message.author.id)
         }, 18000)
     }
+
+    return true
 }
