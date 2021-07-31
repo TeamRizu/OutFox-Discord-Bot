@@ -49,6 +49,6 @@ exports.main = async (client) => {
     console.log('OutFoxing messages')
 
     client.on('messageCreate', (msg) => {
-        message.main(msg, languages, { Sheet })
+        message.main(msg, languages, client, { Sheet })
     })
 }

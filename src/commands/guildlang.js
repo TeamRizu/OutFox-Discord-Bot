@@ -70,7 +70,18 @@ exports.run = async (message, language, { Sheet, args }) => {
         await guildDefined.save()
         message.reply(
             {
-                content: language.readLine('guildlang', 'LanguageUpdated')
+                content: language.readLine('userlang', 'LanguageUpdated')
+            }
+        )
+        cooldown.add(message.guild.id)
+        setTimeout(() => {
+            cooldown.delete(message.guild.id)
+        }, 18000)
+    } else {
+        guildLanguages.addRow({ guild: message.guild.id, language: lang })
+        message.reply(
+            {
+                content: language.readLine('userlang', 'LanguageImplemented')
             }
         )
         cooldown.add(message.guild.id)

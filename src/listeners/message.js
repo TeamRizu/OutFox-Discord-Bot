@@ -14,11 +14,18 @@ const commandList = Object.keys(commands)
  * 
  * @param {Discord.Message} message 
  * @param {Object<string, new language.LanguageInstance>} languages
+ * @param {Discord.Client} client
  */
-exports.main = async (message, languages, { Sheet }) => {
-    if (!message.content.startsWith(process.env.PREFIX)) return
+exports.main = async (message, languages, client, { Sheet }) => {
+    if (!message.content.toLowerCase().startsWith(process.env.PREFIX)) return
+    if (!message.guild) return
+        console.log(message.channel.type)
+    if (message.channel.type !== 'GUILD_TEXT') return
+    if (!message.channel.permissionsFor(client.user.id)?.has('SEND_MESSAGES')) return
+    if (message.author.bot) return
 
-    const args = argument.filterArguments(message)// message.content.split(process.env.PREFIX).join('').split(' ')[0]
+    const args = argument.filterArguments(message)
+    // message.content.split(process.env.PREFIX).join('').split(' ')[0]
 
     if (!commandList.includes(args.commandName[0])) return
     console.log(`Running command ${args.commandName[0]}`)

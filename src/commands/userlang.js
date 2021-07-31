@@ -58,5 +58,16 @@ exports.run = async (message, language, { Sheet, args }) => {
         setTimeout(() => {
             cooldown.delete(message.author.id)
         }, 18000)
+    } else {
+        await userLanguages.addRow({ user: message.author.id, language: lang })
+        message.reply(
+            {
+                content: language.readLine('userlang', 'LanguageImplemented')
+            }
+        )
+        cooldown.add(message.author.id)
+        setTimeout(() => {
+            cooldown.delete(message.author.id)
+        }, 18000)
     }
 }
