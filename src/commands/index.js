@@ -9,5 +9,6 @@ exports.commands = {
     guildlang: require('./guildlang.js'),
     guildlanguage: require('./guildlang.js'), // Alias for guildlang
     serverlanguage: require('./guildlang.js'), // Alias for guildlang
-    serverlang: require('./guildlang.js') // Alias for guildlang
+    serverlang: require('./guildlang.js'), // Alias for guildlang
+    leaderboard: require('./leaderboard.js'),
 }

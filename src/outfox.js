@@ -7,7 +7,7 @@ const message = require('./listeners/message.js')
 const language = require('./utils/language.js')
 const sheets = require('./utils/sheets.js')
 const argument = require('./utils/argument.js')
-// const indexCommand = require('./commands/index.js')
+const leaderboard = require('./utils/leaderboard.js')
 
 // Variables
 const languages = {
@@ -17,11 +17,7 @@ const languages = {
 const sheetCache = new Map()
 const { commands } = indexCommand
 const commandList = Object.keys(commands)
-/*
-const { commands } = indexCommand
-const commandList = Object.keys(commands)
-const slashCommandsArr = []
-*/
+let leaderboardObj = new Map()
 
 /**
  *
@@ -31,8 +27,8 @@ const slashCommandsArr = []
 exports.main = async (client) => {
   /*
 
-    Slash commands are not available for everyone yet.
-    That's why this is commented out. - Zerinho6
+    Slash commands require some really
+    dumb invite setup I'm not going to do it. ~ zerinho6
 
 
     console.log('Setup Slash Commands.')
@@ -52,15 +48,34 @@ exports.main = async (client) => {
 
   sheetCache.set('guild_languages', Sheet.doc.sheetsByTitle['guild_languages'])
   sheetCache.set('user_languages', Sheet.doc.sheetsByTitle['user_languages'])
+  sheetCache.set('discord_github', Sheet.doc.sheetsByTitle['discordgithub'])
 
   setInterval(() => {
     sheetCache.delete('guild_languages')
     sheetCache.delete('user_languages')
+    sheetCache.delete('discord_github')
     sheetCache.set(
       'guild_languages',
       Sheet.doc.sheetsByTitle['guild_languages']
     )
-    sheetCache.set('user_languages', Sheet.doc.sheetsByTitle['user_languages'])
+    sheetCache.set(
+      'user_languages', 
+      Sheet.doc.sheetsByTitle['user_languages']
+    )
+    sheetCache.set(
+      'discord_github', 
+      Sheet.doc.sheetsByTitle['discordgithub']
+    )
+  }, 60000)
+
+  console.log('Setup Leaderboard')
+  const ldInfo = await leaderboard.leaderboard()
+  leaderboardObj.set('obj', ldInfo)
+
+  setInterval( async () => {
+    leaderboardObj.delete('obj')
+    const updatedLdInfo = await leaderboard.leaderboard()
+    leaderboardObj.set('obj', updatedLdInfo)
   }, 60000)
 
   console.log('OutFoxing messages')
@@ -76,7 +91,9 @@ exports.main = async (client) => {
     const args = argument.filterArguments(msg)
 
     if (!commandList.includes(args.commandName[0])) return
-    
-    message.main(msg, languages, client, { Sheet, sheetCache, args, commands })
+
+    message.main(msg, languages, client, {
+      Sheet, sheetCache, args, leaderboard: leaderboardObj.get('obj'), commands 
+    })
   })
 }

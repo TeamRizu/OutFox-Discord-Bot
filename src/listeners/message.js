@@ -6,7 +6,6 @@ const language = require('../utils/language.js')
 const sheets = require('../utils/sheets.js')
 
 // Variables
-
 const userCooldown = new Set()
 const busyState = new Set()
 
@@ -19,6 +18,7 @@ const busyState = new Set()
  * @property {string[]} args.commandName
  * @property {string[]} [args.argument]
  * @property {string[]} [args.flag]
+ * @property {Array<Array<string, string, string, string>>} [OptionalParams.leaderboard]
  */
 
 /**
@@ -38,7 +38,7 @@ const busyState = new Set()
  * @param {Discord.Client} client
  * @param {OptionalParams} param3
  */
-exports.main = async (message, languages, client, { Sheet, sheetCache, args, commands }) => {
+exports.main = async (message, languages, client, { Sheet, sheetCache, args, commands, leaderboard }) => {
     console.log(`Running command ${args.commandName[0]}`)
     console.log(args)
     const rows = await sheetCache.get('guild_languages').getRows()
@@ -75,7 +75,7 @@ exports.main = async (message, languages, client, { Sheet, sheetCache, args, com
     }
 
     busyState.add(message.author.id)
-    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args })
+    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args, client, leaderboard, sheetCache })
     userCooldown.add(message.author.id)
     setTimeout(() => {
         userCooldown.delete(message.author.id)

@@ -1,9 +1,12 @@
 {
   "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
     "discord.js": "^13.0.0-dev.5e70694.1626955541",
     "dotenv": "^10.0.0",
     "google-spreadsheet": "^3.1.15",
-    "ini": "^2.0.0"
+    "ini": "^2.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   },
   "name": "outfox-discord-bot",
   "version": "1.0.0",

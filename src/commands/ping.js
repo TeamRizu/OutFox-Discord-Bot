@@ -7,10 +7,12 @@ const languageFile = require('../utils/language.js')
 
 // Variables
 const { MessageActionRow, MessageButton } = Discord
+/*
 exports.slashCommand = {
     name: 'ping',
     description: 'Tests the bot response time.'
 }
+*/
 
 /**
  * 
