@@ -1,6 +1,6 @@
 const cheerio = require('cheerio')
 const request = require('request-promise')
-// const fetch = require('node-fetch')
+
 exports.leaderboard = async () => {
   const finalArr = new Map()
   let done = false
