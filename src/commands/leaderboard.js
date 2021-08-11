@@ -59,37 +59,62 @@ exports.run = async (message, language, { leaderboard, sheetCache }) => {
     }
 
     const pages = leaderboardPages()
-
+    console.log(pages.length)
+    const setDescription = (page = 0, msg) => {
+        embed.setDescription(pages[page])
+        embed.setFooter(`Page ${page + 1}`)
+        msg.edit({ embeds: [embed] })
+    }
     embed.setDescription(pages[0])
-    /*
+    
     const buttonBack = new MessageButton()
         .setCustomId('swipeback' + message.id)
         .setLabel('Go back')
         .setStyle('PRIMARY')
-    const buttonBackDisabled = buttonBack.setDisabled(true)
+    // const buttonBackDisabled = buttonBack.setDisabled(true)
     
     const buttonNext = new MessageButton()
         .setCustomId('nextpage' + message.id)
         .setLabel('Next page')
         .setStyle('PRIMARY')
-    const buttonNextDisabled = buttonNext.setDisabled(true)
+    // const buttonNextDisabled = buttonNext.setDisabled(true)
     const comp = new MessageActionRow().addComponents(
         buttonBack, buttonNext
     )
     
-    const message.reply({ embeds: [embed], components: [comp] })
+    const msg = await message.reply({ embeds: [embed], components: [comp] })
 
-    const backFilter = i => i.customId === ('swipeback' + message.id) && i.user.id === message.author.id
-    const nextFilter = i => i.customId === ('nextpage' + message.id) && i.user.id === message.author.id
+    const backFilter = (i) => {
+        console.log(i.customId, ' ', 'swipeback' + message.id, '  ', `therefor, you should return ${i.customId === 'swipeback' + message.id}`)
+        if (i.customId !== `swipeback${message.id}` || i.user.id !== message.author.id) {
+            return false
+        }
 
-    const b = () => {
-        const backCollector = message.channel.createMessageComponentCollector({ backFilter, time: 30000 })
-        const nextCollector = message.channel.createMessageComponentCollector({ nextFilter, time: 30000 })
-
-        backCollector.on('collect', async i => {
-
-        })
+        return true
     }
-    */
+
+    const nextFilter = (i) => {
+        if (i.customId !== `nextpage${message.id}` || i.user.id !== message.author.id) {
+            return false
+        }
+
+        return true
+
+    }
+
+    const backCollector = message.channel.createMessageComponentCollector({ filter: backFilter, time: 30000 })
+    const nextCollector = message.channel.createMessageComponentCollector({ filter: nextFilter, time: 30000 })
+    let page = 0
+
+    backCollector.on('collect', async i => {
+        page = Math.max(0, page - 1)
+        setDescription(page, msg)
+    })
+
+    nextCollector.on('collect', async i => {
+        page = Math.min(pages.length - 1, page + 1)
+        setDescription(page, msg)
+    })
+
     return true
 }
