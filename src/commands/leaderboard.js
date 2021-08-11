@@ -12,7 +12,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = Discord
 /**
  *
  * @param {Discord.Message} message
- * @param {Object<string, languageFile.LanguageInstance>} languages
+ * @param {languageFile.LanguageInstance} language
  * @param {Discord.Client} client
  * @param {messageFile.OptionalParams} param3
  */
@@ -24,10 +24,10 @@ exports.run = async (message, language, { leaderboard, sheetCache }) => {
     const hasPoints = rowSearch ? leaderboard.find(element => element[0] === rowSearch.github) : null
 
     const embed = new MessageEmbed()
-    if (hasPoints) {
-        embed.setTitle(`${hasPoints[0]} GitHub`)
-        .setURL('https://github.com/' + hasPoints[0].replace('*', ''))
-    }
+    .setTitle(language.readLine('leaderboard', 'BugHunterLeaderboard'))
+    .setURL('https://github.com/TeamRizu/OutFox/blob/master/leaderboard.md')
+    .setColor('ADBAC7')
+    .setThumbnail('https://avatars.githubusercontent.com/u/64650386?s=200&v=4')
 
     const leaderboardPages = () => {
         const maxLength = 1024
@@ -38,7 +38,7 @@ exports.run = async (message, language, { leaderboard, sheetCache }) => {
         // Start at 1 because the first index is table naming.
         for (let i = 1; i < leaderboard.length; i++) {
             const [user, points, update, is] = leaderboard[i]
-            const leaderboardElement = `${points} Points - ${user} (<@&${constants.bugRole[is]}>)`
+            const leaderboardElement = language.readLine('leaderboard', 'UserPointsField', { points, user, role: `<@&${constants.bugRole[is]}>`})
             const stringToAdd = hasPoints && (user === hasPoints[0]) ? `**${leaderboardElement} <-**\n` : leaderboardElement + '\n'
 
             if ((pages[pageIndex.get('index')] + stringToAdd).length > maxLength) {
@@ -59,33 +59,60 @@ exports.run = async (message, language, { leaderboard, sheetCache }) => {
     }
 
     const pages = leaderboardPages()
-    console.log(pages.length)
-    const setDescription = (page = 0, msg) => {
-        embed.setDescription(pages[page])
-        embed.setFooter(`Page ${page + 1}`)
-        msg.edit({ embeds: [embed] })
-    }
-    embed.setDescription(pages[0])
     
     const buttonBack = new MessageButton()
         .setCustomId('swipeback' + message.id)
-        .setLabel('Go back')
+        .setLabel(language.readLine('leaderboard', 'GoBack'))
         .setStyle('PRIMARY')
-    // const buttonBackDisabled = buttonBack.setDisabled(true)
+    const buttonBackDisabled = new MessageButton()
+        .setCustomId('disabledBack' + message.id)
+        .setLabel(language.readLine('leaderboard', 'GoBack'))
+        .setStyle('PRIMARY')
+        .setDisabled(true)
     
     const buttonNext = new MessageButton()
         .setCustomId('nextpage' + message.id)
-        .setLabel('Next page')
+        .setLabel(language.readLine('leaderboard', 'NextPage'))
         .setStyle('PRIMARY')
-    // const buttonNextDisabled = buttonNext.setDisabled(true)
+    const buttonNextDisabled = new MessageButton()
+        .setCustomId('disabledNext' + message.id)
+        .setLabel(language.readLine('leaderboard', 'NextPage'))
+        .setStyle('PRIMARY')
+        .setDisabled(true)
     const comp = new MessageActionRow().addComponents(
         buttonBack, buttonNext
     )
-    
-    const msg = await message.reply({ embeds: [embed], components: [comp] })
+    const compBackDisabled = new MessageActionRow().addComponents(
+        buttonBackDisabled, buttonNext
+    )
+    const compNextDisabled = new MessageActionRow().addComponents(
+        buttonBack, buttonNextDisabled
+    )
+    const compBothDisabled = new MessageActionRow().addComponents(
+        buttonBackDisabled, buttonNextDisabled
+    )
+
+    const setDescription = async (page = 0, msg) => {
+        embed.setDescription(pages[page])
+        embed.setFooter(`${language.readLine('leaderboard', 'Page')} ${page + 1}/${pages.length}`)
+        
+        let newComp = comp
+
+        if (pages.length === 1) {
+            newComp = compBothDisabled
+        } else {
+            if (page === 0) newComp = compBackDisabled
+            if (page === pages.length - 1) newComp = compNextDisabled
+        }
+
+        await msg.edit({ embeds: [embed], components: [newComp] })
+        return msg
+    }
+
+    const msg = await message.reply({ embeds: [embed] })
+    await setDescription(0, msg)
 
     const backFilter = (i) => {
-        console.log(i.customId, ' ', 'swipeback' + message.id, '  ', `therefor, you should return ${i.customId === 'swipeback' + message.id}`)
         if (i.customId !== `swipeback${message.id}` || i.user.id !== message.author.id) {
             return false
         }
@@ -108,12 +135,16 @@ exports.run = async (message, language, { leaderboard, sheetCache }) => {
 
     backCollector.on('collect', async i => {
         page = Math.max(0, page - 1)
-        setDescription(page, msg)
+        backCollector.resetTimer({ time: 30000 })
+        await setDescription(page, msg)
+        i.deferUpdate()
     })
 
     nextCollector.on('collect', async i => {
         page = Math.min(pages.length - 1, page + 1)
-        setDescription(page, msg)
+        nextCollector.resetTimer({ time: 30000 })
+        await setDescription(page, msg)
+        i.deferUpdate()
     })
 
     return true
