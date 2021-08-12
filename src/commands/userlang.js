@@ -45,16 +45,22 @@ exports.run = async (message, language, { Sheet, args }) => {
         .setLabel('nevermind')
         .setStyle('SECONDARY')
 
-    if (!userDefined) deleteMyLanguage.setDisabled(true)
+    if (!userDefined) {
+        deleteMyLanguage.setDisabled(true)
+    } else {
+        setLanguage.setLabel('Change my language')
+    }
 
     const languages = language.readLine('languages', undefined, {}, { languageFile: language.global })
     const emojis = language.readLine('emojis', undefined, {}, { languageFile: language.global})
     let languageSelects = []
     for (let i = 0; i < Object.keys(languages).length; i++) {
-        if (userDefined && userDefined.language === Object.keys(language)[i]) continue
+        const langTitle = Object.keys(languages)[i]
+        const langName = Object.values(languages)[i]
+        if (userDefined && userDefined.language === langTitle) continue
         languageSelects.push({
-            value: `ofl!!${message.id}!!${Object.keys(languages)[i]}`,
-            label: `${emojis[Object.keys(emojis)[i]]} ${Object.values(languages)[i]}`
+            value: `ofl!!${message.id}!!${langTitle}`,
+            label: `${emojis[langTitle]} ${langName}`
         })
     }
 
@@ -121,7 +127,7 @@ exports.run = async (message, language, { Sheet, args }) => {
                     .setStyle('PRIMARY')
 
                 msg.edit({
-                    embeds: [new MessageEmbed().setTitle('Delete defined message').setDescription('Are you sure?')], 
+                    embeds: [new MessageEmbed().setTitle('Delete defined language').setDescription('Are you sure?')], 
                     components: [new MessageActionRow().addComponents(ye, no)]
                 })
 
