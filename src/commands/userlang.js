@@ -40,7 +40,6 @@ exports.run = async (message, language, { Sheet, args }) => {
         .setCustomId('deletelang' + message.id)
         .setLabel('Delete my language')
         .setStyle('DANGER')
-        .setDisabled(true)
     const nevermind = new MessageButton()
         .setCustomId('nevermind' + message.id)
         .setLabel('nevermind')
@@ -49,12 +48,13 @@ exports.run = async (message, language, { Sheet, args }) => {
     if (!userDefined) deleteMyLanguage.setDisabled(true)
 
     const languages = language.readLine('languages', undefined, {}, { languageFile: language.global })
+    const emojis = language.readLine('emojis', undefined, {}, { languageFile: language.global})
     let languageSelects = []
-    
-    for (let i = 0; i < Object.keys(language).length; i++) {
+    for (let i = 0; i < Object.keys(languages).length; i++) {
+        if (userDefined && userDefined.language === Object.keys(language)[i]) continue
         languageSelects.push({
-            label: `${language.readLine('generic', 'emoji')} ${languages[Object.values(languages)[i]]}`,
-            value: `ofl-${message.id}-${languages[Object.keys(languages)[i]]}`
+            value: `ofl!!${message.id}!!${Object.keys(languages)[i]}`,
+            label: `${emojis[Object.keys(emojis)[i]]} ${Object.values(languages)[i]}`
         })
     }
 
@@ -71,60 +71,89 @@ exports.run = async (message, language, { Sheet, args }) => {
 
     const comp = new MessageActionRow().addComponents(setLanguage, deleteMyLanguage, nevermind)
 
-    await message.reply({ embeds: [embed], components: [comp] })
+    const languageSelectFilter = (i) => {
+        if (i.user.id !== message.author.id || !i.values || i.values[0].split('!!').length !== 3 || i.customId !== 'select' + message.id) return false
 
-    const languageFilter = (i) => {
-        if (!i.value || typeof i.value !== string || i.split('-').length !== 3) return false
+        const lang = i.values[0].split('!!')[2]
+        if (!language.supportedLanguages.includes(lang)) return false
 
-        // TODO: make a variable that splits the interaction value and check if the language present there is supported by the bot.
+        return true
+    }
+    const waitButtonReply = (i) => {
+        if (i.user.id !== message.author.id) return false
+        if (![`setlang${message.id}`, `deletelang${message.id}`, `nevermind${message.id}`].includes(i.customId)) {
+            return false
+        }
         return true
     }
 
-    return true
-    const lang = args.argument[0].toLowerCase()
+    const msg = await message.reply({ embeds: [embed], components: [comp] })
 
-    if (!language.supportedLanguages.includes(lang)) {
-        message.reply(
-            { 
-                content: language.readLine('userlang', 'LanguageNotSupported') + '\n```\n' + language.supportedLanguages.join('\n') + '```' 
-            }
-        )
-        return
-    }
+    const buttonCollector = message.channel.createMessageComponentCollector({ filter: waitButtonReply, time: 30000 })
 
-    
+    buttonCollector.on('collect', async i => {
+        i.deferUpdate()
+        buttonCollector.stop()
+        switch (i.customId) {
+            case `setlang${message.id}`:
+                msg.edit({ embeds: [new MessageEmbed().setTitle('Select language from list')], components: [languageSelector]})
+                const selection = message.channel.createMessageComponentCollector({ filter: languageSelectFilter, time: 30000 })
 
-    if (userDefined) {
-        if (userDefined.language === lang) {
-            message.reply({
-                content: language.readLine('userlang', 'LanguageAlreadyDefined')
-            })
-            return
+                selection.on('collect', async s => {
+                    s.deferUpdate()
+                    if (userDefined) {
+                        userDefined.language = s.values[0].split('!!')[2]
+                        await userDefined.save()
+                    } else {
+                        await userLanguages.addRow({ user: message.author.id, language: s.values[0].split('!!')[2] })
+                    }
+                    msg.edit({ embeds: [new MessageEmbed().setTitle('Done!')], components: []})
+                })
+            break
+            case `deletelang${message.id}`:
+                const ye = new MessageButton()
+                    .setCustomId('yes' + message.id)
+                    .setLabel('Yes')
+                    .setStyle('DANGER')
+                const no = new MessageButton()
+                    .setCustomId('no' + message.id)
+                    .setLabel('No')
+                    .setStyle('PRIMARY')
+
+                msg.edit({
+                    embeds: [new MessageEmbed().setTitle('Delete defined message').setDescription('Are you sure?')], 
+                    components: [new MessageActionRow().addComponents(ye, no)]
+                })
+
+                const collectReply = message.channel.createMessageComponentCollector({
+                    filter: (i) => {
+                        if (i.user.id !== message.author.id) return false
+
+                        if (![`yes${message.id}`, `no${message.id}`].includes(i.customId)) return false
+
+                        return true
+                    },
+                    time: 30000
+                })
+
+                collectReply.on('collect', async i => {
+                    if (i.customId === `yes${message.id}`) {
+                        i.deferUpdate()
+                        await userDefined.delete()
+                        msg.edit({ embeds: [new MessageEmbed().setTitle('Deleted!')], components: [] })
+                    } else {
+                        i.deferUpdate()
+                        msg.edit({ embeds: [new MessageEmbed().setTitle('Ok')], components: [] })
+                    }
+                    collectReply.stop()
+                })
+            break
+            default:
+                msg.edit({ embeds: [new MessageEmbed().setTitle('Ok')], components: [] })
+                buttonCollector.stop()
+            break
         }
-
-        userDefined.language = lang
-        await userDefined.save()
-        message.reply(
-            {
-                content: language.readLine('userlang', 'LanguageUpdated')
-            }
-        )
-        cooldown.add(message.author.id)
-        setTimeout(() => {
-            cooldown.delete(message.author.id)
-        }, 18000)
-    } else {
-        await userLanguages.addRow({ user: message.author.id, language: lang })
-        message.reply(
-            {
-                content: language.readLine('userlang', 'LanguageImplemented')
-            }
-        )
-        cooldown.add(message.author.id)
-        setTimeout(() => {
-            cooldown.delete(message.author.id)
-        }, 18000)
-    }
+    })
 
     return true
 }
