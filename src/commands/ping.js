@@ -4,6 +4,7 @@ const Discord = require('discord.js')
 // Files
 const messageFile = require('../listeners/message.js')
 const languageFile = require('../utils/language.js')
+const buttonFile = require('../utils/buttons.js')
 
 // Variables
 const { MessageActionRow, MessageButton } = Discord
@@ -16,25 +17,17 @@ exports.slashCommand = {
 
 /**
  * 
- * @param {Discord.Message} message 
- * @param {Object<string, languageFile.LanguageInstance>} languages
- * @param {Discord.Client} client
+ * @param {Discord.Message} message
+ * @param {languageFile.LanguageInstance} language
  * @param {messageFile.OptionalParams} param3
  */
 exports.run = async (message, language) => {
     const enabledButton = new MessageActionRow().addComponents(
-        new MessageButton()
-            .setCustomId('retry' + message.id)
-            .setLabel(language.readLine('ping', 'Retry'))
-            .setStyle('PRIMARY')
+        buttonFile.quickButton(`retry${message.id}`, language.readLine('ping', 'Retry'), 'PRIMARY')
     )
 
     const disabledButton = new MessageActionRow().addComponents(
-        new MessageButton()
-            .setCustomId('retry' + message.id)
-            .setLabel(language.readLine('ping', 'Retry'))
-            .setStyle('PRIMARY')
-            .setDisabled(true)
+        buttonFile.quickButton(`retry${message.id}`, language.readLine('ping', 'Retry'), 'PRIMARY', { disabled: true })
     )
 
     const test = async (msg, interaction) => {
@@ -57,7 +50,7 @@ exports.run = async (message, language) => {
         }
     )
 
-    const filter = i => i.customId === ('retry' + message.id) && i.user.id === message.author.id
+    const filter = i => i.customId === (`retry${message.id}`) && i.user.id === message.author.id
     const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 })
     const alreadyCollected = new Set()
 
@@ -66,9 +59,8 @@ exports.run = async (message, language) => {
 
         alreadyCollected.add(i.user.id)
         await test(lastMessage, i)
-        collector.stop('Only one interaction allowed.')
+        collector.stop()
     })
 
     return true
-    // const msg = await test(message, before)
 }
