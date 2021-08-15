@@ -12,8 +12,7 @@ const cooldown = new Set()
 /**
  * 
  * @param {Discord.Message} message 
- * @param {Object<string, languageFile.LanguageInstance>} languages
- * @param {Discord.Client} client
+ * @param {languageFile.LanguageInstance} language
  * @param {messageFile.OptionalParams} param3
  */
 exports.run = async (message, language, { Sheet, args }) => {
@@ -46,22 +45,22 @@ exports.run = async (message, language, { Sheet, args }) => {
     const guildDefined = rows.find(element => element.guild === message.guild.id)
 
     const setLanguage = new MessageButton()
-        .setCustomId('setlang' + message.id)
-        .setLabel('Set guild language')
+        .setCustomId(`setlang${message.id}`)
+        .setLabel(language.readLine('guildlang', 'SetGuildLanguage'))
         .setStyle('PRIMARY')
     const deleteMyLanguage = new MessageButton()
-        .setCustomId('deletelang' + message.id)
-        .setLabel('Delete guild language')
+        .setCustomId(`deletelang${message.id}`)
+        .setLabel(language.readLine('guildlang', 'DeleteGuildLanguage'))
         .setStyle('DANGER')
     const nevermind = new MessageButton()
-        .setCustomId('nevermind' + message.id)
-        .setLabel('nevermind')
+        .setCustomId(`nevermind${message.id}`)
+        .setLabel(language.readLine('userlang', 'Nevermind'))
         .setStyle('SECONDARY')
 
     if (!guildDefined) {
         deleteMyLanguage.setDisabled(true)
     } else {
-        setLanguage.setLabel('Change guild language')
+        setLanguage.setLabel(language.readLine('guildlang', 'ChangeGuildLanguage'))
     }
 
     const languages = language.readLine('languages', undefined, {}, { languageFile: language.global })
@@ -83,12 +82,12 @@ exports.run = async (message, language, { Sheet, args }) => {
     .addComponents(
         new MessageSelectMenu()
             .setCustomId('select' + message.id)
-            .setPlaceholder('Select guild Language')
+            .setPlaceholder(language.readLine('guildlang', 'SelectGuildLanguage'))
             .addOptions(languageSelects)
     )
 
     const embed = new MessageEmbed()
-    .setTitle('What you want to do?')
+    .setTitle(language.readLine('userlang', 'WhatYouWantToDo'))
 
     const comp = new MessageActionRow().addComponents(setLanguage, deleteMyLanguage, nevermind)
 
@@ -117,7 +116,7 @@ exports.run = async (message, language, { Sheet, args }) => {
         buttonCollector.stop()
         switch (i.customId) {
             case `setlang${message.id}`:
-                msg.edit({ embeds: [new MessageEmbed().setTitle('Select language from list').setDescription('Members who define their own language will ignore the guild language!')], components: [languageSelector]})
+                msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'SetLanguageFromList')).setDescription(language.readLine('guildlang', 'MembersWithDefinedLanguage'))], components: [languageSelector]})
                 const selection = message.channel.createMessageComponentCollector({ filter: languageSelectFilter, time: 30000 })
 
                 selection.on('collect', async s => {
@@ -128,21 +127,21 @@ exports.run = async (message, language, { Sheet, args }) => {
                     } else {
                         await guildLanguages.addRow({ guild: message.guild.id, language: s.values[0].split('!!')[2] })
                     }
-                    msg.edit({ embeds: [new MessageEmbed().setTitle('Done!')], components: []})
+                    msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Done'))], components: []})
                 })
             break
             case `deletelang${message.id}`:
                 const ye = new MessageButton()
-                    .setCustomId('yes' + message.id)
-                    .setLabel('Yes')
+                    .setCustomId(`yes${message.id}`)
+                    .setLabel(language.readLine('Generic', 'Yes'))
                     .setStyle('DANGER')
                 const no = new MessageButton()
-                    .setCustomId('no' + message.id)
-                    .setLabel('No')
+                    .setCustomId(`no${message.id}`)
+                    .setLabel(language.readLine('Generic', 'No'))
                     .setStyle('PRIMARY')
 
                 msg.edit({
-                    embeds: [new MessageEmbed().setTitle('Delete defined language').setDescription('Are you sure?')], 
+                    embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'DeleteDefinedLanguage')).setDescription(language.readLine('userlang', 'AreYouSure'))], 
                     components: [new MessageActionRow().addComponents(ye, no)]
                 })
 
@@ -161,68 +160,20 @@ exports.run = async (message, language, { Sheet, args }) => {
                     if (i.customId === `yes${message.id}`) {
                         i.deferUpdate()
                         await guildDefined.delete()
-                        msg.edit({ embeds: [new MessageEmbed().setTitle('Deleted!')], components: [] })
+                        msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Deleted'))], components: [] })
                     } else {
                         i.deferUpdate()
-                        msg.edit({ embeds: [new MessageEmbed().setTitle('Ok')], components: [] })
+                        msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Ok'))], components: [] })
                     }
                     collectReply.stop()
                 })
             break
             default:
-                msg.edit({ embeds: [new MessageEmbed().setTitle('Ok')], components: [] })
+                msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Ok'))], components: [] })
                 buttonCollector.stop()
             break
         }
     })
 
     return true
-    /*
-    const lang = args.argument[0].toLowerCase()
-
-    if (!language.supportedLanguages.includes(lang)) {
-        message.reply(
-            { 
-                content: language.readLine('userlang', 'LanguageNotSupported') + '\n```\n' + language.supportedLanguages.join('\n') + '```' 
-            }
-        )
-        return
-    }
-
-    
-
-    if (guildDefined) {
-        if (guildDefined.language === lang) {
-            message.reply({
-                content: language.readLine('userlang', 'LanguageAlreadyDefined')
-            })
-            return
-        }
-
-        guildDefined.language = lang
-        await guildDefined.save()
-        message.reply(
-            {
-                content: language.readLine('userlang', 'LanguageUpdated')
-            }
-        )
-        cooldown.add(message.guild.id)
-        setTimeout(() => {
-            cooldown.delete(message.guild.id)
-        }, 18000)
-    } else {
-        guildLanguages.addRow({ guild: message.guild.id, language: lang })
-        message.reply(
-            {
-                content: language.readLine('userlang', 'LanguageImplemented')
-            }
-        )
-        cooldown.add(message.guild.id)
-        setTimeout(() => {
-            cooldown.delete(message.guild.id)
-        }, 18000)
-    }
-
-    return true
-    */
 }

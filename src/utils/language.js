@@ -14,7 +14,7 @@ exports.LanguageInstance = class {
         this.global = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/global.ini`), 'utf-8'))
         this.languageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.language}.ini`), 'utf-8'))
         this.fallbackLanguageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.fallbackLanguage}.ini`), 'utf-8'))
-        this.supportedLanguages = ['en', 'pt-br']
+        this.supportedLanguages = ['en', 'pt-BR']
     }
 
     /**

@@ -12,7 +12,7 @@ const leaderboard = require('./utils/leaderboard.js')
 // Variables
 const languages = {
   en: new language.LanguageInstance('en'),
-  'pt-br': new language.LanguageInstance('pt-br'),
+  'pt-BR': new language.LanguageInstance('pt-BR'),
 }
 const sheetCache = new Map()
 const { commands } = indexCommand

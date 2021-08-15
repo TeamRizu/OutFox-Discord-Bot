@@ -13,42 +13,36 @@ const cooldown = new Set()
  * 
  * @param {Discord.Message} message 
  * @param {languageFile.LanguageInstance} language
- * @param {Discord.Client} client
  * @param {messageFile.OptionalParams} param3
  */
-exports.run = async (message, language, { Sheet, args }) => {
+exports.run = async (message, language, { Sheet }) => {
     if (cooldown.has(message.author.id)) {
         message.reply({ content: language.readLine('userlang', 'UserOnCooldown') })
         return
     }
-    /*
-    if (!args.argument) {
-        message.reply({ content: language.readLine('generic', 'MissingArgument') })
-        return
-    }
-    */
+    // TODO: Apply cooldowns when bot is ready to launch.
 
     const userLanguages = Sheet.doc.sheetsByTitle['user_languages']
     const rows = await userLanguages.getRows()
     const userDefined = rows.find(element => element.user === message.author.id)
 
     const setLanguage = new MessageButton()
-        .setCustomId('setlang' + message.id)
-        .setLabel('Set my language')
+        .setCustomId(`setlang${message.id}`)
+        .setLabel(language.readLine('userlang', 'SetMyLanguage'))
         .setStyle('PRIMARY')
     const deleteMyLanguage = new MessageButton()
-        .setCustomId('deletelang' + message.id)
-        .setLabel('Delete my language')
+        .setCustomId(`deletelang${message.id}`)
+        .setLabel(language.readLine('userlang', 'DeleteMyLanguage'))
         .setStyle('DANGER')
     const nevermind = new MessageButton()
-        .setCustomId('nevermind' + message.id)
-        .setLabel('nevermind')
+        .setCustomId(`nevermind${message.id}`)
+        .setLabel(language.readLine('userlang', 'Nevermind'))
         .setStyle('SECONDARY')
 
     if (!userDefined) {
         deleteMyLanguage.setDisabled(true)
     } else {
-        setLanguage.setLabel('Change my language')
+        setLanguage.setLabel(language.readLine('userlang', 'ChangeMyLanguage'))
     }
 
     const languages = language.readLine('languages', undefined, {}, { languageFile: language.global })
@@ -68,12 +62,12 @@ exports.run = async (message, language, { Sheet, args }) => {
     .addComponents(
         new MessageSelectMenu()
             .setCustomId('select' + message.id)
-            .setPlaceholder('Select your Language')
+            .setPlaceholder(language.readLine('userlang', 'SelectYourLanguage'))
             .addOptions(languageSelects)
     )
 
     const embed = new MessageEmbed()
-    .setTitle('What you want to do?')
+    .setTitle(language.readLine('userlang', 'WhatYouWantToDo'))
 
     const comp = new MessageActionRow().addComponents(setLanguage, deleteMyLanguage, nevermind)
 
@@ -90,6 +84,7 @@ exports.run = async (message, language, { Sheet, args }) => {
         if (![`setlang${message.id}`, `deletelang${message.id}`, `nevermind${message.id}`].includes(i.customId)) {
             return false
         }
+
         return true
     }
 
@@ -102,7 +97,7 @@ exports.run = async (message, language, { Sheet, args }) => {
         buttonCollector.stop()
         switch (i.customId) {
             case `setlang${message.id}`:
-                msg.edit({ embeds: [new MessageEmbed().setTitle('Select language from list')], components: [languageSelector]})
+                msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'SetLanguageFromList'))], components: [languageSelector]})
                 const selection = message.channel.createMessageComponentCollector({ filter: languageSelectFilter, time: 30000 })
 
                 selection.on('collect', async s => {
@@ -113,7 +108,8 @@ exports.run = async (message, language, { Sheet, args }) => {
                     } else {
                         await userLanguages.addRow({ user: message.author.id, language: s.values[0].split('!!')[2] })
                     }
-                    msg.edit({ embeds: [new MessageEmbed().setTitle('Done!')], components: []})
+                    msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Done'))], components: []})
+                    cooldown.add(message.author.id)
                 })
             break
             case `deletelang${message.id}`:
@@ -127,7 +123,7 @@ exports.run = async (message, language, { Sheet, args }) => {
                     .setStyle('PRIMARY')
 
                 msg.edit({
-                    embeds: [new MessageEmbed().setTitle('Delete defined language').setDescription('Are you sure?')], 
+                    embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'DeleteDefinedLanguage')).setDescription(language.readLine('userlang', 'AreYouSure'))], 
                     components: [new MessageActionRow().addComponents(ye, no)]
                 })
 
@@ -146,16 +142,16 @@ exports.run = async (message, language, { Sheet, args }) => {
                     if (i.customId === `yes${message.id}`) {
                         i.deferUpdate()
                         await userDefined.delete()
-                        msg.edit({ embeds: [new MessageEmbed().setTitle('Deleted!')], components: [] })
+                        msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Deleted'))], components: [] })
                     } else {
                         i.deferUpdate()
-                        msg.edit({ embeds: [new MessageEmbed().setTitle('Ok')], components: [] })
+                        msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Ok'))], components: [] })
                     }
                     collectReply.stop()
                 })
             break
             default:
-                msg.edit({ embeds: [new MessageEmbed().setTitle('Ok')], components: [] })
+                msg.edit({ embeds: [new MessageEmbed().setTitle(language.readLine('userlang', 'Ok'))], components: [] })
                 buttonCollector.stop()
             break
         }
