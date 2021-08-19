@@ -1,5 +1,6 @@
 // Libs
 const Discord = require('discord.js')
+const Winston = require('winston')
 
 // Files
 const indexCommand = require('./commands/index.js')
@@ -23,8 +24,9 @@ let leaderboardObj = new Map()
  *
  * @async
  * @param {Discord.Client} client
+ * @param {Winston.Logger} logger
  */
-exports.main = async (client) => {
+exports.main = async (client, logger) => {
   /*
 
     Slash commands require some really
@@ -40,7 +42,7 @@ exports.main = async (client) => {
     await client.guilds.cache.get(process.env.DEVSERVER)?.commands.set(slashCommandsArr)
     */
 
-  console.log('Init Sheet Instance')
+  logger.info('Init Sheet Instance')
   const Sheet = new sheets.SheetInstance()
 
   await Sheet.initAuth()
@@ -68,7 +70,7 @@ exports.main = async (client) => {
     )
   }, 60000)
 
-  console.log('Setup Leaderboard')
+  logger.info('Setup Leaderboard')
   const ldInfo = await leaderboard.leaderboard()
   leaderboardObj.set('obj', ldInfo)
 
@@ -78,7 +80,7 @@ exports.main = async (client) => {
     leaderboardObj.set('obj', updatedLdInfo)
   }, 60000)
 
-  console.log('OutFoxing messages')
+  logger.info('OutFoxing messages')
 
   client.on('messageCreate', (msg) => {
     if (!msg.content.toLowerCase().startsWith(process.env.PREFIX)) return
@@ -91,9 +93,8 @@ exports.main = async (client) => {
     const args = argument.filterArguments(msg)
 
     if (!commandList.includes(args.commandName[0])) return
-
     message.main(msg, languages, client, {
-      Sheet, sheetCache, args, leaderboard: leaderboardObj.get('obj'), commands 
+      Sheet, sheetCache, args, leaderboard: leaderboardObj.get('obj'), commands, logger
     })
   })
 }

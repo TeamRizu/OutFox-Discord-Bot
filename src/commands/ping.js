@@ -49,7 +49,6 @@ exports.run = async (message, language) => {
             components: [enabledButton] 
         }
     )
-
     const filter = i => i.customId === (`retry${message.id}`) && i.user.id === message.author.id
     const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 })
     const alreadyCollected = new Set()

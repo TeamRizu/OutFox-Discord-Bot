@@ -30,7 +30,7 @@ exports.run = async (message, language, { leaderboard, sheetCache }) => {
     .setThumbnail('https://avatars.githubusercontent.com/u/64650386?s=200&v=4')
 
     const leaderboardPages = () => {
-        const maxLength = 1024
+        const maxLength = 4096
         const pages = ['']
         const pageIndex = new Map()
         pageIndex.set('index', 0)

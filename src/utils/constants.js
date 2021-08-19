@@ -1,3 +1,6 @@
+/**
+ * Discord IDs for bug hunter roles
+ */
 exports.bugRole = {
 	'Bug Reporter': '687824517422383282',
 	'Bug Catcher': '736367693443235841',

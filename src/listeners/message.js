@@ -1,5 +1,6 @@
 // Libs
 const Discord = require('discord.js')
+const Winston = require('winston')
 
 // Files
 const language = require('../utils/language.js')
@@ -19,6 +20,7 @@ const busyState = new Set()
  * @property {string[]} [args.argument]
  * @property {string[]} [args.flag]
  * @property {Array<Array<string, string, string, string>>} [OptionalParams.leaderboard]
+ * @property {Winston.Logger} logger
  */
 
 /**
@@ -38,9 +40,9 @@ const busyState = new Set()
  * @param {Discord.Client} client
  * @param {OptionalParams} param3
  */
-exports.main = async (message, languages, client, { Sheet, sheetCache, args, commands, leaderboard }) => {
-    console.log(`Running command ${args.commandName[0]}`)
-    console.log(args)
+exports.main = async (message, languages, client, { Sheet, sheetCache, args, commands, leaderboard, logger }) => {
+    logger.info(`Running command ${args.commandName[0]}`)
+    logger.info(args)
     const rows = await sheetCache.get('guild_languages').getRows()
     const urows = await sheetCache.get('user_languages').getRows()
     let language = process.env.FALLBACKLANGUAGE
@@ -75,7 +77,7 @@ exports.main = async (message, languages, client, { Sheet, sheetCache, args, com
     }
 
     busyState.add(message.author.id)
-    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args, client, leaderboard, sheetCache })
+    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args, client, leaderboard, sheetCache, logger })
     userCooldown.add(message.author.id)
     setTimeout(() => {
         userCooldown.delete(message.author.id)

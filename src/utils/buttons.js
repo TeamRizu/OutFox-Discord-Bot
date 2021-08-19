@@ -3,6 +3,15 @@ const Discord = require('discord.js')
 
 // Variables
 const { MessageButton } = Discord
+
+/**
+ * 
+ * @param {Discord.Message} id 
+ * @param {*} label 
+ * @param {*} style 
+ * @param {*} param3 
+ * @returns 
+ */
 const quickButton = (id, label, style, { disabled = false } = {}) => {
 	const button = new MessageButton()
 		.setCustomId(id)
