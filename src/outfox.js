@@ -7,6 +7,7 @@ const indexCommand = require('./commands/index.js')
 const message = require('./listeners/message.js')
 const language = require('./utils/language.js')
 const sheets = require('./utils/sheets.js')
+const languageSheets = require('./utils/languageSheet.js')
 const argument = require('./utils/argument.js')
 const leaderboard = require('./utils/leaderboard.js')
 
@@ -43,7 +44,7 @@ exports.main = async (client, logger) => {
     */
 
   logger.info('Init Sheet Instance')
-  const Sheet = new sheets.SheetInstance()
+  const Sheet = new languageSheets.LanguageSheetInstance()
 
   await Sheet.initAuth()
   await Sheet.doc.loadInfo()

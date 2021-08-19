@@ -1,8 +1,8 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 
 exports.SheetInstance = class {
-    constructor () {
-        this.doc = new GoogleSpreadsheet(process.env.SHEET_ID)
+    constructor (sheetID) {
+        this.doc = new GoogleSpreadsheet(sheetID)
     }
 
     async initAuth() {

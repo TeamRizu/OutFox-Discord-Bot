@@ -6,10 +6,10 @@ const { MessageButton } = Discord
 
 /**
  * 
- * @param {Discord.Message} id 
- * @param {*} label 
- * @param {*} style 
- * @param {*} param3 
+ * @param {import('discord.js').Snowflake} id - Message id snowflage
+ * @param {string} label 
+ * @param {import('discord.js').MessageButtonStyleResolvable} style 
+ * @param {Object<'disabled', boolean>} [param3] 
  * @returns 
  */
 const quickButton = (id, label, style, { disabled = false } = {}) => {
@@ -22,6 +22,16 @@ const quickButton = (id, label, style, { disabled = false } = {}) => {
 
 	return button
 }
+
+/**
+ * Creates a button and immediately starts listening, returns the collector.
+ * @param {import('discord.js').Message} message
+ * @param {import('discord.js').Snowflake} id - Message id snowflage
+ * @param {string} label 
+ * @param {import('discord.js').MessageButtonStyleResolvable} style 
+ * @param {import('discord.js').InteractionCollectorOptions} [param3] 
+ * @returns {import('discord.js').InteractionCollector<any>}
+ */
 const quickBetterButton = (message, id, label, style, { disabled = false, timer = 60000, filter = (i) => {
 		if (i.user.id !== message.author.id) return false
 
@@ -30,7 +40,7 @@ const quickBetterButton = (message, id, label, style, { disabled = false, timer 
 		return true 
 	} 
 }) => {
-	const button = quickButton(id, label, style, disabled)
+	quickButton(id, label, style, disabled)
 	const collector = message.channel.createMessageComponentCollector({ timer, filter })
 
 	return collector
