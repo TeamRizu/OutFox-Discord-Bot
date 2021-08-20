@@ -16,6 +16,7 @@ const languages = {
   en: new language.LanguageInstance('en'),
   'pt-BR': new language.LanguageInstance('pt-BR'),
 }
+// TODO: Remove every instance of sheetCache
 const sheetCache = new Map()
 const { commands } = indexCommand
 const commandList = Object.keys(commands)
@@ -45,7 +46,8 @@ exports.main = async (client, logger) => {
 
   logger.info('Init Sheet Instance')
   const Sheet = new languageSheets.LanguageSheetInstance()
-
+  await Sheet.init()
+  /*
   await Sheet.initAuth()
   await Sheet.doc.loadInfo()
 
@@ -70,6 +72,7 @@ exports.main = async (client, logger) => {
       Sheet.doc.sheetsByTitle['discordgithub']
     )
   }, 60000)
+  */
 
   logger.info('Setup Leaderboard')
   const ldInfo = await leaderboard.leaderboard()
@@ -95,7 +98,7 @@ exports.main = async (client, logger) => {
 
     if (!commandList.includes(args.commandName[0])) return
     message.main(msg, languages, client, {
-      Sheet, sheetCache, args, leaderboard: leaderboardObj.get('obj'), commands, logger
+      Sheet, args, leaderboard: leaderboardObj.get('obj'), commands, logger
     })
   })
 }

@@ -40,11 +40,11 @@ const busyState = new Set()
  * @param {Discord.Client} client
  * @param {OptionalParams} param3
  */
-exports.main = async (message, languages, client, { Sheet, sheetCache, args, commands, leaderboard, logger }) => {
+exports.main = async (message, languages, client, { Sheet, args, commands, leaderboard, logger }) => {
     logger.info(`Running command ${args.commandName[0]}`)
     logger.info(args)
-    const rows = await sheetCache.get('guild_languages').getRows()
-    const urows = await sheetCache.get('user_languages').getRows()
+    const rows = await Sheet.guildLanguages.getRows()
+    const urows = await Sheet.userLanguages.getRows()
     let language = process.env.FALLBACKLANGUAGE
 
     const userDefined = urows.find(element => element.user === message.author.id)
@@ -77,7 +77,7 @@ exports.main = async (message, languages, client, { Sheet, sheetCache, args, com
     }
 
     busyState.add(message.author.id)
-    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args, client, leaderboard, sheetCache, logger })
+    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args, client, leaderboard, logger })
     userCooldown.add(message.author.id)
     setTimeout(() => {
         userCooldown.delete(message.author.id)

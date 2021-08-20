@@ -16,9 +16,9 @@ const { MessageEmbed, MessageActionRow, MessageButton } = Discord
  * @param {Discord.Client} client
  * @param {messageFile.OptionalParams} param3
  */
-exports.run = async (message, language, { leaderboard, sheetCache }) => {
+exports.run = async (message, language, { Sheet, leaderboard, sheetCache }) => {
     const id = message.author.id
-    const knownUsers = sheetCache.get('discord_github')
+    const knownUsers = Sheet.discordgithub
     const rows = await knownUsers.getRows()
     const rowSearch = rows.find(element => element.id === id)
     const hasPoints = rowSearch ? leaderboard.find(element => element[0] === rowSearch.github) : null

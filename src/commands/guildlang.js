@@ -40,7 +40,7 @@ exports.run = async (message, language, { Sheet, args }) => {
         return
     }
 
-    const guildLanguages = Sheet.doc.sheetsByTitle['guild_languages']
+    const guildLanguages = Sheet.guildLanguages
     const rows = await guildLanguages.getRows()
     const guildDefined = rows.find(element => element.guild === message.guild.id)
 
