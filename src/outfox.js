@@ -10,6 +10,7 @@ const sheets = require('./utils/sheets.js')
 const languageSheets = require('./utils/languageSheet.js')
 const argument = require('./utils/argument.js')
 const leaderboard = require('./utils/leaderboard.js')
+const modsSheets = require('./utils/modsSheet.js')
 
 // Variables
 const languages = {
@@ -44,35 +45,13 @@ exports.main = async (client, logger) => {
     await client.guilds.cache.get(process.env.DEVSERVER)?.commands.set(slashCommandsArr)
     */
 
-  logger.info('Init Sheet Instance')
+  logger.info('Init Language Sheet Instance')
   const Sheet = new languageSheets.LanguageSheetInstance()
   await Sheet.init()
-  /*
-  await Sheet.initAuth()
-  await Sheet.doc.loadInfo()
 
-  sheetCache.set('guild_languages', Sheet.doc.sheetsByTitle['guild_languages'])
-  sheetCache.set('user_languages', Sheet.doc.sheetsByTitle['user_languages'])
-  sheetCache.set('discord_github', Sheet.doc.sheetsByTitle['discordgithub'])
-
-  setInterval(() => {
-    sheetCache.delete('guild_languages')
-    sheetCache.delete('user_languages')
-    sheetCache.delete('discord_github')
-    sheetCache.set(
-      'guild_languages',
-      Sheet.doc.sheetsByTitle['guild_languages']
-    )
-    sheetCache.set(
-      'user_languages', 
-      Sheet.doc.sheetsByTitle['user_languages']
-    )
-    sheetCache.set(
-      'discord_github', 
-      Sheet.doc.sheetsByTitle['discordgithub']
-    )
-  }, 60000)
-  */
+  logger.info('Init Mods Sheet Instance')
+  const ModsSheet = new modsSheets.ModsSheetInstance()
+  await ModsSheet.init()
 
   logger.info('Setup Leaderboard')
   const ldInfo = await leaderboard.leaderboard()
