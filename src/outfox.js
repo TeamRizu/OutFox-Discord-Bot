@@ -52,7 +52,7 @@ exports.main = async (client, logger) => {
   logger.info('Init Mods Sheet Instance')
   const ModsSheet = new modsSheets.ModsSheetInstance()
   await ModsSheet.init()
-
+  
   logger.info('Setup Leaderboard')
   const ldInfo = await leaderboard.leaderboard()
   leaderboardObj.set('obj', ldInfo)
@@ -77,7 +77,7 @@ exports.main = async (client, logger) => {
 
     if (!commandList.includes(args.commandName[0])) return
     message.main(msg, languages, client, {
-      Sheet, args, leaderboard: leaderboardObj.get('obj'), commands, logger
+      Sheet, ModsSheet, args, leaderboard: leaderboardObj.get('obj'), commands, logger
     })
   })
 }

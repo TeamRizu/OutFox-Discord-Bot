@@ -40,7 +40,7 @@ const busyState = new Set()
  * @param {Discord.Client} client
  * @param {OptionalParams} param3
  */
-exports.main = async (message, languages, client, { Sheet, args, commands, leaderboard, logger }) => {
+exports.main = async (message, languages, client, { Sheet, ModsSheet, args, commands, leaderboard, logger }) => {
     logger.info(`Running command ${args.commandName[0]}`)
     logger.info(args)
     const rows = await Sheet.guildLanguages.getRows()
@@ -77,7 +77,7 @@ exports.main = async (message, languages, client, { Sheet, args, commands, leade
     }
 
     busyState.add(message.author.id)
-    await commands[args.commandName[0]].run(message, languages[language], { Sheet, args, client, leaderboard, logger })
+    await commands[args.commandName[0]].run(message, languages[language], { Sheet, ModsSheet, args, client, leaderboard, logger })
     userCooldown.add(message.author.id)
     setTimeout(() => {
         userCooldown.delete(message.author.id)
