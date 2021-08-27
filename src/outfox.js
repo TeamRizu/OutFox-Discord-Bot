@@ -17,8 +17,6 @@ const languages = {
   en: new language.LanguageInstance('en'),
   'pt-BR': new language.LanguageInstance('pt-BR'),
 }
-// TODO: Remove every instance of sheetCache
-const sheetCache = new Map()
 const { commands } = indexCommand
 const commandList = Object.keys(commands)
 let leaderboardObj = new Map()

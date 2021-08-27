@@ -16,7 +16,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = Discord
  * @param {Discord.Client} client
  * @param {messageFile.OptionalParams} param3
  */
-exports.run = async (message, language, { Sheet, leaderboard, sheetCache }) => {
+exports.run = async (message, language, { Sheet, leaderboard }) => {
     const id = message.author.id
     const knownUsers = Sheet.discordgithub
     const rows = await knownUsers.getRows()

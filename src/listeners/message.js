@@ -14,7 +14,6 @@ const busyState = new Set()
  * Optional params
  * @typedef {Object} OptionalParams
  * @property {sheets.SheetInstance} OptionalParams.Sheet
- * @property {Map<any, any>} OptionalParams.sheetCache
  * @property {Object} args
  * @property {string[]} args.commandName
  * @property {string[]} [args.argument]
