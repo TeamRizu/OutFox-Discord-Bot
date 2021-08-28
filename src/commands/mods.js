@@ -16,7 +16,8 @@ const { MessageEmbed, MessageActionRow, MessageButton } = Discord
  * @param {Discord.Client} client
  * @param {messageFile.OptionalParams} param3
  */
-exports.run = async (message, language, { ModsSheet }) => {
+exports.run = async (message, language, { ModsSheet, args }) => {
+    /*
     const modsPages = async () => {
         const maxLength = 2024
         const pages = ['']
@@ -49,4 +50,20 @@ exports.run = async (message, language, { ModsSheet }) => {
         .setDescription(pages[0])
 
     message.reply({ embeds: [embed] })
+    */
+
+    if (!args.argument) {
+        message.reply({ content: 'Cade argumento' })
+        return false
+    }
+    
+    const file = await ModsSheet.chartInfo(args.argument[0])
+
+    if (!file) {
+        message.reply({ content: 'nem vi' })
+        return false
+    }
+
+    message.reply({ content: file.name })
+    return true
 }
