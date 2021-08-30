@@ -4,9 +4,6 @@ const Discord = require('discord.js')
 // Variables
 const { MessageEmbed } = Discord
 
- const embed = new MessageEmbed()
- embed.setTitle()
-
 /**
  * Fast Embed implementation
  * @typedef {Object} FastEmbedOptions

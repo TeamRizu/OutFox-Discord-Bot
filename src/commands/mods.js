@@ -4,10 +4,13 @@ const Discord = require('discord.js')
 // Files
 const messageFile = require('../listeners/message.js')
 const languageFile = require('../utils/language.js')
-const constants = require('../utils/constants.js')
+const pagination = require('../utils/pagination.js')
+const embeds = require('../utils/embed.js')
+const buttons = require('../utils/buttons.js')
 
 // Variables
-const { MessageEmbed, MessageActionRow, MessageButton } = Discord
+const { MessageActionRow } = Discord
+const Pagination = pagination.Pagination
 
 /**
  *
@@ -17,41 +20,132 @@ const { MessageEmbed, MessageActionRow, MessageButton } = Discord
  * @param {messageFile.OptionalParams} param3
  */
 exports.run = async (message, language, { ModsSheet, args }) => {
-    /*
-    const modsPages = async () => {
-        const maxLength = 2024
-        const pages = ['']
-        const rows = await ModsSheet.convertedMods.getRows()
-        const pageIndex = new Map()
-        pageIndex.set('index', 0)
-
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i]
-            const stringToAdd = `**${i + i}º** - [${row['File Name']}](${row['YT-Link']}) (${row.Author || 'Unknown Author'})\n`
-
-            if ((pages[pageIndex.get('index')] + stringToAdd).length > maxLength) {
-                const oldValue = pageIndex.get('index')
-                pageIndex.delete('index')
-                pageIndex.set('index', oldValue + 1)
-            }
-
-            if (typeof pages[pageIndex.get('index')] !== 'string') {
-                pages[pageIndex.get('index')] = ''
-            }
-
-            pages[pageIndex.get('index')] += stringToAdd
-        }
-
-        pageIndex.delete('index')
-        return pages
+  if (!args.argument) {
+    const modsPages = new Pagination(await ModsSheet.convertedMods.getRows())
+    const filter = (row, ind) => {
+      if (!row['File Name']) return false
+      return `**${ind + 1}º** - [${row['File Name']}](${row['YT-Link']}) (${
+        row.Author || 'Unknown Author'
+      })\n`
     }
-    const pages = await modsPages()
-    const embed = new MessageEmbed()
-        .setDescription(pages[0])
+    modsPages.setup(filter)
+    let currentPage = 0
+    const embed = embeds.embedBuilder({
+      title: 'Converted Mods',
+      footer: `Page ${currentPage + 1} / ${
+        modsPages.pages.length
+      } - SM5 Conversions by MrThatKid.`,
+      description: modsPages.getPage(currentPage),
+    })
+
+    const mainMessage = await message.reply({ embeds: [embed] })
+
+    const updateEmbed = async () => {
+      embed.setDescription(modsPages.getPage(currentPage))
+      embed.setFooter(
+        `Page ${currentPage + 1} / ${
+          modsPages.pages.length
+        } - SM5 Conversions by MrThatKid.`
+      )
+      await mainMessage.edit({ embeds: [embed] })
+
+      return embed
+    }
+
+    const backBetterButton = buttons.quickBetterButton(
+      message,
+      `${'backpage' + message.id}`,
+      'Go back',
+      'PRIMARY'
+    )
+    const backButton = backBetterButton.button
+    const backCollector = backBetterButton.collector
+
+    const nextBetterButton = buttons.quickBetterButton(
+      message,
+      `${'nextpage' + message.id}`,
+      'Next page',
+      'PRIMARY'
+    )
+    const nextButton = nextBetterButton.button
+    const nextCollector = nextBetterButton.collector
+
+    backCollector.on('collect', async (i) => {
+      if (!i.isButton) return
+
+      backCollector.resetTimer()
+      i.deferUpdate()
+      if (0 > currentPage - 1) return
+
+      currentPage--
+      await updateEmbed()
+    })
+
+    nextCollector.on('collect', async (i) => {
+      if (!i.isButton) return
+
+      nextCollector.resetTimer()
+      i.deferUpdate()
+      if (currentPage + 1 > modsPages.pages.length - 1) return
+
+      currentPage++
+      await updateEmbed()
+    })
+
+    const comp = new MessageActionRow().addComponents(backButton, nextButton)
+
+    mainMessage.edit({ components: [comp] })
+  } else {
+    const file = await ModsSheet.chartInfo(args.argument.join(' '))
+
+    if (!file) {
+        message.reply({ content: 'File not found.' })
+        return false
+    }
+
+    const titles = {
+        converted: 'Converted to SM5',
+        requested: 'Requests',
+        impossible: 'Impossible Requests',
+        forbidden: 'Forbidden Requests'
+    }
+    const explanation = {
+        converted: 'This file is already converted and you can download it, click the title URL.',
+        requested: 'This file has been requested by someone.',
+        impossible: 'This file has been requested but it\'s not possible to convert yet.',
+        forbbiden: 'This file will not be converted.'
+    }
+
+    const embed = embeds.embedBuilder({
+        title: `${file.name} (${file.author})`,
+        footer: explanation[file.foundIn]
+    })
+    embed.setURL(file.video)
+    if (file.pack) {
+        embed.addField('Pack', file.pack)
+    }
+
+    switch (file.foundIn) {
+        case 'converted':
+            embed.addField('Version', file.version)
+        break
+        case 'requested':
+        case 'impossible':
+            embed.addField('Requested by', file.requestedBy)
+            embed.addField('Status', file.status)
+        break
+        case 'forbidden':
+            embed.addField('Type', file.type)
+            embed.addField('Reason', file.reason)
+        break
+        default:
+        break
+    }
 
     message.reply({ embeds: [embed] })
-    */
+  }
 
+  /*
     if (!args.argument) {
         message.reply({ content: 'Cade argumento' })
         return false
@@ -65,5 +159,6 @@ exports.run = async (message, language, { ModsSheet, args }) => {
     }
 
     message.reply({ content: file.name })
-    return true
+    */
+  return true
 }

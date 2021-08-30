@@ -30,70 +30,38 @@ exports.ModsSheetInstance = class {
             return null
         }
 
-        const modsRows = await this.convertedMods.getRows()
-        let fileFound = modsRows.find(file => file['File Name'].toLowerCase() === name.toLowerCase() || file['File Name'].toLowerCase().includes(name.toLowerCase()))
-
-        if (fileFound) {
-            return {
-                name: fileFound['File Name'],
-                series: fileFound.Series,
-                author: fileFound.Author,
-                version: fileFound['SM Version'],
-                video: fileFound['YT-Link'],
-                originalObject: fileFound,
-                foundIn: 'converted'
+        const askForRows = [this.convertedMods, this.requestsMods, this.impossibleMods, this.forbiddenMods]
+        const tableName = ['converted', 'requested', 'impossible', 'forbidden']
+        const askForProperties = {
+            converted: { 
+                placeAs: ['name', 'pack', 'author', 'version', 'video'],
+                getAs: ['File Name', 'Pack', 'Author', 'SM Version', 'YT-Link']
+            },
+            requested: {
+                placeAs: ['name', 'pack', 'author', 'video', 'requestedBy', 'status'],
+                getAs: ['File Name', 'Pack', 'Author', 'URL of original video/pack release', 'Requested by', 'Status']
+            },
+            impossible: {
+                placeAs: ['name', 'author', 'video', 'pack', 'requestedBy', 'status'],
+                getAs: ['File Name', 'Author', 'URL of original video/pack release', 'Pack', 'Requested by', 'Status / Things Needed']
+            },
+            forbidden: {
+                placeAs: ['name', 'author', 'video', 'pack', 'type', 'reason'],
+                getAs: ['File Name', 'Author', 'URL of original video/pack release', 'Type', 'Reason']
             }
         }
+        for (let i = 0; i < askForRows.length; i++) {
+            const row = await askForRows[i].getRows()
+            const fileFound = row.find(file => file['File Name'].toLowerCase() === name.toLowerCase() || file['File Name'].toLowerCase().includes(name.toLowerCase()))
 
-        const requestedRows = await this.requestsMods.getRows()
-        fileFound = requestedRows.find(file => file['File name'].toLowerCase() === name.toLowerCase() || file['File Name'].toLowerCase().includes(name.toLowerCase()))
+            if (!fileFound) continue
 
-        if (fileFound) {
-            return {
-                name: fileFound['File name'],
-                series: fileFound.Pack,
-                author: fileFound.Author,
-                // version: fileFound['SM Version'],
-                video: fileFound['URL of original video/pack release'],
-                requestedBy: fileFound['Requested by'],
-                status: fileFound.Status,
-                originalObject: fileFound,
-                foundIn: 'requested'
+            const objToReturn = {}
+            for (let j = 0; j < askForProperties[tableName[i]].placeAs.length; j++) {
+                objToReturn[askForProperties[tableName[i]].placeAs[j]] = fileFound[askForProperties[tableName[i]].getAs[j]]
             }
-        }
-
-        const impossibleRows = await this.impossibleMods.getRows()
-        fileFound = impossibleRows.find(file => file['File name'].toLowerCase() === name.toLowerCase() || file['File Name'].toLowerCase().includes(name.toLowerCase()))
-
-        if (fileFound) {
-            return {
-                name: fileFound['File name'],
-                author: fileFound.Author,
-                video: fileFound['URL of original video/pack release'],
-                series: fileFound.Pack,
-                requestedBy: fileFound['Requested by'],
-                status: fileFound['Status / Things Needed'],
-                originalObject: fileFound,
-                foundIn: 'impossible'
-            }
-        }
-
-        // TODO: Whole pack requests search, I have no idea how I'm gonna support that.
-
-        const forbiddenRows = await this.forbiddenMods.getRows()
-        fileFound = forbiddenRows.find(file => file['File name'].toLowerCase() === name.toLowerCase() || file['File Name'].toLowerCase().includes(name.toLowerCase()))
-
-        if (fileFound) {
-            return {
-                name: fileFound['File name'],
-                author: fileFound.Author,
-                video: fileFound['URL of original video/pack release'],
-                series: fileFound.Pack,
-                type: fileFound.Type,
-                reason: fileFound.Reason,
-                originalObject: fileFound,
-                foundIn: 'forbidden'
-            }
+            objToReturn.foundIn = tableName[i]
+            return objToReturn
         }
 
         return null
