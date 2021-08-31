@@ -76,7 +76,12 @@ exports.main = async (message, languages, client, { Sheet, ModsSheet, args, comm
     }
 
     busyState.add(message.author.id)
-    await commands[args.commandName[0]].run(message, languages[language], { Sheet, ModsSheet, args, client, leaderboard, logger })
+    try {
+        await commands[args.commandName[0]].run(message, languages[language], { Sheet, ModsSheet, args, client, leaderboard, logger })
+    } catch (e) {
+        console.error(e)
+        message.reply('Failed :(')
+    }
     userCooldown.add(message.author.id)
     setTimeout(() => {
         userCooldown.delete(message.author.id)

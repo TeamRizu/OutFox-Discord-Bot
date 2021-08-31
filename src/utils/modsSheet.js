@@ -50,12 +50,12 @@ exports.ModsSheetInstance = class {
                 getAs: ['File Name', 'Author', 'URL of original video/pack release', 'Type', 'Reason']
             }
         }
+
         for (let i = 0; i < askForRows.length; i++) {
             const row = await askForRows[i].getRows()
-            const fileFound = row.find(file => file['File Name'].toLowerCase() === name.toLowerCase() || file['File Name'].toLowerCase().includes(name.toLowerCase()))
+            const fileFound = row.find(file => file['File Name']?.toLowerCase() === name.toLowerCase() || file['File Name']?.toLowerCase().includes(name.toLowerCase()))
 
             if (!fileFound) continue
-
             const objToReturn = {}
             for (let j = 0; j < askForProperties[tableName[i]].placeAs.length; j++) {
                 objToReturn[askForProperties[tableName[i]].placeAs[j]] = fileFound[askForProperties[tableName[i]].getAs[j]]

@@ -110,33 +110,32 @@ exports.run = async (message, language, { ModsSheet, args }) => {
         forbidden: 'Forbidden Requests'
     }
     const explanation = {
-        converted: 'This file is already converted and you can download it, click the title URL.',
+        converted: 'This file is already converted and you can download it.',
         requested: 'This file has been requested by someone.',
         impossible: 'This file has been requested but it\'s not possible to convert yet.',
         forbbiden: 'This file will not be converted.'
     }
 
     const embed = embeds.embedBuilder({
-        title: `${file.name} (${file.author})`,
+        title: `${file.name}`,
         footer: explanation[file.foundIn]
     })
-    embed.setURL(file.video)
-    if (file.pack) {
-        embed.addField('Pack', file.pack)
-    }
-
+    if (file.video) embed.addField('Video', file.video)
+    if (file.pack) embed.addField('Pack', file.pack, true)
+    if (file.author) embed.addField('Author', file.author, true)
     switch (file.foundIn) {
         case 'converted':
-            embed.addField('Version', file.version)
+            embed.addField('Version', file.version, true)
         break
         case 'requested':
         case 'impossible':
-            embed.addField('Requested by', file.requestedBy)
+            embed.addField('Requested by', file.requestedBy, true)
             embed.addField('Status', file.status)
         break
         case 'forbidden':
-            embed.addField('Type', file.type)
-            embed.addField('Reason', file.reason)
+            embed.addField('Type', file.type, true)
+            console.log(file.reason)
+            if (file.reason) embed.addField('Reason', file.reason, true)
         break
         default:
         break
@@ -144,21 +143,6 @@ exports.run = async (message, language, { ModsSheet, args }) => {
 
     message.reply({ embeds: [embed] })
   }
-
-  /*
-    if (!args.argument) {
-        message.reply({ content: 'Cade argumento' })
-        return false
-    }
-    
-    const file = await ModsSheet.chartInfo(args.argument[0])
-
-    if (!file) {
-        message.reply({ content: 'nem vi' })
-        return false
-    }
-
-    message.reply({ content: file.name })
-    */
+  
   return true
 }
