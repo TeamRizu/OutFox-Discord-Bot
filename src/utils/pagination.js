@@ -10,7 +10,12 @@ exports.Pagination = class {
         for (let i = 0; i < this.content.length; i++) {
             const stringToAdd = elementTemplate(this.content[i], i)
 
-            if ((this.pages[this.pageIndex].length + stringToAdd.length) > this.maxLength) {
+            if (!stringToAdd) continue
+
+            if (
+                this.pages[this.pageIndex].length + stringToAdd.length >
+                this.maxLength
+            ) {
                 this.pageIndex++
             }
 
@@ -18,8 +23,6 @@ exports.Pagination = class {
                 this.pages[this.pageIndex] = ''
             }
 
-            if (!stringToAdd) continue
-            
             this.pages[this.pageIndex] += stringToAdd
         }
 

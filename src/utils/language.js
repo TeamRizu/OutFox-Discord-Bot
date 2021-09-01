@@ -5,15 +5,33 @@ const path = require('path')
 
 exports.LanguageInstance = class {
     /**
-     * 
-     * @param {string} [lang] - The language code. 
+     *
+     * @param {string} [lang] - The language code.
      */
     constructor(lang) {
         this.fallbackLanguage = process.env.FALLBACKLANGUAGE
         this.language = lang || this.fallbackLanguage
-        this.global = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/global.ini`), 'utf-8'))
-        this.languageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.language}.ini`), 'utf-8'))
-        this.fallbackLanguageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.fallbackLanguage}.ini`), 'utf-8'))
+        this.global = ini.parse(
+            fs.readFileSync(
+                path.join(__dirname, `../languages/global.ini`),
+                'utf-8'
+            )
+        )
+        this.languageFile = ini.parse(
+            fs.readFileSync(
+                path.join(__dirname, `../languages/${this.language}.ini`),
+                'utf-8'
+            )
+        )
+        this.fallbackLanguageFile = ini.parse(
+            fs.readFileSync(
+                path.join(
+                    __dirname,
+                    `../languages/${this.fallbackLanguage}.ini`
+                ),
+                'utf-8'
+            )
+        )
         this.supportedLanguages = ['en', 'pt-BR']
     }
 
@@ -23,22 +41,36 @@ exports.LanguageInstance = class {
      */
     parseUpdate(language = this.language) {
         this.language = language
-        this.languageFile = ini.parse(fs.readFileSync(path.join(__dirname, `../languages/${this.language}.ini`), 'utf-8'))
+        this.languageFile = ini.parse(
+            fs.readFileSync(
+                path.join(__dirname, `../languages/${this.language}.ini`),
+                'utf-8'
+            )
+        )
     }
 
     /**
      * Returns an group object, or request line.
      * @param {string} group - The group name
-     * @param {string} [key] - The line nane 
+     * @param {string} [key] - The line nane
      * @param {Object<string, (string | number)>} [context]
      * @returns {string | object}
      */
-    readLine(group, key, context, {languageFile, failSafe} = {languageFile: this.languageFile, failSafe: true}) {
-        if (!languageFile[group]) return failSafe ? `INI ERROR - MISSING GROUP ${group}` : null
+    readLine(
+        group,
+        key,
+        context,
+        { languageFile, failSafe } = {
+            languageFile: this.languageFile,
+            failSafe: true,
+        }
+    ) {
+        if (!languageFile[group])
+            return failSafe ? `INI ERROR - MISSING GROUP ${group}` : null
 
         if (!key) return languageFile[group]
 
-        let line = languageFile[group][key] 
+        let line = languageFile[group][key]
 
         const applyContext = () => {
             const keys = Object.keys(context)
@@ -50,13 +82,13 @@ exports.LanguageInstance = class {
 
         if (!line) {
             line = this.fallbackLanguageFile[group][key]
-            if (!context) return line 
+            if (!context) return line
             applyContext()
             return line
         }
 
         if (!context) return line
-               
+
         applyContext()
 
         return line

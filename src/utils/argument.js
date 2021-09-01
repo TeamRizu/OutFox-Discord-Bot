@@ -19,8 +19,8 @@ exports.filterArguments = (message) => {
     const detectedArgs = {}
     const pushAgr = (argType, value) => {
         if (detectedArgs[argType]) {
-          detectedArgs[argType].push(value)
-          return
+            detectedArgs[argType].push(value)
+            return
         }
         detectedArgs[argType] = [value]
     }
@@ -29,7 +29,9 @@ exports.filterArguments = (message) => {
         const current = args[i]
 
         if (current.toLowerCase().startsWith(process.env.PREFIX)) {
-            const commandName = current.substring(process.env.PREFIX.length).toLowerCase()
+            const commandName = current
+                .substring(process.env.PREFIX.length)
+                .toLowerCase()
 
             if (commandName.length === 0) continue
 

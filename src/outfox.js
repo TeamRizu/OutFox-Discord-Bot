@@ -14,8 +14,8 @@ const modsSheets = require('./utils/modsSheet.js')
 
 // Variables
 const languages = {
-  en: new language.LanguageInstance('en'),
-  'pt-BR': new language.LanguageInstance('pt-BR'),
+    en: new language.LanguageInstance('en'),
+    'pt-BR': new language.LanguageInstance('pt-BR'),
 }
 const { commands } = indexCommand
 const commandList = Object.keys(commands)
@@ -28,7 +28,7 @@ let leaderboardObj = new Map()
  * @param {Winston.Logger} logger
  */
 exports.main = async (client, logger) => {
-  /*
+    /*
 
     Slash commands require some really
     dumb invite setup I'm not going to do it. ~ zerinho6
@@ -43,39 +43,44 @@ exports.main = async (client, logger) => {
     await client.guilds.cache.get(process.env.DEVSERVER)?.commands.set(slashCommandsArr)
     */
 
-  logger.info('Init Language Sheet Instance')
-  const Sheet = new languageSheets.LanguageSheetInstance()
-  await Sheet.init()
+    logger.info('Init Language Sheet Instance')
+    const Sheet = new languageSheets.LanguageSheetInstance()
+    await Sheet.init()
 
-  logger.info('Init Mods Sheet Instance')
-  const ModsSheet = new modsSheets.ModsSheetInstance()
-  await ModsSheet.init()
-  
-  logger.info('Setup Leaderboard')
-  const ldInfo = await leaderboard.leaderboard()
-  leaderboardObj.set('obj', ldInfo)
+    logger.info('Init Mods Sheet Instance')
+    const ModsSheet = new modsSheets.ModsSheetInstance()
+    await ModsSheet.init()
 
-  setInterval( async () => {
-    leaderboardObj.delete('obj')
-    const updatedLdInfo = await leaderboard.leaderboard()
-    leaderboardObj.set('obj', updatedLdInfo)
-  }, 60000)
+    logger.info('Setup Leaderboard')
+    const ldInfo = await leaderboard.leaderboard()
+    leaderboardObj.set('obj', ldInfo)
 
-  logger.info('OutFoxing messages')
+    setInterval(async () => {
+        leaderboardObj.delete('obj')
+        const updatedLdInfo = await leaderboard.leaderboard()
+        leaderboardObj.set('obj', updatedLdInfo)
+    }, 60000)
 
-  client.on('messageCreate', (msg) => {
-    if (!msg.content.toLowerCase().startsWith(process.env.PREFIX)) return
-    if (!msg.guild) return
-    if (msg.channel.type !== 'GUILD_TEXT') return
-    if (!msg.channel.permissionsFor(client.user.id)?.has('SEND_MESSAGES'))
-      return
-    if (msg.author.bot) return
+    logger.info('OutFoxing messages')
 
-    const args = argument.filterArguments(msg)
+    client.on('messageCreate', (msg) => {
+        if (!msg.content.toLowerCase().startsWith(process.env.PREFIX)) return
+        if (!msg.guild) return
+        if (msg.channel.type !== 'GUILD_TEXT') return
+        if (!msg.channel.permissionsFor(client.user.id)?.has('SEND_MESSAGES'))
+            return
+        if (msg.author.bot) return
 
-    if (!commandList.includes(args.commandName[0])) return
-    message.main(msg, languages, client, {
-      Sheet, ModsSheet, args, leaderboard: leaderboardObj.get('obj'), commands, logger
+        const args = argument.filterArguments(msg)
+
+        if (!commandList.includes(args.commandName[0])) return
+        message.main(msg, languages, client, {
+            Sheet,
+            ModsSheet,
+            args,
+            leaderboard: leaderboardObj.get('obj'),
+            commands,
+            logger,
+        })
     })
-  })
 }
