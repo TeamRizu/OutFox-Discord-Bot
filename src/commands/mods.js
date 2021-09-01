@@ -1,6 +1,8 @@
 // Libs
 const Discord = require('discord.js')
 const nodeuri = require('node-uri')
+const Vibrant = require('node-vibrant')
+
 // Files
 const messageFile = require('../listeners/message.js')
 const languageFile = require('../utils/language.js')
@@ -124,15 +126,38 @@ exports.run = async (message, language, { ModsSheet, args }) => {
 
         if (file.video) {
 
+            // FIXME: "URIError: uri scheme is required" when giving "e_n_o" as argument 
             if (nodeuri.checkHttpsURL(file.video)) {
                 embed.setURL(file.video)
 
                 const results = file.video.match('[\\?&]v=([^&#]*)')
-                // TODO: All video links on the request table use youtu.be for some reason, check for that
-                const videoID = (results === null) ? file.video : results[1] 
+                const secondResult = file.video.substring(file.video.length - 11)
+                let videoID = (results === null) ? file.video : results[1]
+                // This solves this type of link https://youtu.be/oMa-fqnCVzY
+                if (videoID === file.video && secondResult.length === 11) videoID = secondResult
 
-                console.log(videoID, videoID.length === 11, nodeuri.checkHttpsURL(`https://img.youtube.com/vi/${videoID}/0.jpg`))
-                if (videoID && videoID.length === 11 && nodeuri.checkHttpsURL(`https://img.youtube.com/vi/${videoID}/0.jpg`)) embed.setImage(`https://img.youtube.com/vi/${videoID}/0.jpg`)
+                if (videoID && videoID.length === 11 && nodeuri.checkHttpsURL(`https://img.youtube.com/vi/${videoID}/0.jpg`)) {
+                    embed.setImage(`https://img.youtube.com/vi/${videoID}/0.jpg`)
+
+                    const vibrantColor = new Map()
+                    const colorObj = await Vibrant.from(`https://img.youtube.com/vi/${videoID}/0.jpg`).getPalette((err, palette) => {
+                        if (err) {
+                            console.log(err)
+                            return false
+                        }
+
+                        const rgb = palette.Vibrant._rgb
+                        const componentToHex = (c) => { // Credits: https://stackoverflow.com/a/5624139
+                            let hex = c.toString(16)
+                            return hex.length == 1 ? '0' + hex : hex
+                        }
+                        
+                        vibrantColor.set('value', `#${componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2])}`)
+                        return true
+                    })
+                    
+                    if (colorObj) embed.setColor(vibrantColor.get('value'))
+                }
             } else {
                 embed.addField('Video', file.video)
             }

@@ -113,6 +113,7 @@ exports.ModsSheetInstance = class {
                     fileFound[askForProperties[tableName[i]].getAs[j]]
             }
             objToReturn.foundIn = tableName[i]
+            console.table(objToReturn)
             return objToReturn
         }
 
