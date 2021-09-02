@@ -116,7 +116,7 @@ exports.run = async (message, language, { ModsSheet, args }) => {
             requested: 'This file has been requested by someone.',
             impossible:
                 "This file has been requested but it's not possible to convert yet.",
-            forbbiden: 'This file will not be converted.',
+            forbidden: 'This file will not be converted.',
         }
 
         const embed = embeds.embedBuilder({
@@ -124,9 +124,8 @@ exports.run = async (message, language, { ModsSheet, args }) => {
             footer: explanation[file.foundIn],
         })
 
-        if (file.video) {
+        if (file.video && ['youtube', 'youtu.be'].some(e => file.video.includes(e))) {
 
-            // FIXME: "URIError: uri scheme is required" when giving "e_n_o" as argument 
             if (nodeuri.checkHttpsURL(file.video)) {
                 embed.setURL(file.video)
 

@@ -86,6 +86,7 @@ exports.ModsSheetInstance = class {
                     'File Name',
                     'Author',
                     'URL of original video/pack release',
+                    'Pack',
                     'Type',
                     'Reason',
                 ],
