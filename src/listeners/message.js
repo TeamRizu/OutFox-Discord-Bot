@@ -43,7 +43,7 @@ exports.main = async (
     message,
     languages,
     client,
-    { Sheet, ModsSheet, args, commands, leaderboard, logger }
+    { Sheet, ModsSheet, args, commands, leaderboard, logger, languageStatus }
 ) => {
     logger.info(`Running command ${args.commandName[0]}`)
     logger.info(args)
@@ -98,6 +98,7 @@ exports.main = async (
             args,
             client,
             leaderboard,
+            languageStatus,
             logger,
         })
     } catch (e) {

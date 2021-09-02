@@ -31,7 +31,7 @@ exports.run = async (message, language, { Sheet, leaderboard }) => {
 
     const embed = embeds.embedBuilder({
         title: language.readLine('leaderboard', 'BugHunterLeaderboard'),
-        color: 'ADBAC7',
+        color: '#ADBAC7',
         thumbnail: 'https://avatars.githubusercontent.com/u/64650386?s=200&v=4',
         url: 'https://github.com/TeamRizu/OutFox/blob/master/leaderboard.md',
     })

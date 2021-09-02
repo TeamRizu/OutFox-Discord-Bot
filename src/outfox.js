@@ -6,11 +6,11 @@ const Winston = require('winston')
 const indexCommand = require('./commands/index.js')
 const message = require('./listeners/message.js')
 const language = require('./utils/language.js')
-const sheets = require('./utils/sheets.js')
 const languageSheets = require('./utils/languageSheet.js')
 const argument = require('./utils/argument.js')
 const leaderboard = require('./utils/leaderboard.js')
 const modsSheets = require('./utils/modsSheet.js')
+const languageStatus = require('./utils/languageStatus.js')
 
 // Variables
 const languages = {
@@ -20,7 +20,7 @@ const languages = {
 const { commands } = indexCommand
 const commandList = Object.keys(commands)
 let leaderboardObj = new Map()
-
+let languageObj = new Map()
 /**
  *
  * @async
@@ -55,6 +55,11 @@ exports.main = async (client, logger) => {
     const ldInfo = await leaderboard.leaderboard()
     leaderboardObj.set('obj', ldInfo)
 
+    logger.info('Setup Language Status')
+    const lgInfo = await languageStatus.languageStatus()
+    console.log(lgInfo)
+    languageObj.set('obj', lgInfo)
+
     setInterval(async () => {
         leaderboardObj.delete('obj')
         const updatedLdInfo = await leaderboard.leaderboard()
@@ -78,6 +83,7 @@ exports.main = async (client, logger) => {
             Sheet,
             ModsSheet,
             args,
+            languageStatus: languageObj.get('obj'),
             leaderboard: leaderboardObj.get('obj'),
             commands,
             logger,

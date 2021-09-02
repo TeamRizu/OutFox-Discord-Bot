@@ -11,5 +11,6 @@ exports.commands = {
     serverlanguage: require('./guildlang.js'), // Alias for guildlang
     serverlang: require('./guildlang.js'), // Alias for guildlang
     leaderboard: require('./leaderboard.js'),
-    mods: require('./mods.js')
+    mods: require('./mods.js'),
+    languagestatus: require('./languagestatus.js')
 }
