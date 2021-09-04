@@ -44,15 +44,40 @@ exports.run = async (message, language, { args, languageStatus }) => {
     const languages = []
     for (let i = 0; i < languageStatus.length; i++) {
         if (i === 0) {
-            languageStatus[1].forEach(language => language !== 'Version' ? languages.push(language) : false)
+            languageStatus[0].forEach(language => language !== 'Version' ? languages.push(language) : false)
+            continue
         }
 
         versions.push(languageStatus[i][0])
     }
 
-    if (!versions.includes(args.argument) && !languages.includes(args.argument)) {
+    if (!versions.includes(args.argument[0]) && !languages.includes(args.argument[0])) {
         message.reply(`Please give a **version number** or **language name** as argument if you want more info.\n\n
-        **Version Numbers**\n\`${versions.join('`, `')}\n\n
-        **Language Names\n\`${languages.join('`, `')}`)
+        **Version Numbers**\n${versions.join(', ')}\n\n
+        **Language Names**\n${languages.join(', ')}`)
+
+        return
     }
+
+    const argument = args.argument[0]
+    let statusStr = '**'
+    embed.setTitle(`Localization status of ${argument}`)
+
+    if (versions.includes(argument)) {
+        const versionStatus = languageStatus.find(status => status[0] === argument)
+        
+        for (let i = 0; i < versionStatus.length; i++) {
+            if (i === 0) continue
+            statusStr += `${languageStatus[0][i]}** - ${versionStatus[i]}\n ${i === languageStatus.length - 1 ? '' : '**'}`
+        }
+    } else {
+        const langIndex = languageStatus[0].findIndex(language => language === argument)
+
+        for (let i = 0; i < languageStatus.length; i++) {
+            if (i === 0) continue
+            statusStr += `${languageStatus[i][0]}** - ${languageStatus[i][langIndex]}\n ${i === languageStatus.length - 1 ? '' : '**'}`
+        }
+    }
+    embed.setDescription(statusStr)
+    message.reply({ embeds: [embed] })
 }
