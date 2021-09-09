@@ -8,7 +8,7 @@ require('dotenv').config()
 const ready = require('./listeners/ready.js')
 
 // Variables
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]})
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS]})
 
 client.on('ready', () => {
     ready.main(client)

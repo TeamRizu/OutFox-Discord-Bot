@@ -22,7 +22,7 @@ exports.run = async (message, language, { client, args }) => {
 
     const outfoxServer = message.guild
 
-    if (!outfoxServer.permissionsFor(client.user.id)?.has('MANAGE_ROLES')) {
+    if (!(await outfoxServer.members.fetch(client.user.id)).permissions.has('MANAGE_ROLES')) {
         message.reply("I'm missing MANAGE_ROLES permission.")
         return;
     }
@@ -32,14 +32,14 @@ exports.run = async (message, language, { client, args }) => {
     if (!member) return false
 
     if (args.argument) {
-        let role = args.argument[0].toLowerCase()
+        let role = args.argument.join(' ').toLowerCase()
 
         if (!Object.keys(constants.roleForMembers).includes(role)) {
             message.reply('That role does not exist.')
             return false
         }
 
-        role = outfoxServer.roles.fetch(constants.roleForMembers[role])
+        role = await outfoxServer.roles.fetch(constants.roleForMembers[role])
         
         if (!role) {
             message.reply('Failed to fetch role.')
@@ -56,11 +56,13 @@ exports.run = async (message, language, { client, args }) => {
             return false
         }
 
-        member.roles.add(role.id).catch((e) => {
+        const adding = await message.reply({ content: 'Adding role...' })
+        await member.roles.add(role.id).catch((e) => {
             console.error(e)
             message.reply('Something happened while trying to give you the role.')
             return false
         })
+        await adding.edit({ content: 'Done.' })
 
         return true
     }
@@ -70,21 +72,53 @@ exports.run = async (message, language, { client, args }) => {
         description: "This setup will help you define free roles for your profile, press the confirm button to continue or press cancel."
     })
 
-    const mainMessage = message.reply({ embeds: [embed] })
+    const mainMessage = await message.reply({ embeds: [embed] })
 
-    const { collector: confirmCollector } = buttonFile.quickBetterButton(message, `confirm${message.id}`, 'Confirm', 'PRIMARY')
-    const { collector: cancelCollector } = buttonFile.quickBetterButton(message, `cancel${message.id}`, 'Cancel', 'DANGER')
-    
+    const { button: confirmButton, collector: confirmCollector } = buttonFile.quickBetterButton(message, `confirm${message.id}`, 'Confirm', 'PRIMARY')
+    const { button: cancelButton, collector: cancelCollector } = buttonFile.quickBetterButton(message, `cancel${message.id}`, 'Cancel', 'DANGER')
+
+    mainMessage.edit({ components: [ new MessageActionRow().addComponents(confirmButton, cancelButton) ] })
     cancelCollector.on('collect', async (i) => {
         cancelCollector.stop()
         confirmCollector.stop()
         i.deferUpdate()
+        mainMessage.edit({ components: [] })
         message.reply('Ok!')
     })
+
+    const setupArrays = () => {
+        const objToReturn = {}
+
+        for (let i = 0; i < Object.keys(constants.roleForMembersCategories).length; i++) {
+            const masterKey = Object.keys(constants.roleForMembersCategories)[i]
+            
+            if (!objToReturn[masterKey]) {
+                objToReturn[masterKey] = []
+            }
+
+            for (let j = 0; j < Object.keys(constants.roleForMembersCategories[masterKey]).length; j++) {
+                const roleName = Object.keys(constants.roleForMembersCategories[masterKey])[j]
+                //const roleID = Object.values(constants.roleForMembersCategories[masterKey])[j]
+                objToReturn[masterKey].push({
+                    value: `ofl!!${message.id}!!${roleName.toLowerCase()}`,
+                    label: roleName
+                })
+
+                // TODO: Collector?
+            }
+        }
+
+        return objToReturn
+    }
+
+    const embedMenu = (category) => {
+        // Menu with all the options for 
+    }
 
     confirmCollector.on('collect', async (i) => {
         cancelCollector.stop()
         confirmCollector.stop()
         i.deferUpdate()
+        message.reply('TBD')
     })
 }

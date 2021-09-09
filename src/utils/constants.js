@@ -12,31 +12,31 @@ exports.bugRole = {
 exports.roleForMembers = {
 	'streamer': '708823937253113908',
 	'youtuber': '708824135706607647',
-	'special Channels': '753206310832570399',
+	'special channels': '753206310832570399',
 
-	'south America': '676196026889142295',
-	'north America': '676196105180151845',
+	'south america': '676196026889142295',
+	'north america': '676196105180151845',
 	'asia': '676196149669134378',
 	'europe': '676196173849034758',
 	'oceania': '676196202580279309',
 
-	'windows XP': '785174684647686154',
+	'windows xp': '785174684647686154',
 	'windows 7': '683654775115350056',
 	'windows 8.x': '683654884637409331',
 	'windows 10': '683654937187713130',
-	'mac Sierra': '683655013650006066',
-	'mac High Sierra': '683655104406093834',
-	'mac Catalina': '683655189458321476',
-	'big Sur': '781862864423485480',
-	'apple Arm/M1': '785175530928472105',
+	'mac sierra': '683655013650006066',
+	'mac high sierra': '683655104406093834',
+	'mac catalina': '683655189458321476',
+	'big sur': '781862864423485480',
+	'apple arm/m1': '785175530928472105',
 	'ubuntu': '683655599426502714',
-	'arch Linux': '683655643504181287',
-	'gentoo Linux': '683655706830045207',
+	'arch linux': '683655643504181287',
+	'gentoo linux': '683655706830045207',
 	'fedora': '683655737552928768',
 	'debian': '683655761808850966',
-	'manjaro Linux': '683655792456368170',
+	'manjaro linux': '683655792456368170',
 	'arm': '706608945267081307',
-	'openSUSE': '683655869380165651',
+	'opensuse': '683655869380165651',
 	'ubuntu 20': '710135590871498804',
 	'aarch': '683698082382348298',
 
@@ -46,7 +46,7 @@ exports.roleForMembers = {
 	'modern': '684159119330246668',
 	'current': '684159151533981758',
 
-	'noteskin Maker': '720810549834678323',
+	'noteskin maker': '720810549834678323',
 	'programmer': '706162611980337242',
 	'charter/step artist': '720811058016813122',
 	'keyboard': '720810527005212764',
@@ -70,6 +70,22 @@ exports.roleForMembers = {
 	'popn': '720811486301388840',
 	'guitar': '841338463852298290',
 	'drum': '841338756224122940'
+}
+
+exports.categoriesDescription = {
+	specialRoles: "Select Streamer or Youtuber if you're any of those. Select Special Channels if you want to see additional bot channels.",
+	regionRoles: "Select the role depending on your region.",
+	osRoles: "Select the role depending on your OS",
+	hardwareRoles: "Select the role depending on your hardware age\n\n`-role prehistoric` - CPU/GPU is from 1999 or older\n`-role vintage` - CPU/GPU is from 2000 to 2007\n`-role legacy` - CPU/GPU is from 2008 to 2012.\n`-role modern` - CPU/GPU is from 2013 to 2018\n`-role current`- CPU/GPU is from 2019 or newer",
+	freeRoles: "Get any of those roles if you want."
+}
+
+exports.categoriesTitles = {
+	specialRoles: "Setup Special Roles",
+	regionRoles: "Setup Region Roles",
+	osRoles: "Setup OS Roles",
+	hardwareRoles: "Setup Hardware Roles",
+	freeRoles: "Setup Free Roles"
 }
 
 exports.roleForMembersCategories = {

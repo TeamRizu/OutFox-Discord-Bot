@@ -18,7 +18,7 @@ const quickButton = (id, label, style, { disabled = false } = {}) => {
         .setLabel(label)
         .setStyle(style)
 
-    if (disabled !== undefined) button.setDisabled(disabled)
+    if (disabled) button.setDisabled(disabled)
 
     return button
 }
@@ -52,7 +52,7 @@ const quickBetterButton = (
             if (i.customId !== id) return false
 
             return true
-        },
+        }
     } = {}
 ) => {
     const button = quickButton(id, label, style, disabled)

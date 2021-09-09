@@ -57,7 +57,6 @@ exports.main = async (client, logger) => {
 
     logger.info('Setup Language Status')
     const lgInfo = await languageStatus.languageStatus()
-    console.log(lgInfo)
     languageObj.set('obj', lgInfo)
 
     setInterval(async () => {
