@@ -27,7 +27,7 @@ exports.embedBuilder = ({
     image,
     thumbnail,
     footer,
-    url,
+    url
 }) => {
     const embed = new MessageEmbed()
 
