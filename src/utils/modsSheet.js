@@ -81,7 +81,7 @@ exports.ModsSheetInstance = class {
                 ],
             },
             forbidden: {
-                placeAs: ['name', 'author', 'video', 'pack', 'type', 'reason'], // The 'Reason' field is not being returned for some reason.
+                placeAs: ['name', 'author', 'video', 'pack', 'type', 'reason'],
                 getAs: [
                     'File Name',
                     'Author',
@@ -102,8 +102,9 @@ exports.ModsSheetInstance = class {
                         ?.toLowerCase()
                         .includes(name.toLowerCase())
             )
-
+            
             if (!fileFound) continue
+            // TODO: The code bellow does not need to be inside this for loop, make let variables to save the file and where it was found (exact match or not) and compare the results later.
             const objToReturn = {}
             for (
                 let j = 0;
