@@ -98,11 +98,15 @@ exports.run = async (message, language, { client, args }) => {
 
             for (let j = 0; j < Object.keys(constants.roleForMembersCategories[masterKey]).length; j++) {
                 const roleName = Object.keys(constants.roleForMembersCategories[masterKey])[j]
-                // const roleID = Object.values(constants.roleForMembersCategories[masterKey])[j]
+                const roleID = Object.values(constants.roleForMembersCategories[masterKey])[j]
                 objToReturn[masterKey].push({
                     value: `ofl!!${message.id}!!${roleName.toLowerCase()}`,
                     label: roleName
                 })
+
+                if (member.roles.cache.has(roleID)) {
+                    objToReturn[masterKey][objToReturn[masterKey].length - 1].description = 'Already Owned!'
+                }
             }
         }
 
@@ -135,7 +139,7 @@ exports.run = async (message, language, { client, args }) => {
 
     const menuObject = (category) => {
         const categoryOptions = selectMenus[category]
-        
+
         return new MessageSelectMenu()
             .setCustomId(`select${message.id}`)
             .setPlaceholder('Select here')
@@ -143,12 +147,32 @@ exports.run = async (message, language, { client, args }) => {
             .addOptions(categoryOptions)
     }
 
+    /**
+     * 
+     * @param {string[]} history 
+     * @returns {string}
+     */
+    const historyString = (history) => {
+        let finalStr = ''
+        console.log(history)
+        for (let i = 0; history.length; i++) {
+            const added = history[i].startsWith('A')
+            const role = history[i].substring(1)
+ 
+            finalStr += added ? `Added <@${role}>` : `Removed <@${role}>`
+            if (i !== history.length - 1) finalStr += '\n'
+        }
+
+        return finalStr || 'No roles were added or removed.'
+    }
+
     confirmCollector.on('collect', async (i) => {
         cancelCollector.stop()
         confirmCollector.stop()
         i.deferUpdate()
         
-        const categories = ['specialRoles', 'regionRoles', 'osRoles', 'hardwareRoles', 'freeRoles']
+        const categories = ['specialRoles', 'regionRoles', 'osRoles', 'hardwareRoles', 'freeRoles', 'gamemodeRoles']
+        const history = []
         let index = 0
 
         await mainMessage.edit({ content: null, embeds: [embedMenu('specialRoles')], components: [ new MessageActionRow().addComponents(menuObject('specialRoles')), new MessageActionRow().addComponents(skipButton) ] })
@@ -156,9 +180,10 @@ exports.run = async (message, language, { client, args }) => {
         skipCollector.on('collect', async (i) => {
             i.deferUpdate()
             skipCollector.resetTimer()
-        
-            if (index === 4) {
-                await mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: 'All roles you selected should have been assigned now!' })], components: [] })
+
+            // FIXME: This will not keep track of items added into the history array, making the command crash if the last page is skipped.
+            if (index === 5) {
+                await mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: historyString(history) })], components: [] })
             } else {
                 index++
                 await updateMessage(mainMessage, null, embedMenu(categories[index]), menuObject(categories[index]))
@@ -166,7 +191,7 @@ exports.run = async (message, language, { client, args }) => {
         })
 
         const menuCollect = mainMessage.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 60000 })
-
+        
         menuCollect.on('collect', async (i) => {
             if (i.user.id !== message.author.id || i.guild.id !== message.guild.id || (!i.values || i.values.length === 0)) return
 
@@ -182,15 +207,20 @@ exports.run = async (message, language, { client, args }) => {
 
                 if (!role) continue
 
-                if (member.roles.cache.find(rol => rol.id === role.id)) continue
-
-                await member.roles.add(role.id)
+                if (member.roles.cache.find(rol => rol.id === role.id)) {
+                    await member.roles.remove(role.id)
+                    history.push(`R${role.id}`)
+                } else {
+                    await member.roles.add(role.id)
+                    history.push(`A${role.id}`)
+                }
             }
 
-            if (index === 4) {
-                mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: 'All roles you selected should have been assigned now!' })], components: [] })
+            if (index === 5) {
+                mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: historyString(history) })], components: [] })
             } else {
                 index++
+                console.log(`Requesting ${categories[index]}`)
                 updateMessage(mainMessage, null, embedMenu(categories[index]), menuObject(categories[index]))
             }
         })

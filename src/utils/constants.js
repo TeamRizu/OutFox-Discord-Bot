@@ -76,8 +76,9 @@ exports.categoriesDescription = {
 	specialRoles: "Select Streamer or Youtuber if you're any of those. Select Special Channels if you want to see additional bot channels.",
 	regionRoles: "Select the role depending on your region.",
 	osRoles: "Select the role depending on your OS",
-	hardwareRoles: "Select the role depending on your hardware age\n\n`-role prehistoric` - CPU/GPU is from 1999 or older\n`-role vintage` - CPU/GPU is from 2000 to 2007\n`-role legacy` - CPU/GPU is from 2008 to 2012.\n`-role modern` - CPU/GPU is from 2013 to 2018\n`-role current`- CPU/GPU is from 2019 or newer",
-	freeRoles: "Get any of those roles if you want."
+	hardwareRoles: "Select the role depending on your hardware age\n\n`prehistoric` - CPU/GPU is from 1999 or older\n`vintage` - CPU/GPU is from 2000 to 2007\n`legacy` - CPU/GPU is from 2008 to 2012.\n`modern` - CPU/GPU is from 2013 to 2018\n`current`- CPU/GPU is from 2019 or newer",
+	freeRoles: "Get any of those roles if you want.",
+	gamemodeRoles: 'Select the role depending on the games you play'
 }
 
 exports.categoriesTitles = {
@@ -85,7 +86,8 @@ exports.categoriesTitles = {
 	regionRoles: "Setup Region Roles",
 	osRoles: "Setup OS Roles",
 	hardwareRoles: "Setup Hardware Roles",
-	freeRoles: "Setup Free Roles"
+	freeRoles: "Setup Free Roles",
+	gamemodeRoles: "Setup Gamemode Roles"
 }
 
 exports.roleForMembersCategories = {
