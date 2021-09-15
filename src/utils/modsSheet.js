@@ -93,32 +93,46 @@ exports.ModsSheetInstance = class {
             },
         }
 
+        let fileFound
+        let foundIn
+        let tableFound
         for (let i = 0; i < askForRows.length; i++) {
             const row = await askForRows[i].getRows()
-            const fileFound = row.find(
-                (file) =>
-                    file['File Name']?.toLowerCase() === name.toLowerCase() ||
-                    file['File Name']
-                        ?.toLowerCase()
-                        .includes(name.toLowerCase())
-            )
-            
-            if (!fileFound) continue
-            // TODO: The code bellow does not need to be inside this for loop, make let variables to save the file and where it was found (exact match or not) and compare the results later.
-            const objToReturn = {}
-            for (
-                let j = 0;
-                j < askForProperties[tableName[i]].placeAs.length;
-                j++
-            ) {
-                objToReturn[askForProperties[tableName[i]].placeAs[j]] =
-                    fileFound[askForProperties[tableName[i]].getAs[j]]
+            if (i === 2) {
+                console.log('heya')
             }
-            objToReturn.foundIn = tableName[i]
-            console.table(objToReturn)
-            return objToReturn
+            row.find(
+                (file) => {
+                    if (file['File Name']?.toLowerCase() === name.toLowerCase()) {
+                        foundIn = 'exact'
+                        tableFound = i
+                        fileFound = file
+                    }
+
+                    if (file['File Name']?.toLowerCase().includes(name.toLowerCase())) {
+                        foundIn = 'include'
+                        tableFound = i
+                        fileFound = file
+                    }
+                }
+            )
+
+            if (foundIn === 'exact') i = askForRows.length
         }
 
-        return null
+        if (!fileFound) return null
+
+        const objToReturn = {}
+        for (
+            let j = 0;
+            j < askForProperties[tableName[tableFound]].placeAs.length;
+            j++
+        ) {
+            objToReturn[askForProperties[tableName[tableFound]].placeAs[j]] =
+                fileFound[askForProperties[tableName[tableFound]].getAs[j]]
+        }
+        objToReturn.foundIn = tableName[tableFound]
+        console.table(objToReturn)
+        return objToReturn
     }
 }
