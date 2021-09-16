@@ -1,5 +1,6 @@
 // Libs
 const Discord = require('discord.js')
+const NodeCache = require('node-cache')
 
 // Files
 const messageFile = require('../listeners/message.js')
@@ -10,7 +11,8 @@ const embeds = require('../utils/embed.js')
 
 // Variables
 const { MessageActionRow, MessageSelectMenu } = Discord
-
+const fileCache = new NodeCache({ stdTTL: 180 })
+fileCache.set('history', { arr: [] }, 20000)
 /**
  *
  * @param {Discord.Message} message
@@ -69,7 +71,7 @@ exports.run = async (message, language, { client, args }) => {
 
     const embed = embeds.embedBuilder({
         title: "Roles Setup",
-        description: "This setup will help you define free roles for your profile, press the confirm button to continue or press cancel."
+        description: "This setup will help you define free roles for your profile, press the confirm button to continue or press cancel.\n\nSelecting roles you already have will remove them."
     })
 
     const mainMessage = await message.reply({ embeds: [embed] })
@@ -155,11 +157,11 @@ exports.run = async (message, language, { client, args }) => {
     const historyString = (history) => {
         let finalStr = ''
         console.log(history)
-        for (let i = 0; history.length; i++) {
+        for (let i = 0; i < history.length; i++) {
             const added = history[i].startsWith('A')
             const role = history[i].substring(1)
  
-            finalStr += added ? `Added <@${role}>` : `Removed <@${role}>`
+            finalStr += added ? `- Added <@&${role}>` : `- Removed <@&${role}>`
             if (i !== history.length - 1) finalStr += '\n'
         }
 
@@ -172,7 +174,6 @@ exports.run = async (message, language, { client, args }) => {
         i.deferUpdate()
         
         const categories = ['specialRoles', 'regionRoles', 'osRoles', 'hardwareRoles', 'freeRoles', 'gamemodeRoles']
-        const history = []
         let index = 0
 
         await mainMessage.edit({ content: null, embeds: [embedMenu('specialRoles')], components: [ new MessageActionRow().addComponents(menuObject('specialRoles')), new MessageActionRow().addComponents(skipButton) ] })
@@ -183,7 +184,8 @@ exports.run = async (message, language, { client, args }) => {
 
             // FIXME: This will not keep track of items added into the history array, making the command crash if the last page is skipped.
             if (index === 5) {
-                await mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: historyString(history) })], components: [] })
+                const history = await fileCache.get('history')
+                await mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: historyString(history.arr) })], components: [] })
             } else {
                 index++
                 await updateMessage(mainMessage, null, embedMenu(categories[index]), menuObject(categories[index]))
@@ -207,17 +209,21 @@ exports.run = async (message, language, { client, args }) => {
 
                 if (!role) continue
 
+                const oldValue = await fileCache.get('history')
                 if (member.roles.cache.find(rol => rol.id === role.id)) {
                     await member.roles.remove(role.id)
-                    history.push(`R${role.id}`)
+                    fileCache.del('history')
+                    fileCache.set('history', { arr: oldValue.arr.concat(`R${role.id}`) })
                 } else {
                     await member.roles.add(role.id)
-                    history.push(`A${role.id}`)
+                    fileCache.del('history')
+                    fileCache.set('history', { arr: oldValue.arr.concat(`A${role.id}`) })
                 }
             }
 
             if (index === 5) {
-                mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: historyString(history) })], components: [] })
+                const history = await fileCache.get('history')
+                mainMessage.edit({ embeds: [embeds.embedBuilder({ title: 'Setup done!', description: historyString(history.arr) })], components: [] })
             } else {
                 index++
                 console.log(`Requesting ${categories[index]}`)
