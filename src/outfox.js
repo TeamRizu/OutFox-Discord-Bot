@@ -11,6 +11,7 @@ const argument = require('./utils/argument.js')
 const leaderboard = require('./utils/leaderboard.js')
 const modsSheets = require('./utils/modsSheet.js')
 const languageStatus = require('./utils/languageStatus.js')
+const archival = require('./utils/archival.js')
 
 // Variables
 const languages = {
@@ -19,8 +20,12 @@ const languages = {
 }
 const { commands } = indexCommand
 const commandList = Object.keys(commands)
+const archivalInstance = new archival.ArchiveInstance()
 let leaderboardObj = new Map()
 let languageObj = new Map()
+
+
+
 /**
  *
  * @async
@@ -66,7 +71,7 @@ exports.main = async (client, logger) => {
     }, 60000)
 
     logger.info('OutFoxing messages')
-
+    await archivalInstance.setup()
     client.on('messageCreate', (msg) => {
         if (!msg.content.toLowerCase().startsWith(process.env.PREFIX)) return
         if (!msg.guild) return
