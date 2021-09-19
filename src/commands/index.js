@@ -13,5 +13,7 @@ exports.commands = {
     leaderboard: require('./leaderboard.js'),
     mods: require('./mods.js'),
     languagestatus: require('./languagestatus.js'),
-    getrole: require('./getrole.js')
+    getrole: require('./getrole.js'),
+    getroles: require('./getrole.js'),
+    themes: require('./themes.js')
 }

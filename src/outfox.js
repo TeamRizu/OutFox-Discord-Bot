@@ -71,7 +71,10 @@ exports.main = async (client, logger) => {
     }, 60000)
 
     logger.info('OutFoxing messages')
+
     await archivalInstance.setup()
+    logger.info('Archival up')
+
     client.on('messageCreate', (msg) => {
         if (!msg.content.toLowerCase().startsWith(process.env.PREFIX)) return
         if (!msg.guild) return
@@ -90,6 +93,7 @@ exports.main = async (client, logger) => {
             languageStatus: languageObj.get('obj'),
             leaderboard: leaderboardObj.get('obj'),
             commands,
+            archivalInstance,
             logger,
         })
     })

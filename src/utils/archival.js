@@ -50,6 +50,28 @@ exports.ArchiveInstance = class {
     }
 
     themeFromVersion(version, themeName) {
-        // TODO: Everything.
+        if (!supportedVersions.includes(version)) return null
+
+        const versionThemes = themesForVersion(version)
+
+        if (!versionThemes.includes(themeName)) return null
+
+        return versionThemes[themeName]
+    }
+
+    themeVersions(version, themeName) {
+        if (!themeFromVersion(version, themeName)) return null
+
+        const theme = themesForVersion(version)[themeName]
+
+        if (!Array.isArray(theme.link)) return null
+
+        const versions = []
+
+        for (let i = 0; i < theme.link.length; i++) {
+            versions.push(theme.link[i].Name)
+        }
+
+        return versions
     }
 }
