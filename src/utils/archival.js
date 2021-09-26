@@ -9,7 +9,7 @@ exports.ArchiveInstance = class {
     async setup() {
         const body = await request(this.sourceURL)
 
-        this.mainObject = body
+        this.mainObject = JSON.parse(body)
 
         return body
     }
@@ -28,7 +28,7 @@ exports.ArchiveInstance = class {
         const versions = []
 
         for (let i = 0; i < Object.keys(this.mainObject).length; i++) {
-            versions.push(this.mainObject[Object.keys(mainObject)[i]].Name)
+            versions.push(this.mainObject[Object.keys(this.mainObject)[i]].Name)
         }
 
         return versions
@@ -40,29 +40,30 @@ exports.ArchiveInstance = class {
      * @returns {string[]|null}
      */
     themesForVersion(version) {
-        if (!supportedVersions.includes(version)) return null
+        if (!this.supportedVersions.includes(version)) return null
 
         const themes = Object.keys(this.mainObject[version])
 
-        themes.shift()
-
+        themes.shift() // Remove version name.
+        console.log('returning themes')
         return themes
     }
 
     themeFromVersion(version, themeName) {
-        if (!supportedVersions.includes(version)) return null
+        console.log(version, themeName)
+        if (!this.supportedVersions.includes(version)) return null
 
-        const versionThemes = themesForVersion(version)
+        const versionThemes = this.themesForVersion(version)
 
         if (!versionThemes.includes(themeName)) return null
 
-        return versionThemes[themeName]
+        return this.mainObject[version][themeName]
     }
 
     themeVersions(version, themeName) {
-        if (!themeFromVersion(version, themeName)) return null
+        if (!this.themeFromVersion(version, themeName)) return null
 
-        const theme = themesForVersion(version)[themeName]
+        const theme = this.themesForVersion(version)[themeName]
 
         if (!Array.isArray(theme.link)) return null
 

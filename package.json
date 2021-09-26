@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
-    "discord.js": "^13.0.0-dev.5e70694.1626955541",
+    "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "google-spreadsheet": "^3.1.15",
     "ini": "^2.0.0",
