@@ -9,7 +9,19 @@ exports.ArchiveInstance = class {
     async setup() {
         const body = await request(this.sourceURL)
 
-        this.mainObject = JSON.parse(body)
+        // this.mainObject = JSON.parse(body)
+        const db = JSON.parse(body)
+
+        for (let i = 0; i < Object.keys(db).length; i++) { // SM Versions
+            const versionName = Object.keys(db)[i]
+            for (let t = 0; t < Object.keys(db[versionName]).length; t++) { // Themes
+                const themeName = Object.keys(db[versionName])[t]
+                
+                if (themeName === 'Name') continue
+
+                // TODO: Add each theme to mainObject, theme name as the index key and add any valuable information as the object value.
+            }
+        }
 
         return body
     }
