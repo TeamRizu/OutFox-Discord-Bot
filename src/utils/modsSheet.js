@@ -98,9 +98,6 @@ exports.ModsSheetInstance = class {
         let tableFound
         for (let i = 0; i < askForRows.length; i++) {
             const row = await askForRows[i].getRows()
-            if (i === 2) {
-                console.log('heya')
-            }
             row.find(
                 (file) => {
                     if (file['File Name']?.toLowerCase() === name.toLowerCase()) {
