@@ -81,7 +81,7 @@ exports.run = async (message, language, { args, archivalInstance }) => {
             if (theme.Date) emb.addField('Creation Date', theme.Date)
             if (theme.Author) emb.addField('Author', theme.Author)
             if (theme.Version) emb.addField('Version', theme.Version)
-            mainMessage.edit({ embeds: [emb], components: []})
+            mainMessage.edit({ embeds: [emb], components: [] })
             fileCache.del('version')
             menuCollect.stop()
             return true
