@@ -23,7 +23,6 @@ exports.run = async (message, language, { Sheet }) => {
         })
         return
     }
-    // TODO: Apply cooldowns when bot is ready to launch.
 
     const userLanguages = Sheet.userLanguages
     const rows = await userLanguages.getRows()

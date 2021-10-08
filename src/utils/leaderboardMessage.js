@@ -3,6 +3,7 @@ const Discord = require('discord.js')
 
 // Files
 const buttons = require('./buttons.js')
+const embeds = require('./embed.js')
 
 // Variables
 const { MessageActionRow, MessageSelectMenu } = Discord
@@ -14,11 +15,22 @@ exports.LeaderboardMessage = class {
         this.charsPerElement = 80
         this.charsPerPage = 1024
         this.supportLookUp = false // If enabled, the message author can type the number of the element to read more about it. Only supported for Object elements.
+        this.lookingUp = false
+        this.menuSelectPlaceholder = 'Look up element'
+        this.leaderboardTitle = 'Checkout cool stuff'
         this.idleTime = 120000
         this.message = message
         this.language = language
         this.formatElement = (e, i) => {
+
+            if (typeof e === 'object') {
+                return e.description || 'UNKNOWN_OBJECT_ELEMENT_DESCRIPTION'
+            }
+
             return i ? `${i}° ${e}` : (e || 'UNKNOWN_ELEMENT')
+        }
+        this.lookUpFunc = (element) => {
+            return embeds.embedBuilder(element)
         }
     }
 
@@ -30,7 +42,7 @@ exports.LeaderboardMessage = class {
                 return false
             }
 
-            if ((typeof element === 'string' && element.length > this.charsPerElement) || this.formatElement(element).length > this.charsPerElement) {
+            if (typeof element === 'string' && element.length > this.charsPerElement) {
                 console.warn('Element is longer than allowed character limit. Limit = ', this.charsPerElement, ', Given = ', element.length)
                 return false
             }
@@ -45,6 +57,7 @@ exports.LeaderboardMessage = class {
 
     get pages() {
         const pageList = []
+        const individualElements = [[]]
         let pageContent = ''
 
         for (let i = 0; i < this.elements.length; i++) {
@@ -57,6 +70,10 @@ exports.LeaderboardMessage = class {
                 pageContent = ''
             }
 
+            if (individualElements[pageList.length] === undefined) {
+                individualElements[pageList.length] = []
+            }
+            individualElements[pageList.length].push(typeof currentElement === 'object' ? currentElement : elementString)
             pageContent += elementString
 
             // If we reach the limit of elements per page, add the current content to the page list.
@@ -71,15 +88,64 @@ exports.LeaderboardMessage = class {
             }
         }
 
-        return pageList
+        return {
+            pageList,
+            individualElements
+        }
     }
 
-    async updateMessage(reason) {
-        // TODO: Almost no operation should be done here, only the update of the message itself.
+    /**
+     * 
+     * @param {'pageswitch'|'stoplooking'|'lookup'|'init'} reason 
+     * @param {any} args 
+     */
+    async updateMessage(reason, args) {
+        switch (reason) {
+            case 'pageswitch':
+            case 'stoplooking':
+            case 'init':
+                await this.message.edit({
+                    embeds: [
+                        embeds.embedBuilder({
+                            title: this.leaderboardTitle,
+                            description: this.pages[this.page],
+                            footer: `${this.page + 1}/${this.pages.pageList.length}`
+                        })
+                    ],
+                    components: [this.pageComponents]
+                })
+            break
+            default:
+                await this.message.edit({
+                    // The default lookUpFunc is not async but one defined by the user is.
+                    embeds: [await this.lookUpFunc( this.pages.individualElements[args[0]][args[1]] )],
+                    components: [this.pageComponents]
+                })
+            break
+        }
     }
 
     get pageComponents() {
-        const pageCount = this.pages.length
+
+        if (this.lookingUp) {
+            const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
+                this.message,
+                'stoplooking' + this.message.id,
+                this.language('generic', 'lookUpBack'),
+                'PRIMARY',
+                { timer: this.idleTime }
+            )
+
+            stopLookingCollector.on('collect', async i => {
+                i.deferUpdate()
+                await this.updateMessage('stoplooking')
+                this.lookingUp = false
+            })
+
+            return new MessageActionRow().addComponents(stopLookingButton)
+        }
+
+        const pageCount = this.pages.pageList.length
         const isNextPossible = !((this.page + 1) > pageCount)
         const isBackPossible = !((this.page - 1) < pageCount)
 
@@ -119,17 +185,56 @@ exports.LeaderboardMessage = class {
             })
         }
 
+        const components = new MessageActionRow()
+        components.addComponents(backButton, nextButton)
+
         if (this.supportLookUp) {
-            const pageContent = this.pages[this.page]
+            const { individualElements } = this.pages
+            const currentPageElements = individualElements[this.page]
 
             const selectElement = []
 
-            for (let i = 0; i < pageContent.length; i++) {
+            for (let i = 0; i < currentPageElements.length; i++) {
                 selectElement.push({
-                    value: `ofl!!${message.id}!!` // TODO: pageElements is NOT an array of elements, its a string of the entire page. 
+                    value: `ofl!!${message.id}!!${this.page}${i}`
                 })
             }
+
+            const elementSelector = MessageSelectMenu()
+                .setCustomId('select' + message.id)
+                .setPlaceholder(this.menuSelectPlaceholder)
+                .addOptions(selectElement)
+
+            const selectCollector = this.message.createMessageComponentCollector({
+                componentType: 'SELECT_MENU',
+                time: this.idleTime
+            })
+
+            const optionsSelectFilter = (i) => {
+                if (i.split('!!').length !== 3) return null
+        
+                const given = i.split('!!')
+        
+                return {
+                    prefix: given[0],
+                    id: given[1],
+                    arg: given[2]
+                }
+            }
+
+            selectCollector.on('collect', async i => {
+                if (i.user.id !== message.author.id || i.guild.id !== message.guild.id || (!i.values || i.values.length === 0)) return
+
+                i.deferUpdate()
+                
+                const { arg } = optionsSelectFilter(i.values[0])
+                this.lookingUp = true
+                await this.updateMessage('lookup', arg)
+            })
+
+            components.addComponents(elementSelector)
         }
-        // TODO: Should return an ActionRow of all the buttons.
+
+        return components
     }
 }
