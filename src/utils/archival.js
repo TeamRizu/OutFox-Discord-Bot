@@ -9,7 +9,8 @@ exports.ArchiveInstance = class {
     async setup() {
         const body = await request(this.sourceURL)
 
-        // this.mainObject = JSON.parse(body)
+        this.mainObject = JSON.parse(body)
+        /*
         const db = JSON.parse(body)
 
         for (let i = 0; i < Object.keys(db).length; i++) { // SM Versions
@@ -24,6 +25,7 @@ exports.ArchiveInstance = class {
         }
 
         return body
+        */
     }
 
     /**

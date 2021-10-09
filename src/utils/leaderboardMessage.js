@@ -8,7 +8,7 @@ const embeds = require('./embed.js')
 // Variables
 const { MessageActionRow, MessageSelectMenu } = Discord
 exports.LeaderboardMessage = class {
-    constructor(message, language) {
+    constructor(message, userMessage, language) {
         this.elements = []
         this.page = 0
         this.elementsPerPage = 15
@@ -20,6 +20,7 @@ exports.LeaderboardMessage = class {
         this.leaderboardTitle = 'Checkout cool stuff'
         this.idleTime = 120000
         this.message = message
+        this.userMessage = userMessage
         this.language = language
         this.formatElement = (e, i) => {
 
@@ -62,7 +63,7 @@ exports.LeaderboardMessage = class {
 
         for (let i = 0; i < this.elements.length; i++) {
             const currentElement = this.elements[i]
-            const elementString = this.formatElement(currentElement, i)
+            const elementString = this.formatElement(currentElement, i + 1)
 
             // If the addition of the element will make the page bigger than allowed, then create a new page.
             if ((pageContent.length + elementString.length) > this.charsPerPage) {
@@ -70,14 +71,15 @@ exports.LeaderboardMessage = class {
                 pageContent = ''
             }
 
-            if (individualElements[pageList.length] === undefined) {
-                individualElements[pageList.length] = []
+            const individualPageIndex = pageList.length > 0 ? pageList.length - 1 : pageList.length
+            if (individualElements[individualPageIndex] === undefined) {
+                individualElements[individualPageIndex] = []
             }
-            individualElements[pageList.length].push(typeof currentElement === 'object' ? currentElement : elementString)
-            pageContent += elementString
+            individualElements[individualPageIndex].push(typeof currentElement === 'object' ? currentElement : elementString)
+            pageContent += `\n${elementString}`
 
             // If we reach the limit of elements per page, add the current content to the page list.
-            if ((i % this.elementsPerPage) === 0) {
+            if (i !== 0 && (i % this.elementsPerPage) === 0) {
                 pageList.push(pageContent)
                 pageContent = ''
                 continue // We need this here to the condition bellow doesn't run if this runs, which would add 2 pages.
@@ -108,18 +110,19 @@ exports.LeaderboardMessage = class {
                     embeds: [
                         embeds.embedBuilder({
                             title: this.leaderboardTitle,
-                            description: this.pages[this.page],
-                            footer: `${this.page + 1}/${this.pages.pageList.length}`
+                            description: this.pages.pageList[this.page],
+                            footer: `Page ${this.page + 1}/${this.pages.pageList.length}`
                         })
                     ],
-                    components: [this.pageComponents]
+                    components: this.pageComponents
                 })
             break
-            default:
+            default: // lookup
+                const embed = await this.lookUpFunc( this.pages.individualElements[args[0]][args[1]] )
                 await this.message.edit({
                     // The default lookUpFunc is not async but one defined by the user is.
-                    embeds: [await this.lookUpFunc( this.pages.individualElements[args[0]][args[1]] )],
-                    components: [this.pageComponents]
+                    embeds: [embed],
+                    components: this.pageComponents
                 })
             break
         }
@@ -127,32 +130,32 @@ exports.LeaderboardMessage = class {
 
     get pageComponents() {
 
-        if (this.lookingUp) {
-            const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
-                this.message,
-                'stoplooking' + this.message.id,
-                this.language('generic', 'lookUpBack'),
-                'PRIMARY',
-                { timer: this.idleTime }
-            )
+        // if (this.lookingUp) {
+        //     const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
+        //         this.message,
+        //         'stoplooking' + this.message.id,
+        //         this.language.readLine('generic', 'lookUpBack'),
+        //         'PRIMARY',
+        //         { timer: this.idleTime }
+        //     )
 
-            stopLookingCollector.on('collect', async i => {
-                i.deferUpdate()
-                await this.updateMessage('stoplooking')
-                this.lookingUp = false
-            })
+        //     stopLookingCollector.on('collect', async i => {
+        //         // await i.deferReply()
+        //         await this.updateMessage('stoplooking')
+        //         this.lookingUp = false
+        //     })
 
-            return new MessageActionRow().addComponents(stopLookingButton)
-        }
+        //     return [new MessageActionRow().addComponents(stopLookingButton)]
+        // }
 
-        const pageCount = this.pages.pageList.length
+        const pageCount = this.pages.pageList.length - 1
         const isNextPossible = !((this.page + 1) > pageCount)
         const isBackPossible = !((this.page - 1) < pageCount)
 
         const { button: backButton, collector: backCollector } = buttons.quickBetterButton(
             this.message,
             'back' + this.message.id,
-            this.language('leaderboard', 'GoBack'),
+            this.language.readLine('leaderboard', 'GoBack'),
             'PRIMARY',
             { timer: this.idleTime }
         )
@@ -160,7 +163,7 @@ exports.LeaderboardMessage = class {
         const { button: nextButton, collector: nextCollector } = buttons.quickBetterButton(
             this.message,
             'next' + this.message.id,
-            this.language('leaderboard', 'NextPage'),
+            this.language.readLine('leaderboard', 'NextPage'),
             'PRIMARY',
             { timer: this.idleTime }
         )
@@ -169,7 +172,7 @@ exports.LeaderboardMessage = class {
             nextButton.setDisabled(true)
         } else {
             nextCollector.on('collect', async i => {
-                i.deferUpdate()
+                await i.deferUpdate()
                 this.page++
                 await this.updateMessage('pageswitch')
             })
@@ -179,14 +182,16 @@ exports.LeaderboardMessage = class {
             backButton.setDisabled(true)
         } else {
             backCollector.on('collect', async i => {
-                i.deferUpdate()
+                await i.deferUpdate()
                 this.page++
                 await this.updateMessage('pageswitch')
             })
         }
 
-        const components = new MessageActionRow()
-        components.addComponents(backButton, nextButton)
+        const components = []
+        const buttonsComponents = new MessageActionRow()
+        .addComponents(backButton, nextButton)
+        components.push(buttonsComponents)
 
         if (this.supportLookUp) {
             const { individualElements } = this.pages
@@ -196,12 +201,13 @@ exports.LeaderboardMessage = class {
 
             for (let i = 0; i < currentPageElements.length; i++) {
                 selectElement.push({
-                    value: `ofl!!${message.id}!!${this.page}${i}`
+                    value: `ofl!!${this.message.id}!!${this.page}${i}`,
+                    label: individualElements[this.page][i].description
                 })
             }
 
-            const elementSelector = MessageSelectMenu()
-                .setCustomId('select' + message.id)
+            const elementSelector = new MessageSelectMenu()
+                .setCustomId('select' + this.message.id)
                 .setPlaceholder(this.menuSelectPlaceholder)
                 .addOptions(selectElement)
 
@@ -223,16 +229,16 @@ exports.LeaderboardMessage = class {
             }
 
             selectCollector.on('collect', async i => {
-                if (i.user.id !== message.author.id || i.guild.id !== message.guild.id || (!i.values || i.values.length === 0)) return
-
-                i.deferUpdate()
-                
+                // await i.fetchReply()
+                if (i.user.id !== this.userMessage.author.id || i.guild.id !== this.message.guild.id || (!i.values || i.values.length === 0)) return
+                selectCollector.resetTimer()
                 const { arg } = optionsSelectFilter(i.values[0])
                 this.lookingUp = true
                 await this.updateMessage('lookup', arg)
             })
 
-            components.addComponents(elementSelector)
+            const selectComponent = new MessageActionRow().addComponents(elementSelector)
+            components.push(selectComponent)
         }
 
         return components
