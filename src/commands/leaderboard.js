@@ -6,8 +6,9 @@ const messageFile = require('../listeners/message.js')
 const languageFile = require('../utils/language.js')
 const constants = require('../utils/constants.js')
 const pagination = require('../utils/pagination.js')
-const embeds = require('../utils/embed.js')
-const buttons = require('../utils/buttons.js')
+// const embeds = require('../utils/embed.js')
+// const buttons = require('../utils/buttons.js')
+const leaderboardMessage = require('../utils/leaderboardMessage.js')
 
 // Variables
 const { MessageActionRow } = Discord
@@ -21,6 +22,7 @@ const Pagination = pagination.Pagination
  * @param {messageFile.OptionalParams} param3
  */
 exports.run = async (message, language, { Sheet, leaderboard }) => {
+    /*
     const id = message.author.id
     const knownUsers = Sheet.discordgithub
     const rows = await knownUsers.getRows()
@@ -29,13 +31,16 @@ exports.run = async (message, language, { Sheet, leaderboard }) => {
         ? leaderboard.find((element) => element[0] === rowSearch.github)
         : null
 
+    
     const embed = embeds.embedBuilder({
         title: language.readLine('leaderboard', 'BugHunterLeaderboard'),
         color: '#ADBAC7',
         thumbnail: 'https://avatars.githubusercontent.com/u/64650386?s=200&v=4',
         url: 'https://github.com/TeamRizu/OutFox/blob/master/leaderboard.md',
     })
+    */
 
+    /*
     const leaderboardPages = new Pagination(leaderboard)
     const filter = (row, ind) => {
         if (ind === 0) return ''
@@ -53,10 +58,29 @@ exports.run = async (message, language, { Sheet, leaderboard }) => {
 
         return stringToAdd
     }
+
     leaderboardPages.setup(filter)
 
     const pages = leaderboardPages.pages
+    */
+    const mainMessage = await message.channel.send('Interact with the menu bellow')
+    const leaderboardManager = new leaderboardMessage.LeaderboardMessage(mainMessage, message, language)
+    leaderboardManager.leaderboardTitle = language.readLine('leaderboard', 'BugHunterLeaderboard')
+    // leaderboardManager.elements = leaderboard
 
+    for (let i = 1; i < leaderboard.length; i++) {
+        const [user, points, update, is] = leaderboard[i]
+        const leaderboardElement = language.readLine(
+            'leaderboard',
+            'UserPointsField',
+            { points, user, role: `<@&${constants.bugRole[is]}>` }
+        )
+
+        leaderboardManager.addElement(leaderboardElement)
+    }
+    await leaderboardManager.updateMessage('init')
+
+    /*
     const buttonBack = buttons.quickButton(
         'swipeback' + message.id,
         language.readLine('leaderboard', 'GoBack'),
@@ -163,6 +187,6 @@ exports.run = async (message, language, { Sheet, leaderboard }) => {
         await setDescription(page, msg)
         i.deferUpdate()
     })
-
+    */
     return true
 }

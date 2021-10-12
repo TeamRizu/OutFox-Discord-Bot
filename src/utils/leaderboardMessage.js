@@ -25,7 +25,7 @@ exports.LeaderboardMessage = class {
         this.formatElement = (e, i) => {
 
             if (typeof e === 'object') {
-                return e.description || 'UNKNOWN_OBJECT_ELEMENT_DESCRIPTION'
+                return i ? `${i}° ${e.description}` : (e.description || 'UNKNOWN_OBJECT_ELEMENT_DESCRIPTION')
             }
 
             return i ? `${i}° ${e}` : (e || 'UNKNOWN_ELEMENT')
@@ -131,29 +131,37 @@ exports.LeaderboardMessage = class {
     get pageComponents() {
 
         // if (this.lookingUp) {
-        //     const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
-        //         this.message,
-        //         'stoplooking' + this.message.id,
-        //         this.language.readLine('generic', 'lookUpBack'),
-        //         'PRIMARY',
-        //         { timer: this.idleTime }
-        //     )
-
-        //     stopLookingCollector.on('collect', async i => {
-        //         // await i.deferReply()
-        //         await this.updateMessage('stoplooking')
-        //         this.lookingUp = false
-        //     })
-
-        //     return [new MessageActionRow().addComponents(stopLookingButton)]
+        //     return []
         // }
+        if (this.lookingUp) {
+            const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
+                this.message,
+                'stoplooking' + this.message.id,
+                this.language.readLine('generic', 'lookUpBack'),
+                'PRIMARY',
+                { timer: this.idleTime }
+            )
+
+            stopLookingCollector.on('collect', async i => {
+                try {
+                    if (i.user.id !== this.userMessage.author.id) return
+                    await i.deferReply()
+                    await this.updateMessage('stoplooking')
+                    this.lookingUp = false
+                } catch (e) {
+                    console.warn(`Interaction said to be unknown, ignoring...`)
+                }
+            })
+
+            return [new MessageActionRow().addComponents(stopLookingButton)]
+        }
 
         const pageCount = this.pages.pageList.length - 1
         const isNextPossible = !((this.page + 1) > pageCount)
-        const isBackPossible = !((this.page - 1) < pageCount)
+        const isBackPossible = !((this.page - 1) < 0)
 
         const { button: backButton, collector: backCollector } = buttons.quickBetterButton(
-            this.message,
+            this.userMessage,
             'back' + this.message.id,
             this.language.readLine('leaderboard', 'GoBack'),
             'PRIMARY',
@@ -161,7 +169,7 @@ exports.LeaderboardMessage = class {
         )
 
         const { button: nextButton, collector: nextCollector } = buttons.quickBetterButton(
-            this.message,
+            this.userMessage,
             'next' + this.message.id,
             this.language.readLine('leaderboard', 'NextPage'),
             'PRIMARY',
@@ -171,20 +179,32 @@ exports.LeaderboardMessage = class {
         if (!isNextPossible) {
             nextButton.setDisabled(true)
         } else {
+            nextButton.setDisabled(false)
             nextCollector.on('collect', async i => {
-                await i.deferUpdate()
-                this.page++
-                await this.updateMessage('pageswitch')
+                try {
+                    if (i.user.id !== this.userMessage.author.id) return
+                    i.deferUpdate()
+                    this.page++
+                    await this.updateMessage('pageswitch')
+                } catch (e) {
+                    console.warn(`Interaction said to be unknown, ignoring...`)
+                }
             })
         }
 
         if (!isBackPossible) {
             backButton.setDisabled(true)
         } else {
+            backButton.setDisabled(false)
             backCollector.on('collect', async i => {
-                await i.deferUpdate()
-                this.page++
-                await this.updateMessage('pageswitch')
+                try {
+                    if (i.user.id !== this.userMessage.author.id) return
+                    i.deferUpdate()
+                    this.page--
+                    await this.updateMessage('pageswitch')
+                } catch (e) {
+                    console.warn(`Interaction said to be unknown, ignoring...`)
+                }
             })
         }
 
@@ -229,12 +249,16 @@ exports.LeaderboardMessage = class {
             }
 
             selectCollector.on('collect', async i => {
-                // await i.fetchReply()
-                if (i.user.id !== this.userMessage.author.id || i.guild.id !== this.message.guild.id || (!i.values || i.values.length === 0)) return
-                selectCollector.resetTimer()
-                const { arg } = optionsSelectFilter(i.values[0])
-                this.lookingUp = true
-                await this.updateMessage('lookup', arg)
+                try {
+                    if (i.user.id !== this.userMessage.author.id || i.guild.id !== this.message.guild.id || (!i.values || i.values.length === 0)) return
+                    i.fetchReply()
+                    selectCollector.resetTimer()
+                    const { arg } = optionsSelectFilter(i.values[0])
+                    this.lookingUp = true
+                    await this.updateMessage('lookup', arg)
+                } catch (e) {
+                    console.warn(`Interaction said to be unknown, ignoring...`)
+                }
             })
 
             const selectComponent = new MessageActionRow().addComponents(elementSelector)

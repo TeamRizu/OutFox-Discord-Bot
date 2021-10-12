@@ -97,4 +97,8 @@ exports.main = async (client, logger) => {
             logger,
         })
     })
+
+    client.on('error', (err) => {
+        console.warn(err)
+    })
 }
