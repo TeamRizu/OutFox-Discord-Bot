@@ -6,13 +6,8 @@ const Vibrant = require('node-vibrant')
 // Files
 const messageFile = require('../listeners/message.js')
 const languageFile = require('../utils/language.js')
-const pagination = require('../utils/pagination.js')
 const embeds = require('../utils/embed.js')
-const buttons = require('../utils/buttons.js')
-
-// Variables
-const { MessageActionRow } = Discord
-const Pagination = pagination.Pagination
+const leaderboardMessage = require('../utils/leaderboardMessage.js')
 
 /**
  *
@@ -23,85 +18,23 @@ const Pagination = pagination.Pagination
  */
 exports.run = async (message, language, { ModsSheet, args }) => {
     if (!args.argument) {
-        const modsPages = new Pagination(
-            await ModsSheet.convertedMods.getRows()
-        )
-        const filter = (row, ind) => {
-            if (!row['File Name']) return false
-            return `**${ind + 1}º** - [${row['File Name']}](${
+        const botMessage = await message.channel.send('Interact with the menu bellow')
+        const modsPages = new leaderboardMessage.LeaderboardMessage(botMessage, message, language)
+        const rows = await ModsSheet.convertedMods.getRows()
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i]
+
+            if (!row['File Name']) continue
+
+            modsPages.addElement(row)
+        }
+        modsPages.formatElement = (row, ind) => {
+            return `**${ind}º** - [${row['File Name']}](${
                 row['YT-Link']
-            }) (${row.Author || 'Unknown Author'})\n`
+            }) (${row.Author || 'Unknown Author'})`
         }
-        modsPages.setup(filter)
-        let currentPage = 0
-        const embed = embeds.embedBuilder({
-            title: 'Converted Mods',
-            footer: `Page ${currentPage + 1} / ${
-                modsPages.pages.length
-            } - SM5 Conversions by MrThatKid.`,
-            description: modsPages.getPage(currentPage),
-        })
+        modsPages.updateMessage('init')
 
-        const mainMessage = await message.reply({ embeds: [embed] })
-
-        const updateEmbed = async () => {
-            embed.setDescription(modsPages.getPage(currentPage))
-            embed.setFooter(
-                `Page ${currentPage + 1} / ${
-                    modsPages.pages.length
-                } - SM5 Conversions by MrThatKid.`
-            )
-            await mainMessage.edit({ embeds: [embed] })
-
-            return embed
-        }
-
-        const backBetterButton = buttons.quickBetterButton(
-            message,
-            `${'backpage' + message.id}`,
-            'Go back',
-            'PRIMARY'
-        )
-        const backButton = backBetterButton.button
-        const backCollector = backBetterButton.collector
-
-        const nextBetterButton = buttons.quickBetterButton(
-            message,
-            `${'nextpage' + message.id}`,
-            'Next page',
-            'PRIMARY'
-        )
-        const nextButton = nextBetterButton.button
-        const nextCollector = nextBetterButton.collector
-
-        backCollector.on('collect', async (i) => {
-            if (!i.isButton) return
-
-            backCollector.resetTimer()
-            i.deferUpdate()
-            if (0 > currentPage - 1) return
-
-            currentPage--
-            await updateEmbed()
-        })
-
-        nextCollector.on('collect', async (i) => {
-            if (!i.isButton) return
-
-            nextCollector.resetTimer()
-            i.deferUpdate()
-            if (currentPage + 1 > modsPages.pages.length - 1) return
-
-            currentPage++
-            await updateEmbed()
-        })
-
-        const comp = new MessageActionRow().addComponents(
-            backButton,
-            nextButton
-        )
-
-        mainMessage.edit({ components: [comp] })
     } else {
         const file = await ModsSheet.chartInfo(args.argument.join(' '))
 

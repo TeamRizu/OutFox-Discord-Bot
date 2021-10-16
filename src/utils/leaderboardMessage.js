@@ -65,6 +65,10 @@ exports.LeaderboardMessage = class {
             const currentElement = this.elements[i]
             const elementString = this.formatElement(currentElement, i + 1)
 
+            if (!elementString) {
+                continue
+            }
+
             // If the addition of the element will make the page bigger than allowed, then create a new page.
             if ((pageContent.length + elementString.length) > this.charsPerPage) {
                 pageList.push(pageContent)
@@ -80,6 +84,7 @@ exports.LeaderboardMessage = class {
 
             // If we reach the limit of elements per page, add the current content to the page list.
             if (i !== 0 && (i % this.elementsPerPage) === 0) {
+                // FIXME: Can push page 2 times with line 74, add a variable to check if a push has already bene made on the same loop.
                 pageList.push(pageContent)
                 pageContent = ''
                 continue // We need this here to the condition bellow doesn't run if this runs, which would add 2 pages.
