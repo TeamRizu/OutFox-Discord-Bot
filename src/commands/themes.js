@@ -55,8 +55,10 @@ exports.run = async (message, language, { args, archivalInstance }) => {
             leaderboardManager.lookingUp = false
             leaderboardManager.page = 0
         }
+
         leaderboardManager.leaderboardTitle = 'Select Theme to lookup'
         leaderboardManager.menuSelectPlaceholder = 'Select Theme'
+        console.log('The funny iam about to return')
         return embeds.embedBuilder({
             title: leaderboardManager.leaderboardTitle,
             description: leaderboardManager.pages.pageList[0],

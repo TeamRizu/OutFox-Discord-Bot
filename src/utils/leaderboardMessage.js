@@ -33,6 +33,7 @@ exports.LeaderboardMessage = class {
         this.lookUpFunc = (element) => {
             return embeds.embedBuilder(element)
         }
+        this.collectors = []
     }
 
     addElement(element) {
@@ -64,6 +65,7 @@ exports.LeaderboardMessage = class {
         for (let i = 0; i < this.elements.length; i++) {
             const currentElement = this.elements[i]
             const elementString = this.formatElement(currentElement, i + 1)
+            let hasPushed = false
 
             if (!elementString) {
                 continue
@@ -73,6 +75,7 @@ exports.LeaderboardMessage = class {
             if ((pageContent.length + elementString.length) > this.charsPerPage) {
                 pageList.push(pageContent)
                 pageContent = ''
+                hasPushed = true
             }
 
             const individualPageIndex = pageList.length > 0 ? pageList.length - 1 : pageList.length
@@ -83,14 +86,15 @@ exports.LeaderboardMessage = class {
             pageContent += `\n${elementString}`
 
             // If we reach the limit of elements per page, add the current content to the page list.
-            if (i !== 0 && (i % this.elementsPerPage) === 0) {
-                // FIXME: Can push page 2 times with line 74, add a variable to check if a push has already bene made on the same loop.
+            const curPageElements = individualElements[individualPageIndex].length + 1
+            if (!hasPushed && i !== 0 && curPageElements >= this.elementsPerPage) {
                 pageList.push(pageContent)
                 pageContent = ''
-                continue // We need this here to the condition bellow doesn't run if this runs, which would add 2 pages.
+                hasPushed = true
+                continue // We need this here so the condition bellow doesn't run if this runs, which would add 2 pages.
             }
 
-            if (i === (this.elements.length - 1)) {
+            if (!hasPushed && i === (this.elements.length - 1)) {
                 pageList.push(pageContent)
             }
         }
@@ -110,6 +114,16 @@ exports.LeaderboardMessage = class {
         switch (reason) {
             case 'pageswitch':
             case 'stoplooking':
+                await this.message.edit({
+                    embeds: [
+                        embeds.embedBuilder({
+                            title: this.leaderboardTitle,
+                            description: this.pages.pageList[this.page],
+                            footer: `Page ${this.page + 1}/${this.pages.pageList.length}`
+                        })
+                    ],
+                    components: this.pageComponents
+                })
             case 'init':
                 await this.message.edit({
                     embeds: [
@@ -123,8 +137,8 @@ exports.LeaderboardMessage = class {
                 })
             break
             default: // lookup
-                const embed = await this.lookUpFunc( this.pages.individualElements[args[0]][args[1]] )
-                await this.message.edit({
+                const embed = await this.lookUpFunc( this.pages.individualElements[args[0][0]][args[0][1]] )
+                this.message.edit({
                     // The default lookUpFunc is not async but one defined by the user is.
                     embeds: [embed],
                     components: this.pageComponents
@@ -135,65 +149,93 @@ exports.LeaderboardMessage = class {
 
     get pageComponents() {
 
-        // if (this.lookingUp) {
-        //     return []
-        // }
         if (this.lookingUp) {
-            const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
-                this.message,
-                'stoplooking' + this.message.id,
-                this.language.readLine('generic', 'lookUpBack'),
-                'PRIMARY',
-                { timer: this.idleTime }
-            )
-
-            stopLookingCollector.on('collect', async i => {
-                try {
-                    if (i.user.id !== this.userMessage.author.id) return
-                    await i.deferReply()
-                    await this.updateMessage('stoplooking')
-                    this.lookingUp = false
-                } catch (e) {
-                    console.warn(`Interaction said to be unknown, ignoring...`)
-                }
-            })
-
-            return [new MessageActionRow().addComponents(stopLookingButton)]
+            return []
         }
+        // if (this.lookingUp) {
+        //     const { button: stopLookingButton, collector: stopLookingCollector } = buttons.quickBetterButton(
+        //         this.message,
+        //         'stoplooking' + this.message.id,
+        //         this.language.readLine('generic', 'lookUpBack'),
+        //         'PRIMARY',
+        //         { timer: this.idleTime }
+        //     )
+
+        //     stopLookingCollector.on('collect', async i => {
+        //         try {
+        //             if (i.user.id !== this.userMessage.author.id) return
+        //             await i.deferReply()
+        //             await this.updateMessage('stoplooking')
+        //             this.lookingUp = false
+        //         } catch (e) {
+        //             console.warn(`Interaction said to be unknown, ignoring...`)
+        //         }
+        //     })
+
+        //     return [new MessageActionRow().addComponents(stopLookingButton)]
+        // }
 
         const pageCount = this.pages.pageList.length - 1
         const isNextPossible = !((this.page + 1) > pageCount)
         const isBackPossible = !((this.page - 1) < 0)
 
-        const { button: backButton, collector: backCollector } = buttons.quickBetterButton(
-            this.userMessage,
-            'back' + this.message.id,
+        const backButton = buttons.quickButton(
+            this.userMessage.id + 'back',
             this.language.readLine('leaderboard', 'GoBack'),
-            'PRIMARY',
-            { timer: this.idleTime }
+            'PRIMARY'
         )
 
-        const { button: nextButton, collector: nextCollector } = buttons.quickBetterButton(
-            this.userMessage,
-            'next' + this.message.id,
+        const nextButton = buttons.quickButton(
+            this.userMessage.id + 'next',
             this.language.readLine('leaderboard', 'NextPage'),
-            'PRIMARY',
-            { timer: this.idleTime }
+            'PRIMARY'
         )
+
+        if (this.collectors.length === 0) {
+
+            let backCollector = this.message.createMessageComponentCollector({
+                timer: 60000, 
+                filter: (i) => {
+                    if (i.user.id !== this.userMessage.author.id) return false
+
+                    if (i.customId !== (this.userMessage.id + 'back')) return false
+
+                    return true
+                }
+            })
+
+            let nextCollector = this.message.createMessageComponentCollector({
+                timer: 60000, 
+                filter: (i) => {
+                    if (i.user.id !== this.userMessage.author.id) return false
+
+                    if (i.customId !== (this.userMessage.id + 'next')) return false
+
+                    return true
+                }
+            })
+
+            this.collectors = [backCollector, nextCollector]
+        }
+
+        this.collectors[0].resetTimer()
+        this.collectors[1].resetTimer()
+
+        const backCollector = this.collectors[0]
+        const nextCollector = this.collectors[1]
 
         if (!isNextPossible) {
             nextButton.setDisabled(true)
         } else {
             nextButton.setDisabled(false)
             nextCollector.on('collect', async i => {
-                try {
-                    if (i.user.id !== this.userMessage.author.id) return
+                if (i.user.id !== this.userMessage.author.id) return
+                if (!i.replied || !i.deffered || !((Date.now() - i.createdAt) >= 3000)) {
                     i.deferUpdate()
-                    this.page++
-                    await this.updateMessage('pageswitch')
-                } catch (e) {
-                    console.warn(`Interaction said to be unknown, ignoring...`)
                 }
+                this.page++
+                nextCollector.stop()
+                await this.updateMessage('pageswitch', i)
             })
         }
 
@@ -202,14 +244,13 @@ exports.LeaderboardMessage = class {
         } else {
             backButton.setDisabled(false)
             backCollector.on('collect', async i => {
-                try {
-                    if (i.user.id !== this.userMessage.author.id) return
+                if (i.user.id !== this.userMessage.author.id) return
+                if (!i.replied || !i.deffered || !((Date.now() - i.createdAt) >= 3000)) {
                     i.deferUpdate()
-                    this.page--
-                    await this.updateMessage('pageswitch')
-                } catch (e) {
-                    console.warn(`Interaction said to be unknown, ignoring...`)
                 }
+                this.page--
+                backCollector.stop()
+                await this.updateMessage('pageswitch')
             })
         }
 
@@ -223,7 +264,7 @@ exports.LeaderboardMessage = class {
             const currentPageElements = individualElements[this.page]
 
             const selectElement = []
-
+            // FIXME: After selecting the stepmania version, switching pages breaks everything.
             for (let i = 0; i < currentPageElements.length; i++) {
                 selectElement.push({
                     value: `ofl!!${this.message.id}!!${this.page}${i}`,
@@ -254,16 +295,16 @@ exports.LeaderboardMessage = class {
             }
 
             selectCollector.on('collect', async i => {
-                try {
-                    if (i.user.id !== this.userMessage.author.id || i.guild.id !== this.message.guild.id || (!i.values || i.values.length === 0)) return
-                    i.fetchReply()
-                    selectCollector.resetTimer()
-                    const { arg } = optionsSelectFilter(i.values[0])
-                    this.lookingUp = true
-                    await this.updateMessage('lookup', arg)
-                } catch (e) {
-                    console.warn(`Interaction said to be unknown, ignoring...`)
+                if (i.user.id !== this.userMessage.author.id || i.guild.id !== this.message.guild.id || (!i.values || i.values.length === 0)) return
+                if (!i.replied || !i.deffered || !((Date.now() - i.createdAt) >= 3000)) {
+                    await i.deferUpdate().catch(e => console.error(e))
                 }
+                
+                selectCollector.resetTimer()
+                const { arg } = optionsSelectFilter(i.values[0])
+                this.lookingUp = true
+                selectCollector.stop()
+                await this.updateMessage('lookup', [arg, i])
             })
 
             const selectComponent = new MessageActionRow().addComponents(elementSelector)

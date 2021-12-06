@@ -27,7 +27,8 @@ exports.embedBuilder = ({
     image,
     thumbnail,
     footer,
-    url
+    url,
+    fields
 }) => {
     const embed = new MessageEmbed()
 
@@ -38,6 +39,7 @@ exports.embedBuilder = ({
     if (thumbnail) embed.setThumbnail(thumbnail)
     if (description) embed.setDescription(description)
     if (url) embed.setURL(url)
+    if (fields) embed.fields = fields
 
     return embed
 }
