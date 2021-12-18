@@ -78,7 +78,9 @@ exports.LeaderboardMessage = class {
                 hasPushed = true
             }
 
-            const individualPageIndex = pageList.length > 0 ? pageList.length - 1 : pageList.length
+            const individualPageIndex = pageList.length 
+            
+            // pageList.length > 0 ? pageList.length - 1 : pageList.length
             if (individualElements[individualPageIndex] === undefined) {
                 individualElements[individualPageIndex] = []
             }
@@ -139,7 +141,7 @@ exports.LeaderboardMessage = class {
             default: // lookup
                 const embed = await this.lookUpFunc( this.pages.individualElements[args[0][0]][args[0][1]] )
                 this.message.edit({
-                    // The default lookUpFunc is not async but one defined by the user is.
+                    // The default lookUpFunc is not async but one defined by the command can be.
                     embeds: [embed],
                     components: this.pageComponents
                 })
@@ -201,7 +203,8 @@ exports.LeaderboardMessage = class {
                     if (i.customId !== (this.userMessage.id + 'back')) return false
 
                     return true
-                }
+                },
+                max: 50
             })
 
             let nextCollector = this.message.createMessageComponentCollector({
@@ -212,46 +215,44 @@ exports.LeaderboardMessage = class {
                     if (i.customId !== (this.userMessage.id + 'next')) return false
 
                     return true
-                }
+                },
+                max: 50
             })
 
-            this.collectors = [backCollector, nextCollector]
-        }
-
-        this.collectors[0].resetTimer()
-        this.collectors[1].resetTimer()
-
-        const backCollector = this.collectors[0]
-        const nextCollector = this.collectors[1]
-
-        if (!isNextPossible) {
-            nextButton.setDisabled(true)
-        } else {
-            nextButton.setDisabled(false)
             nextCollector.on('collect', async i => {
                 if (i.user.id !== this.userMessage.author.id) return
                 if (!i.replied || !i.deffered || !((Date.now() - i.createdAt) >= 3000)) {
                     i.deferUpdate()
                 }
                 this.page++
-                nextCollector.stop()
                 await this.updateMessage('pageswitch', i)
             })
-        }
 
-        if (!isBackPossible) {
-            backButton.setDisabled(true)
-        } else {
-            backButton.setDisabled(false)
             backCollector.on('collect', async i => {
                 if (i.user.id !== this.userMessage.author.id) return
                 if (!i.replied || !i.deffered || !((Date.now() - i.createdAt) >= 3000)) {
                     i.deferUpdate()
                 }
                 this.page--
-                backCollector.stop()
                 await this.updateMessage('pageswitch')
             })
+            this.collectors = [backCollector, nextCollector]
+        }
+
+        this.collectors[0].resetTimer()
+        this.collectors[1].resetTimer()
+
+        if (!isNextPossible) {
+            nextButton.setDisabled(true)
+        } else {
+            nextButton.setDisabled(false)
+            
+        }
+
+        if (!isBackPossible) {
+            backButton.setDisabled(true)
+        } else {
+            backButton.setDisabled(false)
         }
 
         const components = []
@@ -264,7 +265,6 @@ exports.LeaderboardMessage = class {
             const currentPageElements = individualElements[this.page]
 
             const selectElement = []
-            // FIXME: After selecting the stepmania version, switching pages breaks everything.
             for (let i = 0; i < currentPageElements.length; i++) {
                 selectElement.push({
                     value: `ofl!!${this.message.id}!!${this.page}${i}`,
