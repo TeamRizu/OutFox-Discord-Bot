@@ -1,12 +1,36 @@
-# OutFox-Discord-Bot
+# Interaction-OutFox
 
-Project OutFox Discord Bot.
+This is not ready for production.
 
-## Setup
+## TODO
 
-- Install NodeJS v14 or higher.
-- Clone and do `npm i` on the root folder to install all packages.
-- Go into Discord Developer Panel, create a Application, turn it into a bot and copy its token, create an .env file with keys just like .envexample, put the token you copied as the TOKEN key value.
-- Get any a Discord Server to test and copy its ID and place it as DEVSERVER key value.
-- Invite the bot to the testing server.
-- `node src/index.js` and it should be running
+### Command port
+- [ ] getrole
+- [ ] guildlang
+- [x] languagestatus
+- [x] leaderboard
+- [ ] mods
+- [x] ping
+- [ ] themes
+- [ ] userlang
+
+### Classes
+
+- [x] languageStatus
+- [x] languageSheet
+- [x] leaderboard
+- [ ] modsSheet
+- [ ] language
+- [ ] archival
+- [ ] pagination
+
+
+## Installation
+```sh
+npx slash-up init js slash-commands
+cd slash-commands
+# this edit variables in the ".env" file!
+# Create and edit commands in the `commands` folder
+npx slash-up sync
+yarn start
+```

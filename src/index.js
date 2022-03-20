@@ -1,17 +1,54 @@
-console.log('Start')
+require('dotenv').config();
+const { SlashCreator, FastifyServer } = require('slash-create');
+const path = require('path');
+const CatLoggr = require('cat-loggr');
+const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
 
-// Libs
-const Discord = require('discord.js')
-require('dotenv').config()
+const creator = new SlashCreator({
+  applicationID: process.env.DISCORD_APP_ID,
+  publicKey: process.env.DISCORD_PUBLIC_KEY,
+  token: process.env.DISCORD_BOT_TOKEN,
+  serverPort: parseInt(process.env.PORT, 10) || 8020,
+  serverHost: '0.0.0.0'
+});
 
-// Files
-const ready = require('./listeners/ready.js')
+const commands = [
+  'volumes',
+  'leaderboard'
+]
 
-// Variables
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_MEMBERS]})
+creator.on('debug', (message) => logger.log(message));
+creator.on('warn', (message) => logger.warn(message));
+creator.on('error', (error) => logger.error(error));
+creator.on('synced', () => logger.info('Commands synced!'));
+creator.on('commandRun', (command, _, ctx) =>
+  logger.info(`${ctx.user.username}#${ctx.user.discriminator} (${ctx.user.id}) ran command ${command.commandName}`));
+creator.on('commandRegister', (command) =>
+  logger.info(`Registered command ${command.commandName}`));
+creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));
 
-client.on('ready', () => {
-    ready.main(client)
+creator
+  .withServer(new FastifyServer())
+  .registerCommandsIn(path.join(__dirname, 'commands'))
+  .startServer()
+
+creator.on('componentInteraction', async ctx => {
+  /**
+   * This context object is similar to command context as it will
+   * still automatically acknowledge the interaction.
+   *
+   * You can still use `ctx.send` and `ctx.defer` however, there are
+   * new functions like `ctx.acknowledge` and `ctx.editParent`.
+   */
+
+  if (ctx.customID.startsWith('1')) {
+    const LeaderboardFile = require('./commands/leaderboard.js')
+    const LeaderboardCommand = new LeaderboardFile(creator)
+
+    LeaderboardCommand.update(ctx, ctx.customID.split('-')[2], false)
+  }
+
+  // Note: You MUST use `ctx.send` and must not return regular send options.
 })
 
-client.login(process.env.TOKEN)
+console.log(`Starting server at "localhost:${creator.options.serverPort}/interactions"`);

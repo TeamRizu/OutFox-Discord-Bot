@@ -1,58 +1,48 @@
-// Libs
-const cheerio = require('cheerio')
-const request = require('request-promise')
+const { GoogleSpreadsheet } = require('google-spreadsheet')
+exports.LanguagestatusFile = class LanguagestatusInstance {
+  constructor() {
+    this.doc = new GoogleSpreadsheet(process.env.SHEET_ID)
+    this.versions = null
+    this.languages = null
+    this.status = null
+  }
 
-exports.languageStatus = async () => {
-  const finalArr = new Map()
-  let done = false
-  const body = await request(
-    'https://github.com/Tiny-Foxes/OutFox-Translations/blob/master/README.md'
-  )
+  async init() {
+    await this.doc.useServiceAccountAuth({
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_APP_KEY,
+    })
+    await this.doc.loadInfo()
+    this.bhl = this.doc.sheetsByTitle['languagestatus']
+    const rows = await this.bhl.getRows()
+    this.versions = []
+    this.languages = [...rows.headerValues[0].slice(1)]
+    this.status = []
 
-  const $ = cheerio.load(body)
-      const tableChilds = $('article').children()
-      const leaderboard = tableChilds['5']
-      const thread = leaderboard.children[1]
-      const tr = thread.children[1]
-      const ld = [
-        []
-      ]
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i]
 
-      for (let i = 0; i < tr.children.length; i++) {
-        const current = tr.children[i]
+      this.versions.push(row.Version)
+      this.status.push(...row._rawData.slice(1))
+    }
 
-        if (current.name !== 'th') continue
+    return this.doc
+  }
 
-        ld[0].push(current.children[0].data)
-      }
+  statusFromLanguage(language) {
+    const languageIndex = this.languages.indexOf(language)
+    const statuses = []
 
-      const tbody = leaderboard.children[3]
+    for (let i = 0; i < this.status.length; i++) {
+      statuses.push(this.status[i][languageIndex])
+    }
 
-      for (let i = 0; i < tbody.children.length; i++) {
-        const current = tbody.children[i]
+    return statuses
+  }
 
-        if (current.name !== 'tr') continue
+  statusFromVersion(version) {
+    const versionIndex = this.versions.indexOf(version)
 
-        const oldLength = ld.length
-        ld.push([])
-
-        for (let c = 0; c < current.children.length; c++) {
-          const td = current.children[c]
-
-          if (td.name !== 'td') continue
-
-          if (td.children[0].name === 'g-emoji') {
-            ld[oldLength].push(td.children[0].children[0].data)
-          } else {
-            ld[oldLength].push(td.children[0].data)
-          }
-        }
-      }
-
-      finalArr.set('obj', ld)
-      done = true
-
-  if (done) {
-    return finalArr.get('obj')
+    return this.status[versionIndex]
   }
 }
