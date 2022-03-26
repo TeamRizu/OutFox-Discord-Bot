@@ -14,7 +14,10 @@ const creator = new SlashCreator({
 
 const commands = [
   'volumes',
-  'leaderboard'
+  'leaderboard',
+  'mods',
+  'ping',
+  'languagestatus'
 ]
 
 creator.on('debug', (message) => logger.log(message));
@@ -41,12 +44,29 @@ creator.on('componentInteraction', async ctx => {
    * new functions like `ctx.acknowledge` and `ctx.editParent`.
    */
 
+  const IDSplit = ctx.customID.split('-')
+  const commandID = IDSplit[0]
+  const argument = IDSplit[2]
+  const selectInteraction = IDSplit[3] || undefined
+
+  if (IDSplit.length <= 1 || isNaN(commandID) || !commands[Number(commandID)]) return;
+
+  const CommandFile = require(`./commands/${commands[commandID]}.js`)
+  const CommandInstance = new CommandFile(creator)
+
+  if (selectInteraction) {
+    await CommandInstance.lookUp(ctx, argument, false, ctx.values)
+  } else {
+    await CommandInstance.update(ctx, argument, false)
+  }
+  /*
   if (ctx.customID.startsWith('1')) {
     const LeaderboardFile = require('./commands/leaderboard.js')
     const LeaderboardCommand = new LeaderboardFile(creator)
 
     LeaderboardCommand.update(ctx, ctx.customID.split('-')[2], false)
   }
+  */
 
   // Note: You MUST use `ctx.send` and must not return regular send options.
 })

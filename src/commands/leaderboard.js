@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
 const { SlashCommand, ComponentContext } = require('slash-create');
 const { LeaderboardFile } = require('../utils/bhleaderboard.js')
 const LeaderboardSheetInstance = new LeaderboardFile()
@@ -17,7 +17,7 @@ module.exports = class LeaderboardCommand extends SlashCommand {
    */
   async run(ctx) {
     await LeaderboardSheetInstance.init()
-    return this.update(ctx, 0, true)
+    await this.update(ctx, 0, true)
   }
 
   /**
@@ -36,33 +36,28 @@ module.exports = class LeaderboardCommand extends SlashCommand {
 
     const leastPageNum = 0 > (pageIndex - 1) ? 0 : pageIndex - 1
     const maxPageNum = (pageIndex + 1) > (pagesNum - 1) ? pagesNum - 1 : pageIndex + 1
+
+    const buttons = new MessageActionRow()
+    .addComponents(
+      new MessageButton()
+        .setCustomId(`1-${ctx.interactionID}-${leastPageNum}`)
+        .setLabel("Back")
+        .setStyle('PRIMARY'),
+      new MessageButton()
+        .setCustomId(`1-${ctx.interactionID}-${maxPageNum}`)
+        .setLabel('Next')
+        .setStyle('PRIMARY')
+    )
+
     const msgData = {
       embeds: [embed],
-      components: [
-        {
-          type: 1,
-          components: [
-            {
-              type: 2,
-              label: "Back",
-              style: 1,
-              custom_id: `1-${ctx.interactionID}-${leastPageNum}`
-            },
-            {
-              type: 2,
-              label: "Next",
-              style: 1,
-              custom_id: `1-${ctx.interactionID}-${maxPageNum}`
-            }
-          ]
-        }
-      ]
+      components: [buttons]
     }
 
     if (firstSend) {
-      ctx.send(msgData)
+      await ctx.send(msgData)
     } else {
-      ctx.editParent(msgData)
+      await ctx.editParent(msgData)
     }
   }
 }

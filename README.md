@@ -9,7 +9,7 @@ This is not ready for production.
 - [ ] guildlang
 - [x] languagestatus
 - [x] leaderboard
-- [ ] mods
+- [x] mods - HAS PROBLEMS TO SOLVE
 - [x] ping
 - [ ] themes
 - [ ] userlang
@@ -19,7 +19,7 @@ This is not ready for production.
 - [x] languageStatus
 - [x] languageSheet
 - [x] leaderboard
-- [ ] modsSheet
+- [x] modsSheet
 - [ ] language
 - [ ] archival
 - [ ] pagination
