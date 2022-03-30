@@ -135,9 +135,12 @@ exports.ModsSheetFile = class {
       return [...Array(size).keys()].map(i => i + startAt);
     }
     const formatAuthorPack = (author, pack) => {
+      /*
+      Thanks "We are the Loss" for having a 66 char long author field
       if (author && pack) {
         return `By ${author}, released under ${pack} pack`
       }
+      */
 
       if (author) {
         return `By ${author}`
