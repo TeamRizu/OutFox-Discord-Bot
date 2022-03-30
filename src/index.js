@@ -59,7 +59,6 @@ creator.on('componentInteraction', async ctx => {
   if (selectInteraction) {
     await CommandInstance.lookUp(ctx, argument, false, ctx.values, interactionCache)
   } else {
-    console.log(interactionCache.keys())
     await CommandInstance.update(ctx, argument, false, interactionCache)
   }
   /*

@@ -33,8 +33,7 @@ exports.ModsSheetFile = class {
    */
   async chartInfo(name) {
     if (!this.convertedMods) {
-      console.warn('Class has not been initialized, please run init() first.');
-      return null;
+      await this.init()
     }
 
     const askForRows = [this.convertedMods, this.requestsMods, this.impossibleMods, this.forbiddenMods];
@@ -170,6 +169,10 @@ exports.ModsSheetFile = class {
   }
 
   async chartsToArrayObjectRows() {
+    if (!this.convertedMods) {
+      await this.init()
+    }
+
     const convertedRows = await this.convertedMods.getRows();
     const rows = [];
 
@@ -184,10 +187,11 @@ exports.ModsSheetFile = class {
         author: row.Author || undefined,
         pack: row.Pack || undefined,
         youtube: row['YT-Link'],
-        status: row['Fix-up Status']
+        status: row['Fix-up Status'],
+        version: row['SM Version']
       });
     }
-    console.log(rows.length)
+
     return rows
   }
 };

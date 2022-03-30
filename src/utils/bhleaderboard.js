@@ -43,7 +43,7 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
       }
 
       this.pages[currentPageIndex].users.push(row.user)
-      const currentPageLength = this.buildPage(currentPageIndex).length
+      const currentPageLength = (await this.buildPage(currentPageIndex)).length
 
       if (currentPageLength >= this.pageCharLimit) {
         this.pages[currentPageIndex + 1] = {
@@ -55,7 +55,11 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
     return this.doc
   }
 
-  buildPage(pageIndex = 0) {
+  async buildPage(pageIndex = 0) {
+    if (!this.users) {
+      await this.init()
+    }
+
     const page = this.pages[pageIndex]
     const users = page.users
 
@@ -73,7 +77,10 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
     return finalStr
   }
 
-  usersFromPage(pageIndex = 0) {
+  async usersFromPage(pageIndex = 0) {
+    if (!this.users) {
+      await this.init()
+    }
     return this.pages[pageIndex].users
   }
 

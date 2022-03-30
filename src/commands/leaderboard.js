@@ -16,7 +16,7 @@ module.exports = class LeaderboardCommand extends SlashCommand {
    * @param {ComponentContext} ctx
    */
   async run(ctx) {
-    await LeaderboardSheetInstance.init()
+    await LeaderboardSheetInstance.init();
     await this.update(ctx, 0, true)
   }
 
@@ -27,12 +27,15 @@ module.exports = class LeaderboardCommand extends SlashCommand {
    * @param {boolean} [firstSend]
    */
   async update(ctx, pageIndex, firstSend) {
+    if (!LeaderboardSheetInstance.pages) {
+      return;
+    }
     pageIndex = Number(pageIndex)
     const pagesNum = LeaderboardSheetInstance.pages.length
-
+    const builtPage = await LeaderboardSheetInstance.buildPage(pageIndex)
     const embed = new MessageEmbed()
     .setTitle('Project OutFox Bug Hunter Leaderboard')
-    .setDescription(LeaderboardSheetInstance.buildPage(pageIndex))
+    .setDescription(builtPage)
 
     const leastPageNum = 0 > (pageIndex - 1) ? 0 : pageIndex - 1
     const maxPageNum = (pageIndex + 1) > (pagesNum - 1) ? pagesNum - 1 : pageIndex + 1

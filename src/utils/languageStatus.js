@@ -30,6 +30,7 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
   }
 
   statusFromLanguage(language) {
+    // FIXME: Deal with cases where this.language is null
     const languageIndex = this.languages.indexOf(language)
     const statuses = []
 
@@ -41,6 +42,7 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
   }
 
   statusFromVersion(version) {
+    // FIXME: Deal with cases where this.language is null
     const versionIndex = this.versions.indexOf(version)
 
     return this.status[versionIndex]
