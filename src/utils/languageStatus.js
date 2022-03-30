@@ -10,7 +10,7 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
   async init() {
     await this.doc.useServiceAccountAuth({
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_APP_KEY,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
     })
     await this.doc.loadInfo()
     this.bhl = this.doc.sheetsByTitle['languagestatus']
