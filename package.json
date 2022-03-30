@@ -15,6 +15,8 @@
     "fastify": "^3.9.2",
     "google-spreadsheet": "^3.2.0",
     "node-cache": "^5.1.2",
+    "node-uri": "^1.1.1",
+    "node-vibrant": "^3.2.1-alpha.1",
     "slash-create": "^5.2.0"
   },
   "devDependencies": {
