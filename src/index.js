@@ -2,7 +2,9 @@ require('dotenv').config();
 const { SlashCreator, FastifyServer } = require('slash-create');
 const path = require('path');
 const CatLoggr = require('cat-loggr');
+const NodeCache = require( "node-cache" );
 const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
+const interactionCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
 const creator = new SlashCreator({
   applicationID: process.env.DISCORD_APP_ID,
@@ -55,9 +57,10 @@ creator.on('componentInteraction', async ctx => {
   const CommandInstance = new CommandFile(creator)
 
   if (selectInteraction) {
-    await CommandInstance.lookUp(ctx, argument, false, ctx.values)
+    await CommandInstance.lookUp(ctx, argument, false, ctx.values, interactionCache)
   } else {
-    await CommandInstance.update(ctx, argument, false)
+    console.log(interactionCache.keys())
+    await CommandInstance.update(ctx, argument, false, interactionCache)
   }
   /*
   if (ctx.customID.startsWith('1')) {

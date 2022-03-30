@@ -1,7 +1,7 @@
 {
-  "name": "slash-create-template",
+  "name": "outfox-discord-bot",
   "version": "1.0.0",
-  "description": "A template for slash-create",
+  "description": "",
   "main": "src/index.js",
   "scripts": {
     "sync": "slash-up sync",
@@ -14,6 +14,7 @@
     "dotenv": "^8.2.0",
     "fastify": "^3.9.2",
     "google-spreadsheet": "^3.2.0",
+    "node-cache": "^5.1.2",
     "slash-create": "^5.2.0"
   },
   "devDependencies": {

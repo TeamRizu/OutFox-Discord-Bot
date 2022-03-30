@@ -18,7 +18,7 @@ module.exports = class ModsCommand extends SlashCommand {
    */
   async run(ctx) {
     await ModsSheetInstance.init();
-    await this.update(ctx, 6, true)
+    await this.update(ctx, 0, true)
   }
 
   async update(ctx, pageIndex, firstSend) {
@@ -32,7 +32,6 @@ module.exports = class ModsCommand extends SlashCommand {
     const leastPageNum = 0 > (pageIndex - 1) ? 0 : pageIndex - 1
     const maxPageNum = (pageIndex + 1) > (pagesNum - 1) ? pagesNum - 1 : pageIndex + 1
 
-    console.log(`Current index: ${pageIndex}\nBack: ${leastPageNum}\nNext: ${maxPageNum}\nPagesNum: ${pagesNum}`)
     const buttons = new MessageActionRow()
     .addComponents(
       new MessageButton()
