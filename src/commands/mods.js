@@ -56,8 +56,7 @@ module.exports = class ModsCommand extends SlashCommand {
     if (firstSend) {
       await ctx.send(msgData);
     } else {
-      const r = await ctx.editParent(msgData);
-      console.log(r);
+      ctx.editParent(msgData);
     }
   }
 
