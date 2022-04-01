@@ -54,7 +54,7 @@ module.exports = class ModsCommand extends SlashCommand {
     };
 
     if (firstSend) {
-      await ctx.send(msgData);
+      ctx.send(msgData);
     } else {
       ctx.editParent(msgData);
     }

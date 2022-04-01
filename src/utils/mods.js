@@ -94,7 +94,6 @@ exports.ModsSheetFile = class {
         fileFound[askForProperties[tableName[tableFound]].getAs[j]];
     }
     objToReturn.foundIn = tableName[tableFound];
-    console.table(objToReturn);
     return objToReturn;
   }
 

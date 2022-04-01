@@ -7,7 +7,7 @@ module.exports = class LeaderboardCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'leaderboard',
-      description: 'See the leaderboard for OutFox Bug Hunter'
+      description: 'See the leaderboard for OutFox Bug Hunter.'
     });
   }
 
