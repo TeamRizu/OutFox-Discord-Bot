@@ -1,7 +1,8 @@
+const constants = require('./constants.js')
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 exports.LeaderboardFile = class LeaderboardSheetInstance {
   constructor() {
-    this.doc = new GoogleSpreadsheet(process.env.SHEET_ID)
+    this.doc = OutFoxGlobal.databaseDoc // new GoogleSpreadsheet(process.env.SHEET_ID)
     this.users = null
     this.points = null
     this.issues = null
@@ -13,11 +14,13 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
   }
 
   async init() {
+    /*
     await this.doc.useServiceAccountAuth({
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
         private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
     })
     await this.doc.loadInfo()
+    */
     this.bhl = this.doc.sheetsByTitle['bhl']
     const rows = await this.bhl.getRows()
     this.users = []
@@ -70,8 +73,9 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
       const userIndex = this.users.indexOf(user)
       const point = this.points[userIndex]
       const classification = this.classifications[userIndex]
+      const idOfClassification = constants.bugRole[classification]
 
-      finalStr = finalStr + `${point} Points - ${user} (${classification})\n`
+      finalStr = finalStr + `${point} Points - ${user} (${idOfClassification ? `<@${idOfClassification}>` : classification})\n`
     }
 
     return finalStr
