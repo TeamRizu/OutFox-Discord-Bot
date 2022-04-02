@@ -1,5 +1,5 @@
 const constants = require('./constants.js')
-const { GoogleSpreadsheet } = require('google-spreadsheet')
+
 exports.LeaderboardFile = class LeaderboardSheetInstance {
   constructor() {
     this.doc = OutFoxGlobal.databaseDoc // new GoogleSpreadsheet(process.env.SHEET_ID)

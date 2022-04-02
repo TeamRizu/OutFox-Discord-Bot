@@ -8,12 +8,16 @@ const NodeCache = require( "node-cache" );
   const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
   const interactionCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
   const DatabaseSpreadsheetInstance = new DatabaseFile(process.env.SHEET_ID)
-  
+  const ModsSpreadsheetInstance = new DatabaseFile(process.env.MODS_IDS)
+
   await DatabaseSpreadsheetInstance.initDocument()
-  
+  await ModsSpreadsheetInstance.initDocument()
+
   const databaseDoc = DatabaseSpreadsheetInstance.doc
+  const modsDoc = ModsSpreadsheetInstance.doc
   global.OutFoxGlobal = {}
   OutFoxGlobal.databaseDoc = databaseDoc
+  OutFoxGlobal.modsDoc = modsDoc
 
   const creator = new SlashCreator({
     applicationID: process.env.DISCORD_APP_ID,
@@ -22,7 +26,7 @@ const NodeCache = require( "node-cache" );
     serverPort: parseInt(process.env.PORT, 10) || 8020,
     serverHost: '0.0.0.0'
   });
-  
+
   const commands = [
     'volumes',
     'leaderboard',
@@ -30,7 +34,7 @@ const NodeCache = require( "node-cache" );
     'ping',
     'languagestatus' // TBD
   ]
-  
+
   creator.on('debug', (message) => logger.log(message));
   creator.on('warn', (message) => logger.warn(message));
   creator.on('error', (error) => logger.error(error));
@@ -40,12 +44,12 @@ const NodeCache = require( "node-cache" );
   creator.on('commandRegister', (command) =>
     logger.info(`Registered command ${command.commandName}`));
   creator.on('commandError', (command, error) => logger.error(`Command ${command.commandName}:`, error));
-  
+
   creator
     .withServer(new FastifyServer())
     .registerCommandsIn(path.join(__dirname, 'commands'))
     .startServer()
-  
+
   creator.on('componentInteraction', async ctx => {
     /**
      * This context object is similar to command context as it will
@@ -54,17 +58,17 @@ const NodeCache = require( "node-cache" );
      * You can still use `ctx.send` and `ctx.defer` however, there are
      * new functions like `ctx.acknowledge` and `ctx.editParent`.
      */
-  
+
     const IDSplit = ctx.customID.split('-')
     const commandID = IDSplit[0]
     const argument = IDSplit[2]
     const selectInteraction = IDSplit[3] || undefined
-  
+
     if (IDSplit.length <= 1 || isNaN(commandID) || !commands[Number(commandID)]) return;
-  
+
     const CommandFile = require(`./commands/${commands[commandID]}.js`)
     const CommandInstance = new CommandFile(creator)
-  
+
     if (selectInteraction) {
       await CommandInstance.lookUp(ctx, argument, false, ctx.values, interactionCache)
     } else {
@@ -74,13 +78,13 @@ const NodeCache = require( "node-cache" );
     if (ctx.customID.startsWith('1')) {
       const LeaderboardFile = require('./commands/leaderboard.js')
       const LeaderboardCommand = new LeaderboardFile(creator)
-  
+
       LeaderboardCommand.update(ctx, ctx.customID.split('-')[2], false)
     }
     */
-  
+
     // Note: You MUST use `ctx.send` and must not return regular send options.
   })
-  
+
   console.log(`Starting server at "localhost:${creator.options.serverPort}/interactions"`);
 })();
