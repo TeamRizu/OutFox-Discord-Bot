@@ -42,7 +42,7 @@ module.exports = class LeaderboardCommand extends SlashCommand {
     if (!LeaderboardSheetInstance.pages) {
       return;
     }
-    pageIndex = commandArguments.primalArgument
+    let pageIndex = commandArguments.primalArgument
     pageIndex = Number(pageIndex)
     const pagesNum = LeaderboardSheetInstance.pages.length
     const builtPage = await LeaderboardSheetInstance.buildPage(pageIndex)

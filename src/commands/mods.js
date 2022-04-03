@@ -36,9 +36,9 @@ module.exports = class ModsCommand extends SlashCommand {
 
   async update({interaction, commandArguments}) {
     if (!ModsSheetInstance.convertedMods) {
-      await ModsSheetInstance.init()
+      return
     }
-    pageIndex = commandArguments.primalArgument
+    let pageIndex = commandArguments.primalArgument
     pageIndex = Number(pageIndex);
     const rows = await ModsSheetInstance.chartsToArrayObjectRows();
     const pagesNum = Math.round(rows.length / ModsSheetInstance.elementsPerPage);
@@ -75,7 +75,7 @@ module.exports = class ModsCommand extends SlashCommand {
 
   async lookUp({interaction, commandArguments}) {
     if (!ModsSheetInstance.convertedMods) {
-      await ModsSheetInstance.init()
+      return;
     }
     const portID = interaction.values[0].split('-')[2]; // commandID-interactionID-fileID-select
     const rows = await ModsSheetInstance.chartsToArrayObjectRows();
