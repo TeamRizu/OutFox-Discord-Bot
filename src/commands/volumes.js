@@ -31,7 +31,7 @@ const embeds = {
       `Serenity Volume II will feature music by Ace of Beat, Finite Limit, Jack5, Kurio Prokos, Lagoona, Rilliam, rN, SiLiS, and td. We will be accepting chart and song artwork submissions beginning March 27.`
     )
     .setColor('#782024')
-    .setURL('https://projectoutfox.com/outfox-serenity/volume-i')
+    .setURL('https://projectoutfox.com/news/outfox-serenity-volume-2-more')
     .setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-2-jk-small.png')
     .addField('OutFox Serenity Server', '[https://discord.gg/mNcFU67mK7](https://discord.gg/mNcFU67mK7)')
     .setImage('https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/v2/OutFox%20Serenity%20Volume%202/banner.png'),
@@ -69,7 +69,7 @@ module.exports = class VolumesCommand extends SlashCommand {
 
     const checkoutVolumeSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`0--0-select`)
+        .setCustomId(`0-${this.commandVersion}-lookUp-2`)
         .setPlaceholder('Checkout Volumes')
         .addOptions([
           {
@@ -98,7 +98,7 @@ module.exports = class VolumesCommand extends SlashCommand {
   }
 
   async lookUp({interaction, commandArguments}) {
-    const page = interaction.values[0].split('-')[2]
+    const page = interaction.values[0].split('-')[3]
     const pageIntoVolume = ['volume 1', 'volume 2'][page]
 
     const button = new MessageActionRow().addComponents(

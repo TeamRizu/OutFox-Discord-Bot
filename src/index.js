@@ -83,7 +83,7 @@ const start = async () => {
       break
       case 'lookUp':
         if (isNaN(primalArgument)) return;
-        break;
+      break;
       default:
         if (typeof primalArgument !== 'string') return;
         break;
