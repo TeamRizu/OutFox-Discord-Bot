@@ -146,7 +146,6 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
       components.push(buttonsComponents);
     }
 
-
     if (this.supportLookUp) {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
@@ -159,7 +158,6 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
       const selectElement = [];
       for (let i = 0; i < currentPageElements.length; i++) {
-        console.log(individualElements[this.page][i]);
         selectElement.push({
           value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}`,
           label: individualElements[this.page][i]
@@ -177,4 +175,5 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     return components;
   }
+
 };

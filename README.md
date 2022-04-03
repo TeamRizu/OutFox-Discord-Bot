@@ -40,7 +40,7 @@ Given the scope of the project, Interaction-OutFox official instance is not mean
 - [x] leaderboard
 - [x] mods
 - [x] ping
-- [ ] themes (WIP)
+- [x] themes
 
 ### Classes
 
@@ -49,7 +49,7 @@ Given the scope of the project, Interaction-OutFox official instance is not mean
 - [x] leaderboard
 - [x] modsSheet
 - [x] archival
-- [ ] leaderboardMessage (WIP)
+- [x] leaderboardMessage
 
 ## Installation
 

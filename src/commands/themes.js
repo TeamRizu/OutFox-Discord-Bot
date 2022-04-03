@@ -48,11 +48,12 @@ module.exports = class ThemesCommand extends SlashCommand {
       return;
     }
 
-    if (commandArguments.primalArgument === 'themeSelect') {
-      await this.leaderboard({
+    const acceptedScreens = ['OutFox', 'StepMania 5', 'SM4', 'NITG', 'OITG', 'SM3.95', 'SM3.9_Plus', 'SM3.9'];
+    if (acceptedScreens.includes(commandArguments.primalArgument)) {
+      await this.lookUp({
         interaction,
         commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
+          primalArgument: commandArguments.primalArgument,
           arguments: interaction.values[0].split('-').slice(3),
           version: interaction.values[0].split('-')[1],
           firstSend: false,
@@ -175,20 +176,49 @@ module.exports = class ThemesCommand extends SlashCommand {
 
   async leaderboard({ interaction, commandArguments }) {
     const fork = commandArguments.primalArgument;
+    const engineColors = {
+      OutFox: '#bad0ff',
+      NITG: '#e2e5e0',
+      OITG: '#e00207',
+      'StepMania 5': '#fc9768',
+      SM4: '#cc0000',
+      'SM3.95': '#b9b423',
+      'SM3.9': '#b9b423',
+      'SM3.9_Plus': '#b9b423'
+    }
     const page = Number(commandArguments.arguments[1]);
     const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
     const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
-    LeaderboardMessageInstance.supportLookUp = true
-
+    LeaderboardMessageInstance.supportLookUp = true;
+    LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Theme to LookUp';
     for (let i = 0; i < themesForFork.length; i++) {
       LeaderboardMessageInstance.addElement(themesForFork[i]);
     }
 
-    const pageEmbed = new MessageEmbed().setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+    const pageEmbed = new MessageEmbed()
+    .setTitle('Select Theme')
+    .setColor(engineColors[fork])
+    .setFooter({
+      text: 'StepMania Archive made by Jose_Varela',
+      iconURL: 'https://josevarela.xyz/SMArchive/Builds/VersionIcon/SM40.png'
+    })
+    .setURL('https://josevarela.xyz/SMArchive/Themes/index.html')
+    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+
+    const buttons = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setLabel('Select Another Engine')
+        .setStyle('PRIMARY')
+        .setCustomId(`5-${this.commandVersion}-update-0`)
+    );
+
     LeaderboardMessageInstance.page = page;
+    const components = LeaderboardMessageInstance.pageComponents
+    components.push(buttons)
     const msgData = {
       embeds: [pageEmbed],
-      components: LeaderboardMessageInstance.pageComponents // []
+      components: components
     };
 
     if (commandArguments.firstSend) {
@@ -199,17 +229,71 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async lookUp({ interaction, commandArguments }) {
-    const page = Number(interaction.values.split('-')[3]);
+    const interactionSplit = interaction.values[0].split('-');
+    const page = Number(interactionSplit[3]);
     // const LeaderboardMessageInstance = new LeaderboardMessageFile(interaction, commandArguments);
-    const themeData = ArchiveThemesInstance.themeFromVersion(
-      commandArguments.primalArgument,
-      ArchiveThemesInstance.themesForVersion(commandArguments.primalArgument)[page]
+    const engine = commandArguments.primalArgument;
+    const themeID = ArchiveThemesInstance.themesForVersion(engine)[page];
+    const themeData = ArchiveThemesInstance.themeFromVersion(engine, themeID);
+    const engineNames = {
+      OutFox: 'Project OutFox',
+      NITG: 'NotITG',
+      OITG: 'OpenITG',
+      'StepMania 5': 'StepMania 5',
+      SM4: 'StepMania 4',
+      'SM3.95': 'Stepmania 3.95',
+      'SM3.9': 'StepMania 3.9',
+      'SM3.9_Plus': 'StepMania 3.9+'
+    };
+    const engineColors = {
+      OutFox: '#bad0ff',
+      NITG: '#e2e5e0',
+      OITG: '#e00207',
+      'StepMania 5': '#fc9768',
+      SM4: '#cc0000',
+      'SM3.95': '#b9b423',
+      'SM3.9': '#b9b423',
+      'SM3.9_Plus': '#b9b423'
+    }
+    const engineIcon = {
+      OutFox: '959944386609840148',
+      NITG: '959945091324190791',
+      OITG: '959944386588840076',
+      'StepMania 5': '959944386567897138',
+      SM4: '959944386572091432',
+      'SM3.95': '959944386186190870',
+      'SM3.9': '959944386186190870',
+      'SM3.9_Plus': '959944386186190870'
+    }
+    const themeEmbed = new MessageEmbed()
+      .setTitle(`Summary of ${themeData.Name}`)
+      .setDescription(themeData.Name)
+      .addField('Theme Version', engineNames[engine], true)
+      .setColor(engineColors[engine])
+      .setThumbnail(`https://cdn.discordapp.com/emojis/${engineIcon[engine]}.webp?quality=lossless`)
+      .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`)
+      .setFooter({
+        text: 'StepMania Archive made by Jose_Varela',
+        iconURL: 'https://josevarela.xyz/SMArchive/Builds/VersionIcon/SM40.png'
+      });
+    const buttons = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`)
+        .setLabel('See Theme Page')
+        .setStyle('LINK'),
+      new MessageButton()
+        .setLabel('Select Another Theme')
+        .setStyle('PRIMARY')
+        .setCustomId(`5-${this.commandVersion}-leaderboard-${engine}-0`)
     );
-    const themeEmbed = new MessageEmbed().setTitle(themeData.Name);
+
+    if (themeData.Date) themeEmbed.addField('Creation Date', themeData.Date, true);
+    if (themeData.Author) themeEmbed.addField('Theme Author', themeData.Author, true);
+    if (themeData.Version) themeEmbed.addField('Theme Version', themeData.Version, true);
 
     const msgData = {
       embeds: [themeEmbed],
-      components: []
+      components: [buttons]
     };
 
     if (commandArguments.firstSend) {
