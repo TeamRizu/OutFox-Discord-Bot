@@ -1,7 +1,7 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
-  constructor({interaction, commandArguments}) {
+  constructor({ interaction, commandArguments }) {
     this.elements = [];
     this.page = 0;
     this.elementsPerPage = 25;
@@ -12,10 +12,10 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     this.menuSelectPlaceholder = 'Look up element';
     this.leaderboardTitle = 'Checkout cool stuff';
     this.ctx = interaction.ctx;
-    this.commandID = commandArguments?.commandID || null
-    this.commandVersion = commandArguments?.commandVersion || null
-    this.primalArgument = commandArguments?.primalArgument || null
-    this.arguments = commandArguments?.arguments || null
+    this.commandID = commandArguments?.commandID || null;
+    this.commandVersion = commandArguments?.version || null;
+    this.primalArgument = commandArguments?.primalArgument || null;
+    this.arguments = commandArguments?.arguments || null;
     this.formatElement = (e, i) => {
       if (typeof e === 'object') {
         return i ? `${i}° ${e.description}` : e.description || 'UNKNOWN_OBJECT_ELEMENT_DESCRIPTION';
@@ -101,71 +101,73 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   }
 
   get pageComponents() {
-
     if (!this.commandID) {
-      return []
+      return [];
     }
 
     if (this.lookingUp) {
       const stopLookingButton = new MessageButton()
         .setLabel('Go Back')
         .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${this.arguments[1]}`)
-        .setStyle('PRIMARY')
+        .setStyle('PRIMARY');
 
       return [new MessageActionRow().addComponents(stopLookingButton)];
     }
 
-    const pageCount = this.pages.pageList.length - 1;
-    const isNextPossible = !(this.page + 1 > pageCount);
-    const isBackPossible = !(this.page - 1 < 0);
+    const pageCount = this.pages.pageList.length;
     const leastPageNum = 0 > this.page - 1 ? 0 : this.page - 1;
     const maxPageNum = this.page + 1 > pageCount - 1 ? pageCount - 1 : this.page + 1;
 
     const backButton = new MessageButton()
       .setLabel('Back')
       .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${leastPageNum}`)
-      .setStyle('PRIMARY')
+      .setStyle('PRIMARY');
 
     const nextButton = new MessageButton()
       .setLabel('Next')
       .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${maxPageNum}`)
-      .setStyle('PRIMARY')
+      .setStyle('PRIMARY');
 
-    if (!isNextPossible) {
+    if (this.page === maxPageNum) {
       nextButton.setDisabled(true);
     } else {
       nextButton.setDisabled(false);
     }
 
-    if (!isBackPossible) {
+    if (this.page === leastPageNum) {
       backButton.setDisabled(true);
     } else {
       backButton.setDisabled(false);
     }
 
     const components = [];
-    const buttonsComponents = new MessageActionRow().addComponents(backButton, nextButton);
-    components.push(buttonsComponents);
+    if (leastPageNum !== maxPageNum) {
+      const buttonsComponents = new MessageActionRow().addComponents(backButton, nextButton);
+      components.push(buttonsComponents);
+    }
+
 
     if (this.supportLookUp) {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
-      const maxIndex = (this.elementsPerPage * (this.page + 1)) // 200
-      const minIndex = (this.elementsPerPage * (this.page + 1)) - this.elementsPerPage // 175
-      const range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
-        return [...Array(size).keys()].map(i => i + startAt);
-      }
+      const maxIndex = this.elementsPerPage * (this.page + 1); // 200
+      const minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage; // 175
+      const range = (size, startAt = 0) => {
+        // https://stackoverflow.com/a/10050831
+        return [...Array(size).keys()].map((i) => i + startAt);
+      };
 
       const selectElement = [];
       for (let i = 0; i < currentPageElements.length; i++) {
+        console.log(individualElements[this.page][i]);
         selectElement.push({
           value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}`,
-          label: individualElements[this.page][i].description
+          label: individualElements[this.page][i]
         });
       }
 
       const elementSelector = new MessageSelectMenu()
-        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}`)
+        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}`) // FIXME: Theme name is here, handle values somehow
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 

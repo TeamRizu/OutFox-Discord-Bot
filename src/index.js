@@ -58,6 +58,7 @@ const start = async () => {
      * new functions like `ctx.acknowledge` and `ctx.editParent`.
      */
 
+
     const IDSplit = ctx.customID.split('-');
     const commandID = IDSplit[0];
     const version = IDSplit[1];

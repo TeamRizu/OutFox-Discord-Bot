@@ -34,7 +34,6 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async update({ interaction, commandArguments }) {
-
     if (commandArguments.primalArgument === 'smSelected') {
       await this.leaderboard({
         interaction,
@@ -45,8 +44,22 @@ module.exports = class ThemesCommand extends SlashCommand {
           firstSend: false,
           commandID: interaction.values[0].split('-')[0]
         }
-      })
-      return
+      });
+      return;
+    }
+
+    if (commandArguments.primalArgument === 'themeSelect') {
+      await this.leaderboard({
+        interaction,
+        commandArguments: {
+          primalArgument: interaction.values[0].split('-')[3],
+          arguments: interaction.values[0].split('-').slice(3),
+          version: interaction.values[0].split('-')[1],
+          firstSend: false,
+          commandID: interaction.values[0].split('-')[0]
+        }
+      });
+      return;
     }
 
     const themesInfoEmbed = new MessageEmbed()
@@ -164,28 +177,24 @@ module.exports = class ThemesCommand extends SlashCommand {
     const fork = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);
     const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
-    const LeaderboardMessageInstance = new LeaderboardMessageFile({interaction, commandArguments});
+    const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
+    LeaderboardMessageInstance.supportLookUp = true
 
     for (let i = 0; i < themesForFork.length; i++) {
       LeaderboardMessageInstance.addElement(themesForFork[i]);
     }
 
-    console.log(`
-    fork: ${fork}
-    page: ${page}
-    themesForFork: ${themesForFork.join(', ')}
-    `)
     const pageEmbed = new MessageEmbed().setDescription(LeaderboardMessageInstance.pages.pageList[page]);
-
+    LeaderboardMessageInstance.page = page;
     const msgData = {
       embeds: [pageEmbed],
-      components: [] // pageComponents customID are going too far, or idk
+      components: LeaderboardMessageInstance.pageComponents // []
     };
 
     if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
+      await interaction.ctx.send(msgData);
     } else {
-      interaction.ctx.editParent(msgData);
+      await interaction.ctx.editParent(msgData);
     }
   }
 
@@ -202,6 +211,7 @@ module.exports = class ThemesCommand extends SlashCommand {
       embeds: [themeEmbed],
       components: []
     };
+
     if (commandArguments.firstSend) {
       interaction.ctx.send(msgData);
     } else {
