@@ -3,7 +3,7 @@ const { SlashCommand } = require('slash-create');
 const { ModsSheetFile } = require('../utils/mods.js');
 const nodeuri = require('node-uri');
 const Vibrant = require('node-vibrant');
-const ModsSheetInstance = new ModsSheetFile;
+const ModsSheetInstance = new ModsSheetFile();
 
 module.exports = class ModsCommand extends SlashCommand {
   constructor(creator) {
