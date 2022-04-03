@@ -36,7 +36,7 @@ Given the scope of the project, Interaction-OutFox official instance is not mean
 ### Commands
 
 - [ ] getrole
-- [ ] languagestatus
+- [x] languagestatus
 - [x] leaderboard
 - [x] mods
 - [x] ping

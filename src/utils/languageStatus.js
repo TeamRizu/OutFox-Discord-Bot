@@ -24,21 +24,21 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
     this.bhl = this.doc.sheetsByTitle['languagestatus']
     const rows = await this.bhl.getRows()
     this.versions = []
-    this.languages = [...rows.headerValues[0].slice(1)]
+
+    this.languages = [...rows[0]._sheet.headerValues.slice(1)]
     this.status = []
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]
 
       this.versions.push(row.Version)
-      this.status.push(...row._rawData.slice(1))
+      this.status.push([...row._rawData.slice(1)])
     }
 
     return this.doc
   }
 
   statusFromLanguage(language) {
-    // FIXME: Deal with cases where this.language is null
     const languageIndex = this.languages.indexOf(language)
     const statuses = []
 
@@ -50,7 +50,6 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
   }
 
   statusFromVersion(version) {
-    // FIXME: Deal with cases where this.language is null
     const versionIndex = this.versions.indexOf(version)
 
     return this.status[versionIndex]
