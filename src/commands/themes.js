@@ -34,6 +34,10 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async update({ interaction, commandArguments }) {
+    if (!ArchiveThemesInstance.mainObject) {
+      return;
+    }
+
     if (commandArguments.primalArgument === 'smSelected') {
       await this.leaderboard({
         interaction,
@@ -175,6 +179,11 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async leaderboard({ interaction, commandArguments }) {
+
+    if (!ArchiveThemesInstance.mainObject) {
+      return;
+    }
+
     const fork = commandArguments.primalArgument;
     const engineColors = {
       OutFox: '#bad0ff',
@@ -229,6 +238,11 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async lookUp({ interaction, commandArguments }) {
+
+    if (!ArchiveThemesInstance.mainObject) {
+      return;
+    }
+
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
     // const LeaderboardMessageInstance = new LeaderboardMessageFile(interaction, commandArguments);
