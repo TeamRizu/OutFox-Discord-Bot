@@ -9,6 +9,7 @@ module.exports = class LeaderboardCommand extends SlashCommand {
       name: 'leaderboard',
       description: 'See the leaderboard for OutFox Bug Hunter.'
     });
+    this.commandVersion = '0.0.1'
   }
 
   /**
@@ -17,7 +18,18 @@ module.exports = class LeaderboardCommand extends SlashCommand {
    */
   async run(ctx) {
     await LeaderboardSheetInstance.init();
-    await this.update(ctx, 0, true)
+    await this.update({
+      interaction: {
+        ctx,
+        values: []
+      },
+      commandArguments: {
+        primalArgument: '0',
+        arguments: ['0'],
+        version: this.commandVersion,
+        firstSend: true
+      }
+    })
   }
 
   /**
@@ -26,10 +38,11 @@ module.exports = class LeaderboardCommand extends SlashCommand {
    * @param {number} pageIndex
    * @param {boolean} [firstSend]
    */
-  async update(ctx, pageIndex, firstSend) {
+  async update({interaction, commandArguments}) {
     if (!LeaderboardSheetInstance.pages) {
       return;
     }
+    pageIndex = commandArguments.primalArgument
     pageIndex = Number(pageIndex)
     const pagesNum = LeaderboardSheetInstance.pages.length
     const builtPage = await LeaderboardSheetInstance.buildPage(pageIndex)
@@ -43,11 +56,11 @@ module.exports = class LeaderboardCommand extends SlashCommand {
     const buttons = new MessageActionRow()
     .addComponents(
       new MessageButton()
-        .setCustomId(`1-${ctx.interactionID}-${leastPageNum}`)
+        .setCustomId(`1-${this.commandVersion}-update-${leastPageNum}`)
         .setLabel("Back")
         .setStyle('PRIMARY'),
       new MessageButton()
-        .setCustomId(`1-${ctx.interactionID}-${maxPageNum}`)
+        .setCustomId(`1-${this.commandVersion}-update-${maxPageNum}`)
         .setLabel('Next')
         .setStyle('PRIMARY')
     )
@@ -57,10 +70,10 @@ module.exports = class LeaderboardCommand extends SlashCommand {
       components: [buttons]
     }
 
-    if (firstSend) {
-      await ctx.send(msgData)
+    if (commandArguments.firstSend) {
+      await interaction.ctx.send(msgData)
     } else {
-      await ctx.editParent(msgData)
+      await interaction.ctx.editParent(msgData)
     }
   }
 }

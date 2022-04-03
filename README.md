@@ -36,11 +36,11 @@ Given the scope of the project, Interaction-OutFox official instance is not mean
 ### Commands
 
 - [ ] getrole
-- [x] languagestatus
+- [ ] languagestatus
 - [x] leaderboard
 - [x] mods
 - [x] ping
-- [ ] themes
+- [ ] themes (WIP)
 
 ### Classes
 
@@ -48,8 +48,8 @@ Given the scope of the project, Interaction-OutFox official instance is not mean
 - [x] languageSheet
 - [x] leaderboard
 - [x] modsSheet
-- [ ] archival
-
+- [x] archival
+- [ ] leaderboardMessage (WIP)
 
 ## Installation
 

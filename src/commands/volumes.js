@@ -43,6 +43,7 @@ module.exports = class VolumesCommand extends SlashCommand {
       name: 'volumes',
       description: 'Get information for Serenity Volumes.'
     });
+    this.commandVersion = '0.0.1'
   }
 
   /**
@@ -50,25 +51,36 @@ module.exports = class VolumesCommand extends SlashCommand {
    * @param {ComponentContext} ctx
    */
   async run(ctx) {
-    this.update(ctx, 0, true)
+    await this.update({
+      interaction: {
+        ctx,
+        values: []
+      },
+      commandArguments: {
+        primalArgument: '0',
+        arguments: ['0'],
+        version: this.commandVersion,
+        firstSend: true
+      }
+    })
   }
 
-  async update(ctx, pageIndex, firstSend) {
+  async update({interaction, commandArguments}) {
 
     const checkoutVolumeSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`0-${ctx.interactionID}-0-select`)
+        .setCustomId(`0--0-select`)
         .setPlaceholder('Checkout Volumes')
         .addOptions([
           {
             label: `Volume 1 Winter Update`,
             description: `Released August 27, 2021`,
-            value: `0-${ctx.interactionID}-0-select`
+            value: `0-${this.commandVersion}-lookUp-0`
           },
           {
             label: `Volume 2`,
             description: `In production`,
-            value: `0-${ctx.interactionID}-1-select`
+            value: `0-${this.commandVersion}-lookUp-1`
           }
         ])
     );
@@ -78,25 +90,25 @@ module.exports = class VolumesCommand extends SlashCommand {
       components: [checkoutVolumeSelectMenu]
     };
 
-    if (firstSend) {
-      ctx.send(msgData);
+    if (commandArguments.firstSend) {
+      interaction.ctx.send(msgData);
     } else {
-      ctx.editParent(msgData);
+      interaction.ctx.editParent(msgData);
     }
   }
 
-  async lookUp(ctx, argument, firstSend, values) {
-    const page = values[0].split('-')[2]
+  async lookUp({interaction, commandArguments}) {
+    const page = interaction.values[0].split('-')[2]
     const pageIntoVolume = ['volume 1', 'volume 2'][page]
 
     const button = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`0-${ctx.interactionID}-start`)
+        .setCustomId(`0-${this.commandVersion}-update-start`)
         .setLabel('Back to Serenity')
         .setStyle('PRIMARY')
     );
 
-    ctx.send({
+    interaction.ctx.send({
       embeds: [embeds[pageIntoVolume]],
       components: [button]
     })

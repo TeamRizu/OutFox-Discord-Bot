@@ -1,6 +1,6 @@
 exports.ModsSheetFile = class {
   constructor() {
-    this.doc = OutFoxGlobal.modsDoc
+    this.doc = global.OutFoxGlobal ? global.OutFoxGlobal.modsDoc : null
     this.convertedMods = null;
     this.requestsMods = null;
     this.impossibleMods = null;
@@ -10,6 +10,19 @@ exports.ModsSheetFile = class {
   }
 
   async init() {
+    /*
+    The case bellow will only happen if src/index.js is not run.
+    This is the case when you try to sync up commands using slash-up.
+    */
+    if (!this.doc) {
+      this.doc = new GoogleSpreadsheet(process.env.MODS_ID)
+      await this.doc.useServiceAccountAuth({
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+      })
+      await this.doc.loadInfo()
+    }
+
     this.convertedMods = this.doc.sheetsByTitle['Converted to SM5'];
     this.requestsMods = this.doc.sheetsByTitle['Requests'];
     this.impossibleMods = this.doc.sheetsByTitle['Impossible Requests'];

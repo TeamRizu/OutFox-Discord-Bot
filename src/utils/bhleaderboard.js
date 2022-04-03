@@ -2,7 +2,7 @@ const constants = require('./constants.js')
 
 exports.LeaderboardFile = class LeaderboardSheetInstance {
   constructor() {
-    this.doc = OutFoxGlobal.databaseDoc // new GoogleSpreadsheet(process.env.SHEET_ID)
+    this.doc = global.OutFoxGlobal ? global.OutFoxGlobal.databaseDoc : null // new GoogleSpreadsheet(process.env.SHEET_ID)
     this.users = null
     this.points = null
     this.issues = null
@@ -15,12 +15,18 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
 
   async init() {
     /*
-    await this.doc.useServiceAccountAuth({
+    The case bellow will only happen if src/index.js is not run.
+    This is the case when you try to sync up commands using slash-up.
+    */
+    if (!this.doc) {
+      this.doc = new GoogleSpreadsheet(process.env.SHEET_ID)
+      await this.doc.useServiceAccountAuth({
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
         private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-    })
-    await this.doc.loadInfo()
-    */
+      })
+      await this.doc.loadInfo()
+    }
+
     this.bhl = this.doc.sheetsByTitle['bhl']
     const rows = await this.bhl.getRows()
     this.users = []

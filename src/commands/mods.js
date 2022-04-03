@@ -3,7 +3,7 @@ const { SlashCommand } = require('slash-create');
 const { ModsSheetFile } = require('../utils/mods.js');
 const nodeuri = require('node-uri');
 const Vibrant = require('node-vibrant');
-const ModsSheetInstance = new ModsSheetFile();
+const ModsSheetInstance = new ModsSheetFile;
 
 module.exports = class ModsCommand extends SlashCommand {
   constructor(creator) {
@@ -11,6 +11,7 @@ module.exports = class ModsCommand extends SlashCommand {
       name: 'mods',
       description: 'See information about MrThatKid4 porting progress.'
     });
+    this.commandVersion = '0.0.1'
   }
 
   /**
@@ -19,13 +20,25 @@ module.exports = class ModsCommand extends SlashCommand {
    */
   async run(ctx) {
     await ModsSheetInstance.init();
-    await this.update(ctx, 0, true);
+    await this.update({
+      interaction: {
+        ctx,
+        values: []
+      },
+      commandArguments: {
+        primalArgument: '0',
+        arguments: ['0'],
+        version: this.commandVersion,
+        firstSend: true
+      }
+    })
   }
 
-  async update(ctx, pageIndex, firstSend) {
+  async update({interaction, commandArguments}) {
     if (!ModsSheetInstance.convertedMods) {
       await ModsSheetInstance.init()
     }
+    pageIndex = commandArguments.primalArgument
     pageIndex = Number(pageIndex);
     const rows = await ModsSheetInstance.chartsToArrayObjectRows();
     const pagesNum = Math.round(rows.length / ModsSheetInstance.elementsPerPage);
@@ -37,15 +50,15 @@ module.exports = class ModsCommand extends SlashCommand {
     const maxPageNum = pageIndex + 1 > pagesNum - 1 ? pagesNum - 1 : pageIndex + 1;
 
     const buttons = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId(`2-${ctx.interactionID}-${leastPageNum}`).setLabel('Back').setStyle('PRIMARY'),
-      new MessageButton().setCustomId(`2-${ctx.interactionID}-${maxPageNum}`).setLabel('Next').setStyle('PRIMARY')
+      new MessageButton().setCustomId(`2-${commandVersion}-update-${leastPageNum}`).setLabel('Back').setStyle('PRIMARY'),
+      new MessageButton().setCustomId(`2-${commandVersion}-update-${maxPageNum}`).setLabel('Next').setStyle('PRIMARY')
     );
 
     const selectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`2-${ctx.interactionID}-${pageIndex}-select`)
+        .setCustomId(`2-${this.commandVersion}-lookUp-${pageIndex}`)
         .setPlaceholder('Select file')
-        .addOptions(ModsSheetInstance.chartsSelectMenuFromPage(rows, pageIndex, ctx))
+        .addOptions(ModsSheetInstance.chartsSelectMenuFromPage(rows, pageIndex, interaction.ctx))
     );
 
     const msgData = {
@@ -53,29 +66,29 @@ module.exports = class ModsCommand extends SlashCommand {
       components: [buttons, selectMenu]
     };
 
-    if (firstSend) {
-      ctx.send(msgData);
+    if (commandArguments.firstSend) {
+      interaction.ctx.send(msgData);
     } else {
-      ctx.editParent(msgData);
+      interaction.ctx.editParent(msgData);
     }
   }
 
-  async lookUp(ctx, argument, firstSend, values) {
+  async lookUp({interaction, commandArguments}) {
     if (!ModsSheetInstance.convertedMods) {
       await ModsSheetInstance.init()
     }
-    const portID = values[0].split('-')[2]; // commandID-interactionID-fileID-select
+    const portID = interaction.values[0].split('-')[2]; // commandID-interactionID-fileID-select
     const rows = await ModsSheetInstance.chartsToArrayObjectRows();
     const file = rows.find((element) => element.portID === portID);
 
     if (!file) {
-      await ctx.send('Failed to get file.');
+      await interaction.ctx.send('Failed to get file.');
       return;
     }
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`2-${ctx.interactionID}-${argument}`)
+        .setCustomId(`2-${this.commandVersion}-update-${commandArguments.primalArgument}`)
         .setLabel('Back to Select')
         .setStyle('PRIMARY'),
       new MessageButton().setLabel('Watch Video').setStyle('LINK').setURL(file.youtube)
@@ -131,10 +144,10 @@ module.exports = class ModsCommand extends SlashCommand {
       components: [buttons]
     };
 
-    if (firstSend) {
-      await ctx.send(msgData);
+    if (commandArguments.firstSend) {
+      interaction.ctx.send(msgData);
     } else {
-      await ctx.editParent(msgData);
+      interaction.ctx.editParent(msgData);
     }
   }
 };

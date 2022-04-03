@@ -4,7 +4,7 @@ module.exports = class PingCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'ping',
-      description: 'Test the reponse time'
+      description: 'Test the reponse time.'
     });
   }
 
