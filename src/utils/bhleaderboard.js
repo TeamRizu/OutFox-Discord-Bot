@@ -81,7 +81,7 @@ exports.LeaderboardFile = class LeaderboardSheetInstance {
       const classification = this.classifications[userIndex]
       const idOfClassification = constants.bugRole[classification]
 
-      finalStr = finalStr + `${point} Points - ${user} (${idOfClassification ? `<@${idOfClassification}>` : classification})\n`
+      finalStr = finalStr + `${point} Points - ${user} (${idOfClassification ? `<@&${idOfClassification}>` : classification})\n`
     }
 
     return finalStr
