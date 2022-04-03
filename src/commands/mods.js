@@ -11,7 +11,7 @@ module.exports = class ModsCommand extends SlashCommand {
       name: 'mods',
       description: 'See information about MrThatKid4 porting progress.'
     });
-    this.commandVersion = '0.0.1'
+    this.commandVersion = '0.0.1';
   }
 
   /**
@@ -31,27 +31,39 @@ module.exports = class ModsCommand extends SlashCommand {
         version: this.commandVersion,
         firstSend: true
       }
-    })
+    });
   }
 
-  async update({interaction, commandArguments}) {
+  async update({ interaction, commandArguments }) {
     if (!ModsSheetInstance.convertedMods) {
-      return
+      return;
     }
-    let pageIndex = commandArguments.primalArgument
+    let pageIndex = commandArguments.primalArgument;
     pageIndex = Number(pageIndex);
     const rows = await ModsSheetInstance.chartsToArrayObjectRows();
     const pagesNum = Math.round(rows.length / ModsSheetInstance.elementsPerPage);
     const embed = new MessageEmbed()
       .setTitle('Converted Mods')
+      .setURL('https://docs.google.com/spreadsheets/d/1P892pQEcfzP59NeSm2aHIKNB1Rv4DqIXtELkcIvJNbM/edit?usp=sharing')
+      .setFooter({
+        text: 'StepMania Conversions by MrThatKid4',
+        iconURL: 'https://media.discordapp.net/attachments/953800884549189662/960303427710230670/unknown.png'
+      })
+      .setColor('#9f245c')
       .setDescription(ModsSheetInstance.chartsFromPage(rows, pageIndex));
 
     const leastPageNum = 0 > pageIndex - 1 ? 0 : pageIndex - 1;
     const maxPageNum = pageIndex + 1 > pagesNum - 1 ? pagesNum - 1 : pageIndex + 1;
 
     const buttons = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId(`2-${commandVersion}-update-${leastPageNum}`).setLabel('Back').setStyle('PRIMARY'),
-      new MessageButton().setCustomId(`2-${commandVersion}-update-${maxPageNum}`).setLabel('Next').setStyle('PRIMARY')
+      new MessageButton()
+        .setCustomId(`2-${this.commandVersion}-update-${leastPageNum}`)
+        .setLabel('Back')
+        .setStyle('PRIMARY'),
+      new MessageButton()
+        .setCustomId(`2-${this.commandVersion}-update-${maxPageNum}`)
+        .setLabel('Next')
+        .setStyle('PRIMARY')
     );
 
     const selectMenu = new MessageActionRow().addComponents(
@@ -73,7 +85,7 @@ module.exports = class ModsCommand extends SlashCommand {
     }
   }
 
-  async lookUp({interaction, commandArguments}) {
+  async lookUp({ interaction, commandArguments }) {
     if (!ModsSheetInstance.convertedMods) {
       return;
     }
@@ -98,14 +110,18 @@ module.exports = class ModsCommand extends SlashCommand {
       .setTitle(file.name)
       .addField('Fix-up Status', file.status, true)
       .addField('StepMania Engine', file.version, true)
+      .setFooter({
+        text: 'StepMania Conversions by MrThatKid4',
+        iconURL: 'https://media.discordapp.net/attachments/953800884549189662/960303427710230670/unknown.png'
+      })
       .setURL(file.youtube);
 
-    if (['youtube', 'youtu.be'].some(e => file.youtube.includes(e)) && nodeuri.checkHttpsURL(file.youtube)) {
+    if (['youtube', 'youtu.be'].some((e) => file.youtube.includes(e)) && nodeuri.checkHttpsURL(file.youtube)) {
       embed.setURL(file.youtube);
 
       const results = file.youtube.match('[\\?&]v=([^&#]*)');
       const secondResult = file.youtube.substring(file.youtube.length - 11);
-      let  videoID = results === null ? file.youtube : results[1];
+      let videoID = results === null ? file.youtube : results[1];
       // This solves this type of link https://youtu.be/oMa-fqnCVzY
       if (videoID === file.youtube && secondResult.length === 11) videoID = secondResult;
 
