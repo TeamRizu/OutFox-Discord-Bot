@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { SlashCommand } = require('slash-create');
-const { LanguagestatusFile } = require('../utils/languagestatus.js')
+const { LanguagestatusFile } = require('../utils/languagestatusSpreadsheet.js')
 const LanguagestatusInstance = new LanguagestatusFile()
 
 module.exports = class LanguageStatusCommand extends SlashCommand {
