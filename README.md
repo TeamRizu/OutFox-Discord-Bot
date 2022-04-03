@@ -35,7 +35,7 @@ Given the scope of the project, Interaction-OutFox official instance is not mean
 
 ### Commands
 
-- [ ] getrole
+~~- [ ] getrole~~ Not possible with slash-creator?
 - [x] languagestatus
 - [x] leaderboard
 - [x] mods
