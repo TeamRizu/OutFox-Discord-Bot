@@ -1,6 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { SlashCommand } = require('slash-create');
 const { ModsSheetFile } = require('../utils/mods.js');
+const { conversionsGenericEmbedFields } = require('../utils/constants.js')
 const nodeuri = require('node-uri');
 const Vibrant = require('node-vibrant');
 const ModsSheetInstance = new ModsSheetFile();
@@ -45,10 +46,6 @@ module.exports = class ModsCommand extends SlashCommand {
     const embed = new MessageEmbed()
       .setTitle('Converted Mods')
       .setURL('https://docs.google.com/spreadsheets/d/1P892pQEcfzP59NeSm2aHIKNB1Rv4DqIXtELkcIvJNbM/edit?usp=sharing')
-      .setFooter({
-        text: 'StepMania Conversions by MrThatKid4',
-        iconURL: 'https://media.discordapp.net/attachments/953800884549189662/960303427710230670/unknown.png'
-      })
       .setColor('#9f245c')
       .setDescription(ModsSheetInstance.chartsFromPage(rows, pageIndex));
 
@@ -74,7 +71,12 @@ module.exports = class ModsCommand extends SlashCommand {
     );
 
     const msgData = {
-      embeds: [embed],
+      embeds: [
+        {
+          ...embed,
+          ...conversionsGenericEmbedFields
+        }
+      ],
       components: [buttons, selectMenu]
     };
 
@@ -110,10 +112,6 @@ module.exports = class ModsCommand extends SlashCommand {
       .setTitle(file.name)
       .addField('Fix-up Status', file.status, true)
       .addField('StepMania Engine', file.version, true)
-      .setFooter({
-        text: 'StepMania Conversions by MrThatKid4',
-        iconURL: 'https://media.discordapp.net/attachments/953800884549189662/960303427710230670/unknown.png'
-      })
       .setURL(file.youtube);
 
     if (['youtube', 'youtu.be'].some((e) => file.youtube.includes(e)) && nodeuri.checkHttpsURL(file.youtube)) {
@@ -156,7 +154,12 @@ module.exports = class ModsCommand extends SlashCommand {
     if (file.pack) embed.addField('Pack', file.pack, true);
 
     const msgData = {
-      embeds: [embed],
+      embeds: [
+        {
+          ...embed,
+          ...conversionsGenericEmbedFields
+        }
+      ],
       components: [buttons]
     };
 

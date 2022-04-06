@@ -1,3 +1,4 @@
+const constants = require('../utils/constants.js')
 exports.ModsSheetFile = class {
   constructor() {
     this.doc = global.OutFoxGlobal ? global.OutFoxGlobal.modsDoc : null
@@ -135,9 +136,7 @@ exports.ModsSheetFile = class {
   chartsSelectMenuFromPage(rows, pageIndex, ctx) {
     const maxIndex = (this.elementsPerPage * (pageIndex + 1)) // 200
     const minIndex = (this.elementsPerPage * (pageIndex + 1)) - this.elementsPerPage // 175
-    const range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
-      return [...Array(size).keys()].map(i => i + startAt);
-    }
+
     const formatAuthorPack = (author, pack) => {
       /*
       Thanks "We are the Loss" for having a 66 char long author field
@@ -155,7 +154,7 @@ exports.ModsSheetFile = class {
     let finalArray = []
 
     for (let i = 0; i < this.elementsPerPage; i++) {
-      const currentIndex = range(maxIndex, minIndex)[i]
+      const currentIndex = constants.range(maxIndex, minIndex)[i]
       const file = rows[currentIndex]
 
       if (!file) { // This page might not have 25 elements
@@ -166,7 +165,8 @@ exports.ModsSheetFile = class {
       finalArray.push({
         label: `${currentIndex + 1}° - ${file.name}`,
         description: `${!file.author && !file.pack ? 'Unknown Author & Pack' : formatAuthorPack(file.author, file.pack)}`,
-        value: `2-${ctx.interactionID}-${file.portID}-select`
+        value: `2-${ctx.interactionID}-${file.portID}-select`,
+        emoji: constants.archiveEngineEmoteData[constants.conversionsVersionToEngineID[file.version]]
       })
     }
 

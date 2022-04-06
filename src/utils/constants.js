@@ -111,3 +111,49 @@ exports.archiveGenericEmbedFields = {
     icon_url: 'https://josevarela.xyz/SMArchive/Builds/VersionIcon/SM40.png'
   }
 }
+
+exports.archiveThemesMusicWheelImage = {
+  OITG: {
+    'DECO': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Deco/screen3.png',
+    'Empress': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Empress/screen4.png',
+    'Retro': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Retro/screen3.png',
+    'Meat': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Meat/screen3.png',
+    'Mlp': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Mlp/screen4.png',
+    'Obscurity': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Obscurity/screen3.png',
+    'SLGJUVM': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/SLGJUVM/screen3.png',
+    'Tactics': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Tactics/screen4.png',
+  },
+  'NITG': {
+    'SLOat': 'https://objects-us-east-1.dream.io/smthemes/NITG/Screenshots/SLOat/screen2.png'
+  },
+  'StepMania 5': {
+    'Barebone': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/Barebone/screen3.png',
+    'CS8S': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/CS8S/screen2.png',
+    'CS8LA': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/CS8LA/screen2.png',
+    'DDR5th': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/DDR5th/screen3.png',
+    'Lazarus': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/Lazarus/screen2.png',
+    'StRev': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/StRev/screen2.png',
+    'starlight': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/starlight/screen3.png',
+    'ultralight': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/ultralight/screen2.png',
+    'UPSRT': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/UPSRT/screen4.png',
+    'XIX.SUPER': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/XIX.SUPER/screen2.png'
+  }
+}
+
+exports.conversionsGenericEmbedFields = {
+  footer: {
+    text: 'StepMania Conversions by MrThatKid4',
+    icon_url: 'https://media.discordapp.net/attachments/953800884549189662/960303427710230670/unknown.png'
+  }
+}
+
+exports.conversionsVersionToEngineID = {
+  '5.0+': 'StepMania 5',
+  '5.1+': 'StepMania 5',
+  '5.3': 'OutFox',
+  'OutFox': 'OutFox'
+}
+
+exports.range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
+  return [...Array(size).keys()].map(i => i + startAt);
+}
