@@ -2,7 +2,7 @@ const { SlashCommand } = require('slash-create');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveThemesFile } = require('../utils/archivalThemes.js');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
-const { archiveEngineID, archiveEngineName, archiveEngineEmoteData, archiveEngineColors, archiveGenericEmbedFields, archiveEngineLink } = require('../utils/constants.js')
+const { archiveThemesMusicWheelImage, archiveEngineID, archiveEngineName, archiveEngineEmoteData, archiveEngineColors, archiveGenericEmbedFields, archiveEngineLink } = require('../utils/constants.js')
 const ArchiveThemesInstance = new ArchiveThemesFile();
 
 module.exports = class ThemesCommand extends SlashCommand {
@@ -207,10 +207,13 @@ module.exports = class ThemesCommand extends SlashCommand {
       .setThumbnail(`https://cdn.discordapp.com/emojis/${archiveEngineEmoteData[engine].id}.webp?quality=lossless`)
       .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`);
 
-    /*
-    if (themeData.hasImages) {
-      themeEmbed.setImage(`https://objects-us-east-1.dream.io/smthemes/${engine.replace(' ', '%20')}/Screenshots/${themeID}/screen3.png`)
-    }*/
+    if (themeData.HasImages) {
+      const engineThemesImg = archiveThemesMusicWheelImage[engine]
+
+      if (engineThemesImg[themeID]) {
+        themeEmbed.setImage(engineThemesImg[themeID])
+      }
+    }
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
