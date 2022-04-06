@@ -196,9 +196,7 @@ module.exports = class ThemesCommand extends SlashCommand {
 
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
-    console.log(page)
     const engine = commandArguments.primalArgument;
-    console.log(ArchiveThemesInstance.themesForVersion(engine).join(', '))
     const themeID = ArchiveThemesInstance.themesForVersion(engine)[page];
     const themeData = ArchiveThemesInstance.themeFromVersion(engine, themeID);
     const themeEmbed = new MessageEmbed()
