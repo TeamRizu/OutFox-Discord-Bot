@@ -2,7 +2,7 @@ const { SlashCommand } = require('slash-create');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveThemesFile } = require('../utils/archivalThemes.js');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
-const { archiveThemesMusicWheelImage, archiveEngineID, archiveEngineName, archiveEngineEmoteData, archiveEngineColors, archiveGenericEmbedFields, archiveEngineLink } = require('../utils/constants.js')
+const { archiveThemeDescription, archiveThemesMusicWheelImage, archiveEngineID, archiveEngineName, archiveEngineEmoteData, archiveEngineColors, archiveGenericEmbedFields, archiveEngineLink } = require('../utils/constants.js')
 const ArchiveThemesInstance = new ArchiveThemesFile();
 
 module.exports = class ThemesCommand extends SlashCommand {
@@ -196,12 +196,14 @@ module.exports = class ThemesCommand extends SlashCommand {
 
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
+    console.log(page)
     const engine = commandArguments.primalArgument;
+    console.log(ArchiveThemesInstance.themesForVersion(engine).join(', '))
     const themeID = ArchiveThemesInstance.themesForVersion(engine)[page];
     const themeData = ArchiveThemesInstance.themeFromVersion(engine, themeID);
     const themeEmbed = new MessageEmbed()
       .setTitle(`Summary of ${themeData.Name}`)
-      .setDescription(themeData.Name)
+      .setDescription(archiveThemeDescription[engine][themeID] || themeData.Name)
       .addField('Engine', archiveEngineName[engine], true)
       .setColor(archiveEngineColors[engine])
       .setThumbnail(`https://cdn.discordapp.com/emojis/${archiveEngineEmoteData[engine].id}.webp?quality=lossless`)

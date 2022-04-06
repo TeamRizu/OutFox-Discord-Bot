@@ -150,7 +150,10 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
       const maxIndex = this.elementsPerPage * (this.page + 1); // 200
-      const minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage; // 175
+      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage;
+      if (this.page >= 1) {
+        minIndex = minIndex - 1
+      }
       const range = (size, startAt = 0) => {
         // https://stackoverflow.com/a/10050831
         return [...Array(size).keys()].map((i) => i + startAt);

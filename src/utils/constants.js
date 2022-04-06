@@ -140,6 +140,13 @@ exports.archiveThemesMusicWheelImage = {
   }
 }
 
+exports.archiveThemeDescription = {
+  'StepMania 5': {
+    'UPSRT': 'This theme is a "Story" theme, you need the UPSRT pack to experience the whole story.',
+    'starlight': 'Do not confuse this version with the latest Starlight 2.0 version.'
+  }
+}
+
 exports.conversionsGenericEmbedFields = {
   footer: {
     text: 'StepMania Conversions by MrThatKid4',
