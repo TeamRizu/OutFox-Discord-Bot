@@ -10,7 +10,6 @@ exports.bugRole = {
   'Bug Banned': '707360111076835369'
 };
 
-
 /**
  * Engine ID accepted by StepMania Archive.
  */
@@ -164,3 +163,28 @@ exports.conversionsVersionToEngineID = {
 exports.range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
   return [...Array(size).keys()].map(i => i + startAt);
 }
+
+/*
+exports.volumesAdditionalFields = {
+  chartInfo: {
+    'volume 1': {
+      name: 'Volume 1 Winter Update Chart Count',
+      value: `
+      | Mode   | Charts |
+      |--------|--------|
+      | dance  | 112    |
+      | pump   | 63     |
+      | be-mu  | 37     |
+      | gh     | 31     |
+      | po-mu  | 28     |
+      | gddm   | 18     |
+      | smx    | 16     |
+      | techno | 10     |
+      | gdgf   | 8      |
+      | maniax | 2      |
+      | ez2    | 1      |
+      `
+    }
+  }
+}
+*/

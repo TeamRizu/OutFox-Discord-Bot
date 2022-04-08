@@ -34,7 +34,8 @@ const start = async () => {
     'mods',
     'ping',
     'languagestatus', // TBD
-    'themes'
+    'themes',
+    'announcers'
   ];
 
   creator.on('debug', (message) => logger.log(message));

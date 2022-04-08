@@ -12,7 +12,7 @@ module.exports = class ModsCommand extends SlashCommand {
       name: 'mods',
       description: 'See information about MrThatKid4 porting progress.'
     });
-    this.commandVersion = '0.0.1';
+    this.commandVersion = '0.0.2';
   }
 
   /**

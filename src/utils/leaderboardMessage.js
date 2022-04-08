@@ -10,7 +10,6 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     this.supportLookUp = false; // If enabled, the message author can type the number of the element to read more about it. Only supported for Object elements.
     this.lookingUp = false;
     this.menuSelectPlaceholder = 'Look up element';
-    this.leaderboardTitle = 'Checkout cool stuff';
     this.ctx = interaction.ctx;
     this.commandID = commandArguments?.commandID || null;
     this.commandVersion = commandArguments?.version || null;
@@ -168,7 +167,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
       }
 
       const elementSelector = new MessageSelectMenu()
-        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}`) // FIXME: Theme name is here, handle values somehow
+        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}`)
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 
