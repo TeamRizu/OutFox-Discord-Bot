@@ -1,15 +1,15 @@
 const { SlashCommand } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { ArchiveAnnouncersFile } = require('../utils/archivalAnnouncers.js');
-const { archiveGenericEmbedFields } = require('../utils/constants.js')
-const ArchiveAnnouncersInstance = new ArchiveAnnouncersFile();
+const { ArchiveCreditsFile } = require('../utils/archivalCredits.js');
+const { archiveGenericEmbedFields, creditsEngineID, creditsEngineIDToEngineTag } = require('../utils/constants.js')
+const ArchiveCreditsInstance = new ArchiveCreditsFile();
 
-module.exports = class AnnouncersCommand extends SlashCommand {
+module.exports = class CreditsCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
-      name: 'announcers',
-      description: 'Get a list of announcers with info and more.'
+      name: 'credits',
+      description: 'Get a list of credits with info and more.'
     });
     this.commandVersion = '0.0.1';
   }
@@ -19,7 +19,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
    * @param {ComponentContext} ctx
    */
   async run(ctx) {
-    await ArchiveAnnouncersInstance.setup();
+    await ArchiveCreditsInstance.setup();
     await this.update({
       interaction: {
         ctx,
@@ -35,11 +35,11 @@ module.exports = class AnnouncersCommand extends SlashCommand {
   }
 
   async update({ interaction, commandArguments }) {
-    if (!ArchiveAnnouncersInstance.mainObject) {
+    if (!ArchiveCreditsInstance.mainObject) {
       return;
     }
 
-    if (commandArguments.primalArgument === 'authorSelected') {
+    if (commandArguments.primalArgument === 'engineSelected') {
       await this.leaderboard({
         interaction,
         commandArguments: {
@@ -53,7 +53,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       return;
     }
 
-    if (['KU+002FStep', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted'].includes(commandArguments.primalArgument)) {
+    if (creditsEngineID.includes(commandArguments.primalArgument)) {
       await this.lookUp({
         interaction,
         commandArguments: {
@@ -67,55 +67,52 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       return;
     }
 
-    const announcersCountString = (author) => {
-      const announcersCount = ArchiveAnnouncersInstance.announcersFromAuthors[author].length
-
-      return `${author}: **${announcersCount} ${1 >= announcersCount ? 'Announcer' : 'Announcers'}**`
-    }
-
-    const announcersEmbed = new MessageEmbed()
+    const engineEmbed = new MessageEmbed()
       .setTitle('StepMania Archive Announcers')
       .setDescription(
         `
-        Announcers help cheer up the player during gameplay and to say out loud their earned score.
+        The story of StepMania Engine is big, rich and long, however credits to the people who worked hard might be lost.
 
-        StepMania Archive cames to archive all that work in one place, going beyond Announcers.
+        StepMania Archive cames to archive all that work in one place, going beyond Credits.
 
-        ${announcersCountString('MadkaT')}
-        ${announcersCountString('Hooky')}
-        ${announcersCountString('K-Step')}
-        ${announcersCountString('Schizkitty')}
-        ${announcersCountString('Unlisted')}
+        See Credits For:
+
+        - **StepMania**
+        - **Pulsen**
+        - **Mungyodance**
+        - **Mungyodance 3**
+        - **Keys 7**
+        - **OpenITG**
         `
       )
       .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-      .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
+      .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
       .setColor('#30c3c4');
 
-    const authorOptions = []
+    const engineOptions = []
 
-    const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors)
-    for (let i = 0; i < announcersAuthors.length; i++) {
-      const currentAuthor = announcersAuthors[i]
+    const engines = ArchiveCreditsInstance.engines
+    for (let i = 0; i < engines.length; i++) {
+      const currentEngine = engines[i]
       const tempObj = {}
 
-      tempObj.label = currentAuthor
-      tempObj.value = `6-${this.commandVersion}-leaderboard-${currentAuthor.replace('-', 'U+002F')}-0`
+      tempObj.label = currentEngine
+      tempObj.value = `7-${this.commandVersion}-leaderboard-${currentEngine}-0`
 
-      authorOptions.push(tempObj)
+      engineOptions.push(tempObj)
     }
 
     const smSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`6-${this.commandVersion}-update-authorSelected`)
-        .setPlaceholder('Select Author')
-        .addOptions(authorOptions)
+        .setCustomId(`7-${this.commandVersion}-update-engineSelected`)
+        .setPlaceholder('Select Engine')
+        .addOptions(engineOptions)
     );
 
     const msgData = {
       embeds: [
         {
-          ...announcersEmbed,
+          ...engineEmbed,
           ...archiveGenericEmbedFields
         }
       ],
@@ -130,33 +127,33 @@ module.exports = class AnnouncersCommand extends SlashCommand {
   }
 
   async leaderboard({ interaction, commandArguments }) {
-    if (!ArchiveAnnouncersInstance.mainObject) {
+    if (!ArchiveCreditsInstance.mainObject) {
       return;
     }
 
-    const author = commandArguments.primalArgument.replace('U+002F', '-');
+    const engine = commandArguments.primalArgument
     const page = Number(commandArguments.arguments[1]);
-    const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author)
+    const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine)
     const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
 
     LeaderboardMessageInstance.supportLookUp = true;
-    LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Announcer to Look Up';
+    LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Section to Look Up';
 
-    for (let i = 0; i < announcersForAuthor.length; i++) {
-      LeaderboardMessageInstance.addElement(announcersForAuthor[i].name);
+    for (let i = 0; i < titlesByEngine.length; i++) {
+      LeaderboardMessageInstance.addElement(titlesByEngine[i]);
     }
 
     const pageEmbed = new MessageEmbed()
-    .setTitle('Select Announcer')
-    .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
+    .setTitle('Select Section')
+    .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
     .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
     .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
-        .setLabel('Another Announcer')
+        .setLabel('Another Engine')
         .setStyle('PRIMARY')
-        .setCustomId(`6-${this.commandVersion}-update-0`)
+        .setCustomId(`7-${this.commandVersion}-update-0`)
     );
 
     LeaderboardMessageInstance.page = page;
@@ -183,31 +180,51 @@ module.exports = class AnnouncersCommand extends SlashCommand {
   }
 
   async lookUp({ interaction, commandArguments }) {
-    if (!ArchiveAnnouncersInstance.mainObject) {
+    if (!ArchiveCreditsInstance.mainObject) {
       return;
     }
 
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
-    const author = commandArguments.primalArgument.replace('U+002F', '-')
-    const announcer = ArchiveAnnouncersInstance.announcersByAuthor(author)[page]
+    const engine = commandArguments.primalArgument.replace('U+002F', '-')
+    const section = ArchiveCreditsInstance.mainObject[engine][page]
+    let sectionMembers = ''
 
+    for (let i = 0; i < section.members.length; i++) {
+      let currentMember = section.members[i]
+
+      if (currentMember.includes('strong>')) {
+        currentMember = currentMember.replace('<strong>', '**')
+        currentMember = currentMember.replace('</strong>', '**')
+      }
+
+      if (currentMember.includes('i>')) {
+        currentMember = currentMember.replace('<i>', '_')
+        currentMember = currentMember.replace('</i>', '_')
+      }
+
+      if ('small>') {
+        currentMember = currentMember.replace('<small>', '')
+        currentMember = currentMember.replace('</small>', '')
+      }
+
+      sectionMembers = sectionMembers + currentMember + '\n'
+    }
     const announcerEmbed = new MessageEmbed()
-      .setTitle(`${announcer.name}`)
-      .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`);
+      .setTitle(`${section.title}`)
+      .setURL(`https://josevarela.xyz/SMArchive/Builds/Credits.html#${creditsEngineIDToEngineTag[engine]}`)
+      .setDescription(sectionMembers);
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
-        .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`)
-        .setLabel('Find on Page')
+        .setURL(`https://josevarela.xyz/SMArchive/Builds/Credits.html#${creditsEngineIDToEngineTag[engine]}`)
+        .setLabel('Read on Page')
         .setStyle('LINK'),
       new MessageButton()
-        .setLabel('Another Announcer')
+        .setLabel('Another section')
         .setStyle('PRIMARY')
-        .setCustomId(`6-${this.commandVersion}-leaderboard-${author.replace('-', 'U+002F')}-0`)
+        .setCustomId(`7-${this.commandVersion}-leaderboard-${engine}-0`)
     );
-
-    if (author !== 'Unlisted') announcerEmbed.addField('Author', author, true);
 
     const msgData = {
       embeds: [

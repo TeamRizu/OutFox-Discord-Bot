@@ -33,9 +33,10 @@ const start = async () => {
     'leaderboard',
     'mods',
     'ping',
-    'languagestatus', // TBD
+    'languagestatus',
     'themes',
-    'announcers'
+    'announcers',
+    'credits'
   ];
 
   creator.on('debug', (message) => logger.log(message));
@@ -51,14 +52,6 @@ const start = async () => {
   creator.withServer(new FastifyServer()).registerCommandsIn(path.join(__dirname, 'commands')).startServer();
 
   creator.on('componentInteraction', async (ctx) => {
-    /**
-     * This context object is similar to command context as it will
-     * still automatically acknowledge the interaction.
-     *
-     * You can still use `ctx.send` and `ctx.defer` however, there are
-     * new functions like `ctx.acknowledge` and `ctx.editParent`.
-     */
-
 
     const IDSplit = ctx.customID.split('-');
     const commandID = IDSplit[0];

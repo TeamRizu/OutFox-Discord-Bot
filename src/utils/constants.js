@@ -164,6 +164,22 @@ exports.range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
   return [...Array(size).keys()].map(i => i + startAt);
 }
 
+exports.creditsEngineID = [
+  'Stepmania',
+  'Pulsen',
+  'Mung1',
+  'Keys6',
+  'OpenITG'
+]
+
+exports.creditsEngineIDToEngineTag = {
+  'Stepmania': 'StepMania',
+  'Pulsen': 'Pulsen',
+  'Mung1': 'Mung1',
+  'Keys6': 'Keys6',
+  'OpenITG': 'OpenITG'
+}
+
 /*
 exports.volumesAdditionalFields = {
   chartInfo: {
