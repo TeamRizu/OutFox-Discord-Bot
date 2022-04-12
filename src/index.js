@@ -36,7 +36,8 @@ const start = async () => {
     'languagestatus',
     'themes',
     'announcers',
-    'credits'
+    'credits',
+    'preference'
   ];
 
   creator.on('debug', (message) => logger.log(message));
