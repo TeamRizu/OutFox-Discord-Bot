@@ -1,5 +1,5 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-
+const { range } = require('./constants.js')
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   constructor({ interaction, commandArguments }) {
     this.elements = [];
@@ -149,25 +149,21 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
       const maxIndex = this.elementsPerPage * (this.page + 1); // 200
-      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage;
+      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage
       if (this.page >= 1) {
-        minIndex = minIndex - 1
+        minIndex = minIndex - this.page
       }
-      const range = (size, startAt = 0) => {
-        // https://stackoverflow.com/a/10050831
-        return [...Array(size).keys()].map((i) => i + startAt);
-      };
 
       const selectElement = [];
       for (let i = 0; i < currentPageElements.length; i++) {
         selectElement.push({
-          value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}`,
+          value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
           label: individualElements[this.page][i]
         });
       }
 
       const elementSelector = new MessageSelectMenu()
-        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}`)
+        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}-${this.arguments[1]}`)
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 
