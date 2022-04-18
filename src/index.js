@@ -37,7 +37,8 @@ const start = async () => {
     'themes',
     'announcers',
     'credits',
-    'preference'
+    'preference',
+    'builds'
   ];
 
   creator.on('debug', (message) => logger.log(message));
