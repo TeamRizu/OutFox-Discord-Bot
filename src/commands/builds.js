@@ -6,6 +6,7 @@ const {
   archiveListIDs,
   archiveListNames,
   archiveListIDToNames,
+  archiveListIDToEngineName,
   archiveThemeDescription,
   archiveThemesMusicWheelImage,
   archiveEngineID,
@@ -113,7 +114,7 @@ module.exports = class BuildsCommand extends SlashCommand {
       .setURL('https://josevarela.xyz/SMArchive/Builds/index.html')
       .setColor('#30c3c4');
 
-    const smOptions = []
+    const listOptions = []
 
     for (let i = 0; i < archiveListIDs.length; i++) {
       const currentEngine = archiveListIDs[i]
@@ -123,14 +124,14 @@ module.exports = class BuildsCommand extends SlashCommand {
       tempObj.value = `9-${this.commandVersion}-leaderboard-${currentEngine}-0`
       // tempObj.emoji = archiveEngineEmoteData[currentEngine]
 
-      smOptions.push(tempObj)
+      listOptions.push(tempObj)
     }
 
     const smSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
         .setCustomId(`9-${this.commandVersion}-update-buildSelected`)
         .setPlaceholder('Select Build List')
-        .addOptions(smOptions)
+        .addOptions(listOptions)
     );
 
     const msgData = {
@@ -214,34 +215,55 @@ module.exports = class BuildsCommand extends SlashCommand {
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
     const listName = commandArguments.primalArgument;
-    const listObject = ArchivaBuildsInstance.buildListObjectFromID(listName).Listing[page]
-    console.log(listObject.Name, listName)
+    const listObject = ArchivaBuildsInstance.buildListObjectFromID(listName)
+    const buildObject = listObject.Listing[page]
     const buildEmbed = new MessageEmbed()
-      .setTitle(`Summary of ${listObject.Name}`)
-      // .setDescription(archiveThemeDescription[engine][themeID] || themeData.Name)
-      .addField('Engine', listName, true)
+      .setTitle(`Summary of ${buildObject.Name}`)
+      .addField('Engine', archiveListIDToEngineName[listName], true)
+      .addField('Date', buildObject.Date || '????-??-??', true)
+      .setDescription(listObject.Description || 'No description.')
       // .setColor(archiveEngineColors[engine])
-      // .setThumbnail(`https://cdn.discordapp.com/emojis/${archiveEngineEmoteData[engine].id}.webp?quality=lossless`)
-      // .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`);
+      .setThumbnail(`https://josevarela.xyz/SMArchive/Builds/VersionIcon/${listObject.DefaultIcon}`)
 
-    // const buttons = new MessageActionRow().addComponents(
-    //   new MessageButton()
-    //     .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`)
-    //     .setLabel('Theme Page')
-    //     .setStyle('LINK'),
-    //   new MessageButton()
-    //     .setURL(archiveEngineLink[engine])
-    //     .setLabel('Engine Page')
-    //     .setStyle('LINK'),
-    //   new MessageButton()
-    //     .setLabel('Another Theme')
-    //     .setStyle('PRIMARY')
-    //     .setCustomId(`9-${this.commandVersion}-leaderboard-${engine}-0`)
-    // );
+    const buttons = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setURL(`https://josevarela.xyz/SMArchive/Builds/index.html#${listName}`)
+        .setLabel('List Page')
+        .setStyle('LINK'),
+      new MessageButton()
+        .setLabel('Another Build')
+        .setCustomId(`9-${this.commandVersion}-leaderboard-${listName}-0`)
+        .setStyle('PRIMARY')
+    );
 
-    // if (themeData.Date) themeEmbed.addField('Creation Date', themeData.Date, true);
-    // if (themeData.Author) themeEmbed.addField('Theme Author', themeData.Author, true);
-    // if (themeData.Version) themeEmbed.addField('Theme Version', themeData.Version, true);
+    if (buildObject.ID) {
+      buttons.addComponents(
+        new MessageButton()
+          .setURL(`https://josevarela.xyz/SMArchive/Builds/BuildChangeLogs.html?Version=${buildObject.ID}`)
+          .setLabel('Build Changelog')
+          .setStyle('LINK')
+      )
+    }
+
+    const { Windows, Mac, Linux, Src } = buildObject
+    const sources = [Windows, Mac, Linux, Src]
+    const sourcesStr = ['Windows', 'Mac', 'Linux', 'Source Code']
+    let availableSources = ''
+
+    if (sources.every(e => !e)) {
+      availableSources = 'No soures available for this build.'
+    } else {
+      for (let i = 0; i < sources.length; i++) {
+        if (sources[i]) {
+          availableSources += `${sourcesStr[i]} - ✅\n`
+          continue
+        }
+
+        availableSources += `${sourcesStr[i]} - ❌\n`
+      }
+    }
+
+    buildEmbed.addField('Available Sources', availableSources, false)
 
     const msgData = {
       embeds: [
@@ -250,7 +272,7 @@ module.exports = class BuildsCommand extends SlashCommand {
           ...archiveGenericEmbedFields
         }
       ],
-      components: [/*buttons*/]
+      components: [buttons]
     };
 
     if (commandArguments.firstSend) {

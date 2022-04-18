@@ -27,8 +27,8 @@ const request = require('request-promise');
 /**
  * Object of Archive BuildListed
  * @typedef {Object} BuildListed
- * @property {string} Name - Can have HTML tags
- * @property {string} Date - YYYY/MM/DD
+ * @property {string} Name
+ * @property {string} [Date] - YYYY/MM/DD
  * @property {string} [ID] - ChangeLog ID (eg. Builds/BuildChangeLogs.html?Version=ITGB01072004)
  * @property {string | OSBuildOptions[]} [Windows]
  * @property {string | OSBuildOptions[]} [Mac]
@@ -39,7 +39,7 @@ const request = require('request-promise');
 /**
  * Object of Archive OS Build Options
  * @typedef {Object} OSBuildOptions
- * @property {string} Name
+ * @property {string} Name - Can have HTML tags
  * @property {string} Link
  */
 
