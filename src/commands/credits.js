@@ -68,7 +68,7 @@ module.exports = class CreditsCommand extends SlashCommand {
     }
 
     const engineEmbed = new MessageEmbed()
-      .setTitle('StepMania Archive Announcers')
+      .setTitle('StepMania Archive Credits')
       .setDescription(
         `
         The story of StepMania Engine is big, rich and long, however credits to the people who worked hard might be lost.
