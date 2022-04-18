@@ -1,8 +1,7 @@
 const { SlashCommand } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { WikiPreferencesFile } = require('../utils/wikiPreferences.js');
-const { archiveGenericEmbedFields } = require('../utils/constants.js')
 const PreferencesInstance = new WikiPreferencesFile();
 
 module.exports = class PreferenceCommand extends SlashCommand {
