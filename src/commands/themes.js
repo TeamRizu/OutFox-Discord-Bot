@@ -201,7 +201,7 @@ module.exports = class ThemesCommand extends SlashCommand {
     const themeData = ArchiveThemesInstance.themeFromVersion(engine, themeID);
     const themeEmbed = new MessageEmbed()
       .setTitle(`Summary of ${themeData.Name}`)
-      .setDescription(archiveThemeDescription[engine][themeID] || themeData.Name)
+      .setDescription(archiveThemeDescription[engine] ? archiveThemeDescription[engine][themeID] : themeData.Name)
       .addField('Engine', archiveEngineName[engine], true)
       .setColor(archiveEngineColors[engine])
       .setThumbnail(`https://cdn.discordapp.com/emojis/${archiveEngineEmoteData[engine].id}.webp?quality=lossless`)
