@@ -156,6 +156,16 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
       const selectElement = [];
       for (let i = 0; i < currentPageElements.length; i++) {
+
+        if (typeof currentPageElements === 'object') {
+          selectElement.push({
+            value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
+            label: individualElements[this.page][i].description,
+            emoji: individualElements[this.page][i].emoji
+          });
+          continue
+        }
+
         selectElement.push({
           value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
           label: individualElements[this.page][i]
