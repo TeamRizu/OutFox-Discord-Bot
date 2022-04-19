@@ -1,5 +1,6 @@
 /**
  * Discord IDs for bug hunter roles
+ * @type {BugRoles}
  */
 exports.bugRole = {
   'Bug Reporter': '687824517422383282',
@@ -12,6 +13,7 @@ exports.bugRole = {
 
 /**
  * Engine ID accepted by StepMania Archive.
+ * @type {ArchiveEngineIDs}
  */
 exports.archiveEngineID = [
   'OutFox', // Project OutFox
@@ -26,6 +28,7 @@ exports.archiveEngineID = [
 
 /**
  * Engine names based on Engine ID accepted by StepMania Archive.
+ * @type {ArchiveEngineName}
  */
 exports.archiveEngineName = {
   OutFox: 'Project OutFox',
@@ -40,6 +43,7 @@ exports.archiveEngineName = {
 
 /**
  * Discord Emote Data based on Engine ID accepted by StepMania Archive.
+ * @type {ArchiveEngineEmoteData}
  */
 exports.archiveEngineEmoteData = {
   OutFox: {
@@ -78,6 +82,7 @@ exports.archiveEngineEmoteData = {
 
 /**
  * Engine Vibrant Colors Hex format based on Engine ID accepted by StepMania Archive
+ * @type {ArchiveEngineColors}
  */
 exports.archiveEngineColors = {
   OutFox: '#bad0ff',
@@ -90,6 +95,9 @@ exports.archiveEngineColors = {
   'SM3.9_Plus': '#b9b423'
 };
 
+/**
+ * @type {ArchiveEngineLink}
+ */
 exports.archiveEngineLink = {
   OutFox: 'https://josevarela.xyz/SMArchive/Builds/#OUTFOX',
   'StepMania 5': 'https://josevarela.xyz/SMArchive/Builds/#SM5',
@@ -103,6 +111,7 @@ exports.archiveEngineLink = {
 
 /**
  * Embed fields that should be included on any embed with data from StepMania Archive
+ * @type {ArchiveGenericEmbedFields}
  */
 exports.archiveGenericEmbedFields = {
   footer: {
@@ -111,6 +120,9 @@ exports.archiveGenericEmbedFields = {
   }
 }
 
+/**
+ * @type {ArchiveThemesMusicWheelImage}
+ */
 exports.archiveThemesMusicWheelImage = {
   OITG: {
     'DECO': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Deco/screen3.png',
@@ -122,7 +134,7 @@ exports.archiveThemesMusicWheelImage = {
     'SLGJUVM': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/SLGJUVM/screen3.png',
     'Tactics': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Tactics/screen4.png',
   },
-  'NITG': {
+  NITG: {
     'SLOat': 'https://objects-us-east-1.dream.io/smthemes/NITG/Screenshots/SLOat/screen2.png'
   },
   'StepMania 5': {
@@ -139,6 +151,9 @@ exports.archiveThemesMusicWheelImage = {
   }
 }
 
+/**
+ * @type {ArchiveThemeDescription}
+ */
 exports.archiveThemeDescription = {
   'StepMania 5': {
     'UPSRT': 'This theme is a "Story" theme, you need the UPSRT pack to experience the whole story.',
@@ -146,6 +161,9 @@ exports.archiveThemeDescription = {
   }
 }
 
+/**
+ * @type {conversionsGenericEmbedFields}
+ */
 exports.conversionsGenericEmbedFields = {
   footer: {
     text: 'StepMania Conversions by MrThatKid4',
@@ -153,6 +171,9 @@ exports.conversionsGenericEmbedFields = {
   }
 }
 
+/**
+ * @type {ConversionsVersionToEngineID}
+ */
 exports.conversionsVersionToEngineID = {
   '5.0+': 'StepMania 5',
   '5.1+': 'StepMania 5',
@@ -160,10 +181,20 @@ exports.conversionsVersionToEngineID = {
   'OutFox': 'OutFox'
 }
 
+/**
+ * Generates a array with given start value and size.
+ * @function
+ * @param {number} size - How long the array should be.
+ * @param {number} startAt - The starting value.
+ * @returns {Array<Number>} - The generated array.
+ */
 exports.range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
   return [...Array(size).keys()].map(i => i + startAt);
 }
 
+/**
+ * @type {CreditsEngineID}
+ */
 exports.creditsEngineID = [
   'Stepmania',
   'Pulsen',
@@ -172,6 +203,9 @@ exports.creditsEngineID = [
   'OpenITG'
 ]
 
+/**
+ * @type {CreditsEngineIDToEngineTag}
+ */
 exports.creditsEngineIDToEngineTag = {
   'Stepmania': 'StepMania',
   'Pulsen': 'Pulsen',
@@ -180,6 +214,9 @@ exports.creditsEngineIDToEngineTag = {
   'OpenITG': 'OpenITG'
 }
 
+/**
+ * @type {ArchiveListIDs}
+ */
 exports.archiveListIDs = [
   'DDRPC',
   'SM095',
@@ -197,6 +234,9 @@ exports.archiveListIDs = [
   'OUTFOX'
 ]
 
+/**
+ * @type {ArchiveListNames}
+ */
 exports.archiveListNames = [
   'DDR PC Edition ',
   'StepMania 0.9x',
@@ -214,6 +254,9 @@ exports.archiveListNames = [
   'Project OutFox'
 ]
 
+/**
+ * @type {ArchiveListIDToNames}
+ */
 exports.archiveListIDToNames = {
   'DDRPC': 'DDR PC Edition ',
   'SM095': 'StepMania 0.9x',
@@ -231,6 +274,9 @@ exports.archiveListIDToNames = {
   'OUTFOX': 'Project OutFox'
 }
 
+/**
+ * @type {ArchiveListIdToEngineName}
+ */
 exports.archiveListIDToEngineName = {
   'DDRPC': 'DDR PC Edition',
   'SM095': 'StepMania 0.9x',
@@ -248,6 +294,9 @@ exports.archiveListIDToEngineName = {
   'OUTFOX': 'Project OutFox'
 }
 
+/**
+ * @type {ArchiveBuildEngineIconData}
+ */
 exports.archiveBuildEngineIconData = {
   DDRPC: {
     name: 'SM164',
@@ -393,6 +442,9 @@ exports.archiveBuildEngineIconData = {
   }
 }
 
+/**
+ * @type {ArchiveBuildEngineColor}
+ */
 exports.archiveBuildEngineColor = {
   DDRPC: '#d72e3c',
   SM095: '#d72e3c',
@@ -434,9 +486,9 @@ exports.archiveBuildEngineColor = {
 }
 
 /**
- *
+ * Returns either .ico or .png depending on build name.
  * @param {string} name
- * @returns {string}
+ * @returns {'.ico' | '.png'}
  */
 exports.archiveIconLinkFormat = (name) => {
   switch (name) {
@@ -450,10 +502,11 @@ exports.archiveIconLinkFormat = (name) => {
 }
 
 /**
- *
- * @param {string} engine
+ * Converts build name & engine to EngineID, accepted as a key to IconData.
+ * @function
+ * @param {BuildListID} engine
  * @param {string} name
- * @returns {string}
+ * @returns {BuildEngineIDs}
  */
 exports.buildNameToEmoteKey = (engine, name) => {
   switch (engine) {
