@@ -197,7 +197,22 @@ exports.archiveListIDs = [
   'OUTFOX'
 ]
 
-exports.archiveListNames = ['DDR PC Edition ', 'StepMania 0.9x', 'StepMania 1.64', 'StepMania 3.0', 'StepMania 3.9', 'StepMania 3.95 (Main and Based builds)', 'OpenITG based builds', 'NotITG based builds', 'StepMania 4.0 Normal/CVS Builds', 'SM-SSC - StepMania 5.0 Alpha/Beta Builds', 'SM-SSC - StepMania 5.0 Custom Builds', 'StepMania 5', 'Etterna', 'Project OutFox']
+exports.archiveListNames = [
+  'DDR PC Edition ',
+  'StepMania 0.9x',
+  'StepMania 1.64',
+  'StepMania 3.0',
+  'StepMania 3.9',
+  'StepMania 3.95 (Main and Based builds)',
+  'OpenITG based builds',
+  'NotITG based builds',
+  'StepMania 4.0 Normal/CVS Builds',
+  'SM-SSC - StepMania 5.0 Alpha/Beta Builds',
+  'SM-SSC - StepMania 5.0 Custom Builds',
+  'StepMania 5',
+  'Etterna',
+  'Project OutFox'
+]
 
 exports.archiveListIDToNames = {
   'DDRPC': 'DDR PC Edition ',
@@ -231,6 +246,324 @@ exports.archiveListIDToEngineName = {
   'SM5': 'StepMania 5',
   'ETT': 'Etterna',
   'OUTFOX': 'Project OutFox'
+}
+
+exports.archiveBuildEngineIconData = {
+  DDRPC: {
+    name: 'SM164',
+    id: '965745798316974150'
+  },
+  SM095: {
+    name: 'SM164',
+    id: '965745798316974150'
+  },
+  SM164: {
+    name: 'SM164',
+    id: '965745798316974150'
+  },
+  SM30: {
+    name: 'SM39',
+    id: '959944386186190870'
+  },
+  SM39: {
+    name: 'SM39',
+    id: '959944386186190870'
+  },
+  SM395: {
+    name: 'SM39',
+    id: '959944386186190870'
+  },
+  OITG: {
+    name: 'OITG',
+    id: '959944386588840076'
+  },
+  NOTITG: {
+    name: 'MZERO',
+    id: '965747870013743134'
+  },
+  SM4: {
+    name: 'SM40',
+    id: '959944386572091432'
+  },
+  SMSSC: {
+    name: 'SMSSC',
+    id: '965747887831154778'
+  },
+  SMSSCCUSTOM: {
+    name: 'SM5',
+    id: '959944386567897138'
+  },
+  SM5: {
+    name: 'SM5',
+    id: '959944386567897138'
+  },
+  ETT: {
+    name: 'ETT',
+    id: '965748137803280424'
+  },
+  OUTFOX: {
+    name: 'OUTFOX',
+    id: '959944386609840148'
+  },
+
+  // Bellow are icons for Listed Builds, not Build List.
+  SMAMX: {
+    name: 'SMAMX',
+    id: '965746186470453248'
+  },
+  DDRE: {
+    name: 'DDRE',
+    id: '965746187049263104'
+  },
+  MUN1: {
+    name: 'MUN1',
+    id: '965746186512367656'
+  },
+  MUN3: {
+    name: 'MUN3',
+    id: '965746186470449203'
+  },
+  BEATUP: {
+    name: 'BEATUP',
+    id: '965984810571038793'
+  },
+  NEONFM: {
+    name: 'NEONFM',
+    id: '965985012073758790'
+  },
+  NITG: {
+    name: 'NITG',
+    id: '965985305054314516'
+  },
+  DNOT: {
+    name: 'DNOT',
+    id: '965746681247322122'
+  },
+  NITG3: {
+    name: 'NITG3',
+    id: '965747505780379718'
+  },
+  NITG4: {
+    name: 'NITG4',
+    id: '959945091324190791'
+  },
+  NITG4OR1: {
+    name: 'NITG4OR1',
+    id: '965746380469575690'
+  },
+  SPLAT: {
+    name: 'SPLAT',
+    id: '965746380595396658'
+  },
+  SM4B10: {
+    name: 'SM4B10',
+    id: '965747887801778226'
+  },
+  SM5TE: {
+    name: 'SM5TE',
+    id: '965747887852109985'
+  },
+  PARASTAR: {
+    name: 'PARASTAR',
+    id: '965747888435130369'
+  },
+  PULSEN: {
+    name: 'PULSEN',
+    id: '965747888447701052'
+  },
+  KEY6IX: {
+    name: 'KEY6IX',
+    id: '965747887545942067'
+  },
+  ZETMANIA: {
+    name: 'ZETMANIA',
+    id: '965748137564176435'
+  },
+  SUSHI: {
+    name: 'SUSHI',
+    id: '965748137861996562'
+  },
+  SM5NEW: {
+    name: 'SM5NEW',
+    id: '961263777427382322'
+  },
+  STEPF2: {
+    name: 'STEPF2',
+    id: '966072916691288194'
+  }
+}
+
+exports.archiveBuildEngineColor = {
+  DDRPC: '#d72e3c',
+  SM095: '#d72e3c',
+  SM164: '#d72e3c',
+  SM30: '#878514',
+  SM39: '#878514',
+  SM395: '#878514',
+  OITG: '#cd6d6c',
+  NOTITG: '#395b84',
+  SM4: '#912224',
+  SMSSC: '#f3b314',
+  SMSSCCUSTOM: '#d73b23',
+  SM5: '#d73b23',
+  ETT: '#412248',
+  OUTFOX: '#bad0ff',
+
+  // Bellow are icons for Listed Builds, not Build List.
+  SMAMX: '#28737d',
+  DDRE: '#024c2d',
+  MUN1: '#2caff2',
+  MUN3: '#a623ea',
+  BEATUP: '#ffdbc2',
+  NEONFM: '#bbe2f0',
+  NITG: '#1fcb20',
+  DNOT: '#e99cb6',
+  NITG3: '#af0057',
+  NITG4: '#eeedee',
+  NITG4OR1: '#0099fe',
+  SPLAT: '#d0f624',
+  SM4B10: '#f1f81f',
+  SM5TE: '#eeb997',
+  PARASTAR: '#e5e8e9',
+  PULSEN: '#9b78ab',
+  KEY6IX: '#31c6eb',
+  ZETMANIA: '#ca7001',
+  SUSHI: '#96724d',
+  SM5NEW: '#ee8f49',
+  STEPF2: '#aa1b20'
+}
+
+/**
+ *
+ * @param {string} name
+ * @returns {string}
+ */
+exports.archiveIconLinkFormat = (name) => {
+  switch (name) {
+    case 'NotITG Version 3.1':
+    case 'NotITG Version 3':
+    case 'do not':
+      return '.ico'
+    default:
+      return '.png'
+  }
+}
+
+/**
+ *
+ * @param {string} engine
+ * @param {string} name
+ * @returns {string}
+ */
+exports.buildNameToEmoteKey = (engine, name) => {
+  switch (engine) {
+    case 'DDRPC':
+    case 'SM095':
+    case 'SM164':
+    case 'NOTITG':
+    case 'OUTFOX':
+      return engine
+    case 'SM30': {
+      const unique = ['PLUGIN - EZ2 Support', 'PLUGIN - Para Support', 'PLUGIN - Pump Support']
+
+      if (unique.includes(name)) return 'SM5'
+
+      return engine
+    }
+    case 'SM39': {
+      const unique = [
+        'Mungyodance', 'Mungyodance 2', 'Mungyodance 3',
+        'StepMania AMX - Beta 2.9', 'StepMania AMX - Beta 5.9.2', "CMSMA R001 (cesarmades' StepMania AMX)",
+        "Beware's DDR Extreme R2", "Beware's DDR Extreme R3",
+        'Beat Up Mania',
+        'NeonFM: Dance Radio'
+      ]
+
+      if (!unique.includes(name)) return engine
+
+      if (name.includes('AMX')) return 'SMAMX'
+
+      if (name.includes('DDR')) return 'DDRE'
+
+      if (name.includes('Mungyodance')) {
+        return name === 'Mungyodance' ? 'MUN1' : 'MUN3'
+      }
+
+      return name === 'Beat Up Mania' ? 'BEATUP' : 'NEONFM'
+    }
+    case 'SM395': {
+      const unique = ['StepMania 3.95 CVS', "BBOY's 3.95 Mod", 'Xsoft ITG2 ver1.01', 'Xsoft ITG2 ver1.27', 'In The Groove 2 R3', 'In The Groove 2 R9', "StepMania 3.95 [Staiain's]"]
+
+      if (unique.includes(name)) return engine
+
+      return 'OITG'
+    }
+    case 'OITG': {
+      const unique = [
+        'NotITG Version 1', 'NotITG Version 2',
+        'do not',
+        'NotITG Version 3', 'NotITG Version 3.1',
+        'NotITG Version 4', 'NotITG Version 4.0.1', 'NotITG Version 4.2.0',
+        'NotITG Version 4/1 (April Fools Day)',
+        'SplatMania 0.3.3.0'
+      ]
+
+      if (!unique.includes(name)) return engine
+
+      if (name.includes('NotITG')) {
+        const majorVersion = Math.floor(Number(name.split(' ')[2]))
+
+        if (2 >= majorVersion) return 'NITG'
+
+        if (isNaN(majorVersion)) return 'NITG4OR1'
+
+        return majorVersion === 3 ? 'NITG3': 'NITG4'
+      }
+
+      return name === 'do not' ? 'DNOT' : 'SPLAT'
+    }
+    case 'SM4': {
+      return name === 'StepMania 4.0 Beta 10' ? 'SM4B10' : engine
+    }
+    case 'SMSSC': {
+      return name.includes('StepMania 5') ? 'SM5' : engine
+    }
+    case 'SMSSCCUSTOM': {
+      // I'm not doing a switch case inside switch case.
+
+      if (name.includes('Tournament')) return 'SM5TE'
+
+      if (name.includes('PARASTAR')) return 'PARASTAR'
+
+      if (name.includes('Keys')) return 'KEY6IX'
+
+      if (name.includes('Pulsen')) return 'PULSEN'
+
+      if (name.includes('Zettmania')) return 'ZETMANIA'
+
+      if (name.includes('Sushi')) return 'SUSHI'
+
+      if (name.includes('StepF2')) return 'STEPF2'
+
+      return engine
+    }
+    case 'SM5': {
+      const unique = ['StepMania 5.1.-3', 'StepMania 5.1 Beta 1', 'StepMania 5.1 Beta 2']
+
+      if (unique.includes(name)) return 'SM5NEW'
+
+      return engine
+    }
+    case 'ETT': {
+      const unique = ['Xwidget_0.00000001', 'Xwidget_0.00000002', 'Xwidget_0.00000003', 'Etterna 0.5', 'Etterna 0.51', 'Etterna 0.52', 'Etterna 0.53', 'Etterna 0.53 (Hotfix)', 'Etterna 0.54', 'Etterna 0.54 (Hotfix)', 'Etterna 0.54r (Release)', 'Etterna 0.54.1']
+
+      if (unique.includes(name)) return 'SM5'
+
+      return engine
+    }
+    default:
+    return 'SM5'
+  }
 }
 /*
 exports.volumesAdditionalFields = {

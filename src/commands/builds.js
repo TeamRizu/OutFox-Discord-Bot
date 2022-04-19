@@ -7,14 +7,12 @@ const {
   archiveListNames,
   archiveListIDToNames,
   archiveListIDToEngineName,
-  archiveThemeDescription,
-  archiveThemesMusicWheelImage,
-  archiveEngineID,
-  archiveEngineName,
-  archiveEngineEmoteData,
-  archiveEngineColors,
   archiveGenericEmbedFields,
-  archiveEngineLink } = require('../utils/constants.js')
+  archiveBuildEngineIconData,
+  buildNameToEmoteKey,
+  archiveBuildEngineColor,
+  archiveIconLinkFormat
+} = require('../utils/constants.js')
 const ArchivaBuildsInstance = new ArchiveBuildsFile();
 
 module.exports = class BuildsCommand extends SlashCommand {
@@ -86,28 +84,34 @@ module.exports = class BuildsCommand extends SlashCommand {
       return `${archiveListIDToNames[listID]}: **${buildListCount} ${1 >= buildListCount ? 'Build' : 'Builds'}**`
     }
 
+    const buildEmote = (listID) => {
+      const { name, id } = archiveBuildEngineIconData[listID]
+
+      return `<:${name}:${id}>`
+    }
+
     const buildListsEmbed = new MessageEmbed()
       .setTitle('StepMania Archive Builds')
       .setDescription(
         `
         Builds are the core code that powers the engine, different builds will behave differently and have
 
-        StepMania Archive cames to archive all that work in one place, going beyond themes.
+        StepMania Archive cames to archive all that work in one place, going beyond builds.
 
-        ${archivebuildCountString('DDRPC')}
-        ${archivebuildCountString('SM095')}
-        ${archivebuildCountString('SM164')}
-        ${archivebuildCountString('SM30')}
-        ${archivebuildCountString('SM39')}
-        ${archivebuildCountString('SM395')}
-        ${archivebuildCountString('OITG')}
-        ${archivebuildCountString('NOTITG')}
-        ${archivebuildCountString('SM4')}
-        ${archivebuildCountString('SMSSC')}
-        ${archivebuildCountString('SMSSCCUSTOM')}
-        ${archivebuildCountString('SM5')}
-        ${archivebuildCountString('ETT')}
-        ${archivebuildCountString('OUTFOX')}
+        ${buildEmote('DDRPC') + ' - ' + archivebuildCountString('DDRPC')}
+        ${buildEmote('SM095') + ' - ' + archivebuildCountString('SM095')}
+        ${buildEmote('SM164') + ' - ' + archivebuildCountString('SM164')}
+        ${buildEmote('SM30') + ' - ' + archivebuildCountString('SM30')}
+        ${buildEmote('SM39') + ' - ' + archivebuildCountString('SM39')}
+        ${buildEmote('SM395') + ' - ' + archivebuildCountString('SM395')}
+        ${buildEmote('OITG') + ' - ' + archivebuildCountString('OITG')}
+        ${buildEmote('NOTITG') + ' - ' + archivebuildCountString('NOTITG')}
+        ${buildEmote('SM4') + ' - ' + archivebuildCountString('SM4')}
+        ${buildEmote('SMSSC') + ' - ' + archivebuildCountString('SMSSC')}
+        ${buildEmote('SMSSCCUSTOM') + ' - ' + archivebuildCountString('SMSSCCUSTOM')}
+        ${buildEmote('SM5') + ' - ' + archivebuildCountString('SM5')}
+        ${buildEmote('ETT') + ' - ' + archivebuildCountString('ETT')}
+        ${buildEmote('OUTFOX') + ' - ' + archivebuildCountString('OUTFOX')}
         `
       )
       .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
@@ -122,7 +126,7 @@ module.exports = class BuildsCommand extends SlashCommand {
 
       tempObj.label = archiveListNames[i]
       tempObj.value = `9-${this.commandVersion}-leaderboard-${currentEngine}-0`
-      // tempObj.emoji = archiveEngineEmoteData[currentEngine]
+      tempObj.emoji = archiveBuildEngineIconData[currentEngine]
 
       listOptions.push(tempObj)
     }
@@ -164,9 +168,15 @@ module.exports = class BuildsCommand extends SlashCommand {
 
     LeaderboardMessageInstance.supportLookUp = true;
     LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Build to Look Up';
+    LeaderboardMessageInstance.formatElement = (e, i) => {
+      return `<:${e.emoji.name}:${e.emoji.id}> ${e.description}`
+    }
 
     for (let i = 0; i < listingForBuild.length; i++) {
-      LeaderboardMessageInstance.addElement(listingForBuild[i]);
+      LeaderboardMessageInstance.addElement({
+        description: listingForBuild[i],
+        emoji: archiveBuildEngineIconData[buildNameToEmoteKey(listID, listingForBuild[i])]
+      });
     }
 
     const pageEmbed = new MessageEmbed()
@@ -222,8 +232,8 @@ module.exports = class BuildsCommand extends SlashCommand {
       .addField('Engine', archiveListIDToEngineName[listName], true)
       .addField('Date', buildObject.Date || '????-??-??', true)
       .setDescription(listObject.Description || 'No description.')
-      // .setColor(archiveEngineColors[engine])
-      .setThumbnail(`https://josevarela.xyz/SMArchive/Builds/VersionIcon/${listObject.DefaultIcon}`)
+      .setColor(archiveBuildEngineColor[buildNameToEmoteKey(listName, buildObject.Name)])
+      .setThumbnail(`https://josevarela.xyz/SMArchive/Builds/VersionIcon/${buildNameToEmoteKey(listName, buildObject.Name)}${archiveIconLinkFormat(buildObject.Name)}`)
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
