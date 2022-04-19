@@ -73,7 +73,7 @@ module.exports = class CreditsCommand extends SlashCommand {
         `
         The story of StepMania Engine is big, rich and long, however credits to the people who worked hard might be lost.
 
-        StepMania Archive cames to archive all that work in one place, going beyond Credits.
+        StepMania Archive cames to archive all that work in one place, going beyond credits.
 
         See Credits For:
 
