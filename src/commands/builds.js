@@ -181,7 +181,7 @@ module.exports = class BuildsCommand extends SlashCommand {
 
     const pageEmbed = new MessageEmbed()
     .setTitle('Select Build')
-    // .setColor(archiveEngineColors[fork])
+    .setColor(archiveBuildEngineColor[listID])
     .setURL(`https://josevarela.xyz/SMArchive/Builds/index.html#${listID}`)
     .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
     .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
