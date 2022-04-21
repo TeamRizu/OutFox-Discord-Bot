@@ -2,7 +2,13 @@ const request = require('request-promise');
 
 exports.ArchiveAnnouncersFile = class ArchiveAnnouncersInstance {
   constructor() {
+    /**
+     * @type {string}
+     */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Announcers/db.json';
+    /**
+     * @type {Object<string, AnnouncerObject>}
+     */
     this.mainObject = null;
   }
 
@@ -13,12 +19,15 @@ exports.ArchiveAnnouncersFile = class ArchiveAnnouncersInstance {
   }
 
   /**
-   * @returns {string[]}
+   * @returns {AnnouncersNames}
    */
   get announcers() {
     return Object.keys(this.mainObject);
   }
 
+  /**
+   * @returns {Object<string, AnnouncerName[]>}
+   */
   get announcersFromAuthors() {
     const finalObj = {}
     const announcersObj = Object.values(this.mainObject)
@@ -37,6 +46,11 @@ exports.ArchiveAnnouncersFile = class ArchiveAnnouncersInstance {
     return finalObj
   }
 
+  /**
+   *
+   * @param {AnnouncerCreator} author
+   * @returns {AnnouncerName[]}
+   */
   announcersByAuthor(author) {
     if (!this.announcersFromAuthors[author]) {
       return []

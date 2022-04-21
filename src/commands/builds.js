@@ -78,12 +78,22 @@ module.exports = class BuildsCommand extends SlashCommand {
       return;
     }
 
+    /**
+     *
+     * @param {BuildListID} listID
+     * @returns {string}
+     */
     const archivebuildCountString = (listID) => {
       const buildListCount = ArchivaBuildsInstance.buildListObjectFromID(listID).Listing.length
 
       return `${archiveListIDToNames[listID]}: **${buildListCount} ${1 >= buildListCount ? 'Build' : 'Builds'}**`
     }
 
+    /**
+     *
+     * @param {BuildListID} listID
+     * @returns {string}
+     */
     const buildEmote = (listID) => {
       const { name, id } = archiveBuildEngineIconData[listID]
 
@@ -161,6 +171,9 @@ module.exports = class BuildsCommand extends SlashCommand {
       return;
     }
 
+    /**
+     * @type {BuildListID}
+     */
     const listID = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);
     const listingForBuild = ArchivaBuildsInstance.listingNamesFromID(listID);

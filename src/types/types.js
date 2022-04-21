@@ -14,6 +14,10 @@
  */
 
 /**
+ * @typedef {'OutFox' | 'StepMania 5' | 'SM4' | 'NITG' | 'OITG' | 'SM3.95' | 'SM3.9_Plus' | 'SM3.9'} ArchiveEngineID
+ */
+
+/**
  * @typedef {{
  *  OutFox: 'Project OutFox',
  *  'StepMania 5': 'StepMania 5',
@@ -23,7 +27,11 @@
  *  'SM3.95': 'StepMania 3.95',
  *  'SM3.9_Plus': 'StepMania 3.9+',
  *  'SM3.9': 'StepMania 3.9'
- * }} ArchiveEngineName
+ * }} ArchiveEngineNameObj
+ */
+
+/**
+ * @typedef {'Project OutFox' | 'StepMania 5' | 'StepMania 4' | 'NotITG' | 'OpenITG' | 'StepMania 3.95' | 'StepMania 3.9+' | 'StepMania 3.9'} ArchiveEngineName
  */
 
 /**
@@ -448,4 +456,53 @@
 
 /**
  * @typedef {['DDRPC', 'SM095', 'SM164', 'SM30', 'SM39', 'SM395', 'OITG', 'NOTITG', 'SM4', 'SMSSC', 'SMSSCCUSTOM', 'SM5', 'ETT', 'OUTFOX', 'SMAMX', 'DDRE', 'MUN1', 'MUN3', 'BEATUP', 'NEONFM', 'NITG', 'DNOT', 'NITG3', 'NITG4', 'NITG4OR1', 'SPLAT', 'SM4B10', 'SM5TE', 'PARASTAR', 'PULSEN', 'KEY6IX', 'ZETMANIA', 'SUSHI', 'SM5NEW', 'STEPF2']} BuildEngineIDs
+ */
+
+/**
+ * @typedef {['K-Step', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted']} AnnouncersCreators
+ */
+
+/**
+ * @typedef {'K-Step' | 'MadkaT' | 'Hooky' | 'Schizkitty' | 'Unlisted' } AnnouncerCreator
+ */
+
+/**
+ * @typedef {['Akuma', 'Ashens', 'Caddicarus', 'Call Me Kevin', 'Cheesemix 2', 'Dancemaniax', 'DDR 1st Mix', 'DDR A (DDR SELECTION) voices', 'DDR Extreme2', 'DDR Hottest Party 2', 'DDR Kids', 'DDR Mega Announcer Pack!', 'DDR Solo 2000 / ExtraMix', 'DDROHA_1', 'DDROHA_2', 'DDRX Beta1', 'DWI', 'ExtraMix', 'Funhaus', 'Gameshawn', 'Jacksfilms', 'KatzeExtreme', 'Microsoft Sam', 'Neo (Spanish)', 'RoboStepper', 'Sabrina', 'Schizkitty', 'Space Channel 5', 'Techno', 'Trance Machina', 'Unreal Tournament (Evil)', 'Unreal Tournament (Merc)', 'Worms', 'Yoshi', 'Zig']} AnnouncersNames
+ */
+
+/**
+ * @typedef {'Akuma' | 'Ashens' | 'Caddicarus' | 'Call Me Kevin' | 'Cheesemix 2' | 'Dancemaniax' | 'DDR 1st Mix' | 'DDR A (DDR SELECTION) voices' | 'DDR Extreme2' | 'DDR Hottest Party 2' | 'DDR Kids' | 'DDR Mega Announcer Pack!' | 'DDR Solo 2000 / ExtraMix' | 'DDROHA_1' | 'DDROHA_2' | 'DDRX Beta1' | 'DWI' | 'ExtraMix' | 'Funhaus' | 'Gameshawn' | 'Jacksfilms' | 'KatzeExtreme' | 'Microsoft Sam' | 'Neo (Spanish)' | 'RoboStepper' | 'Sabrina' | 'Schizkitty' | 'Space Channel 5' | 'Techno' | 'Trance Machina' | 'Unreal Tournament (Evil)' | 'Unreal Tournament (Merc)' | 'Worms' | 'Yoshi' | 'Zig' } AnnouncerName
+ */
+
+/**
+ * @typedef {Object} AnnouncerObject
+ * @property {string} File
+ * @property {AnnouncerCreator} [Author]
+ */
+
+/**
+ * @typedef {'Stepmania' | 'Pulsen' | 'Mung1' | 'Keys6' | 'OpenITG'} CreditedEngine
+ */
+
+/**
+ * @typedef {Object} CreditSection
+ * @property {string} title
+ * @property {Array<string>} members
+ */
+
+/**
+ * @typedef {Object} ThemeObject
+ * @property {string} Name
+ * @property {string | ThemeLinkObject[]} [Link] - Can end with .smzip or .zip
+ * @property {string} [Date] - YYYY/MM/DD
+ * @property {string} [Author]
+ * @property {string} [Version]
+ * @property {boolean} [HasImages]
+ */
+
+/**
+ * @typedef {Object} ThemeLinkObject
+ * @property {string} Name
+ * @property {string} [Link] - Can end with .smzip or .zip
+ * @property {string} [Date] - YYYY/MM/DD
  */

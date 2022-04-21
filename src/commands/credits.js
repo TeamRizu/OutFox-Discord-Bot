@@ -131,6 +131,9 @@ module.exports = class CreditsCommand extends SlashCommand {
       return;
     }
 
+    /**
+     * @type {CreditedEngine}
+     */
     const engine = commandArguments.primalArgument
     const page = Number(commandArguments.arguments[1]);
     const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine)
@@ -186,7 +189,10 @@ module.exports = class CreditsCommand extends SlashCommand {
 
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
-    const engine = commandArguments.primalArgument.replace('U+002F', '-')
+    /**
+     * @type {CreditedEngine}
+     */
+    const engine = commandArguments.primalArgument
     const section = ArchiveCreditsInstance.mainObject[engine][page]
     let sectionMembers = ''
 

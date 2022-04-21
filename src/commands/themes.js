@@ -67,6 +67,11 @@ module.exports = class ThemesCommand extends SlashCommand {
       return;
     }
 
+    /**
+     *
+     * @param {ArchiveEngineID} engine
+     * @returns {string}
+     */
     const engineThemeCountString = (engine) => {
       const themeCount = ArchiveThemesInstance.themesForVersion(engine).length
 
@@ -139,6 +144,9 @@ module.exports = class ThemesCommand extends SlashCommand {
       return;
     }
 
+    /**
+     * @type {ArchiveEngineID}
+     */
     const fork = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);
     const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
@@ -196,6 +204,9 @@ module.exports = class ThemesCommand extends SlashCommand {
 
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
+    /**
+     * @type {ArchiveEngineID}
+     */
     const engine = commandArguments.primalArgument;
     const themeID = ArchiveThemesInstance.themesForVersion(engine)[page];
     const themeData = ArchiveThemesInstance.themeFromVersion(engine, themeID);

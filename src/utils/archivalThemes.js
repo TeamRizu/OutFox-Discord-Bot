@@ -2,7 +2,13 @@ const request = require('request-promise');
 
 exports.ArchiveThemesFile = class ArchiveThemesInstance {
   constructor() {
+    /**
+     * @type {string}
+     */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Themes/db.json';
+    /**
+     * @type {Object<string, Object<string, ThemeObject>>}
+     */
     this.mainObject = null;
   }
 
@@ -13,14 +19,14 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
   }
 
   /**
-   * @returns {string[]}
+   * @returns {ArchiveEngineIDs}
    */
   get supportedVersions() {
     return Object.keys(this.mainObject);
   }
 
   /**
-   * @returns {string[]}
+   * @returns {ArchiveEngineName[]}
    */
   get supportedVersionsName() {
     const versions = [];
@@ -34,7 +40,7 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
 
   /**
    *
-   * @param {string} version
+   * @param {ArchiveEngineID} version
    * @returns {string[]}
    */
   themesForVersion(version) {
@@ -46,6 +52,12 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
     return themes;
   }
 
+  /**
+   *
+   * @param {ArchiveEngineID} version
+   * @param {string} themeName
+   * @returns {ThemeObject}
+   */
   themeFromVersion(version, themeName) {
     if (!this.supportedVersions.includes(version)) return null;
 
@@ -54,21 +66,5 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
     if (!versionThemes.includes(themeName)) return null;
 
     return this.mainObject[version][themeName];
-  }
-
-  themeVersions(version, themeName) {
-    if (!this.themeFromVersion(version, themeName)) return null;
-
-    const theme = this.themesForVersion(version)[themeName];
-
-    if (!Array.isArray(theme.link)) return null;
-
-    const versions = [];
-
-    for (let i = 0; i < theme.link.length; i++) {
-      versions.push(theme.link[i].Name);
-    }
-
-    return versions;
   }
 };

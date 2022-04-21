@@ -2,7 +2,13 @@ const request = require('request-promise');
 
 exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
   constructor() {
+    /**
+     * @type {string}
+     */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Builds/Credits/data.json';
+    /**
+     * @type {Object<string, Array<CreditSection>>}
+     */
     this.mainObject = null;
   }
 
@@ -13,12 +19,17 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
   }
 
   /**
-   * @returns {string[]}
+   * @returns {CreditedEngine[]}
    */
   get engines() {
     return Object.keys(this.mainObject).filter(e => e !== 'Mung3');
   }
 
+  /**
+   *
+   * @param {CreditedEngine} engine
+   * @returns {string[]}
+   */
   creditsTitleByEngine(engine) {
     if (!this.engines.includes(engine)) {
       return []

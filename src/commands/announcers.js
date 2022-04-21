@@ -2,7 +2,10 @@ const { SlashCommand } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveAnnouncersFile } = require('../utils/archivalAnnouncers.js');
-const { archiveGenericEmbedFields } = require('../utils/constants.js')
+const {
+  archiveGenericEmbedFields,
+  announcersCreators
+} = require('../utils/constants.js')
 const ArchiveAnnouncersInstance = new ArchiveAnnouncersFile();
 
 module.exports = class AnnouncersCommand extends SlashCommand {
@@ -53,7 +56,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       return;
     }
 
-    if (['KU+002FStep', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted'].includes(commandArguments.primalArgument)) {
+    if (announcersCreators.includes(commandArguments.primalArgument)) {
       await this.lookUp({
         interaction,
         commandArguments: {
@@ -67,6 +70,11 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       return;
     }
 
+    /**
+     *
+     * @param {AnnouncerCreator} author
+     * @returns {string}
+     */
     const announcersCountString = (author) => {
       const announcersCount = ArchiveAnnouncersInstance.announcersFromAuthors[author].length
 
@@ -96,6 +104,9 @@ module.exports = class AnnouncersCommand extends SlashCommand {
 
     const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors)
     for (let i = 0; i < announcersAuthors.length; i++) {
+      /**
+       * @type {AnnouncerCreator}
+       */
       const currentAuthor = announcersAuthors[i]
       const tempObj = {}
 
@@ -134,6 +145,9 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       return;
     }
 
+    /**
+     * @type {AnnouncerCreator}
+     */
     const author = commandArguments.primalArgument.replace('U+002F', '-');
     const page = Number(commandArguments.arguments[1]);
     const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author)
@@ -189,6 +203,9 @@ module.exports = class AnnouncersCommand extends SlashCommand {
 
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
+    /**
+     * @type {AnnouncerCreator}
+     */
     const author = commandArguments.primalArgument.replace('U+002F', '-')
     const announcer = ArchiveAnnouncersInstance.announcersByAuthor(author)[page]
 

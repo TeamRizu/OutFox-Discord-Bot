@@ -28,7 +28,7 @@ exports.archiveEngineID = [
 
 /**
  * Engine names based on Engine ID accepted by StepMania Archive.
- * @type {ArchiveEngineName}
+ * @type {ArchiveEngineNameObj}
  */
 exports.archiveEngineName = {
   OutFox: 'Project OutFox',
@@ -618,6 +618,11 @@ exports.buildNameToEmoteKey = (engine, name) => {
     return 'SM5'
   }
 }
+
+/**
+ * @type {AnnouncersCreators}
+ */
+exports.announcersCreators = ['KU+002FStep', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted']
 /*
 exports.volumesAdditionalFields = {
   chartInfo: {
