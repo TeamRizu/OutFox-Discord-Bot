@@ -1,12 +1,35 @@
+const { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } = require('google-spreadsheet');
+const { ComponentContext } = require('slash-create');
 const constants = require('../utils/constants.js')
 exports.ModsSheetFile = class {
   constructor() {
+    /**
+     * @type {GoogleSpreadsheet}
+     */
     this.doc = global.OutFoxGlobal ? global.OutFoxGlobal.modsDoc : null
+    /**
+     * @type {GoogleSpreadsheetWorksheet}
+     */
     this.convertedMods = null;
+    /**
+     * @type {GoogleSpreadsheetWorksheet}
+     */
     this.requestsMods = null;
+    /**
+     * @type {GoogleSpreadsheetWorksheet}
+     */
     this.impossibleMods = null;
+    /**
+     * @type {GoogleSpreadsheetWorksheet}
+     */
     this.packMods = null;
+    /**
+     * @type {GoogleSpreadsheetWorksheet}
+     */
     this.forbiddenMods = null;
+    /**
+     * @type {number}
+     */
     this.elementsPerPage = 25
   }
 
@@ -111,15 +134,13 @@ exports.ModsSheetFile = class {
    * @returns {string}
    */
   chartsFromPage(rows, pageIndex) {
-    const maxIndex = (this.elementsPerPage * (pageIndex + 1)) // 200
-    const minIndex = (this.elementsPerPage * (pageIndex + 1)) - this.elementsPerPage // 175
-    const range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
-      return [...Array(size).keys()].map(i => i + startAt);
-    }
+    const maxIndex = (this.elementsPerPage * (pageIndex + 1))
+    const minIndex = (this.elementsPerPage * (pageIndex + 1)) - this.elementsPerPage
+
     let finalString = ''
 
     for (let i = 0; i < this.elementsPerPage; i++) {
-      const currentIndex = range(maxIndex, minIndex)[i]
+      const currentIndex = constants.range(maxIndex, minIndex)[i]
       const file = rows[currentIndex]
 
       if (!file) { // This page might not have 25 elements
@@ -133,6 +154,13 @@ exports.ModsSheetFile = class {
     return finalString
   }
 
+  /**
+   *
+   * @param {any} rows
+   * @param {number} pageIndex
+   * @param {ComponentContext} ctx
+   * @returns {import('discord.js').MessageSelectOptionData[]}
+   */
   chartsSelectMenuFromPage(rows, pageIndex, ctx) {
     const maxIndex = (this.elementsPerPage * (pageIndex + 1)) // 200
     const minIndex = (this.elementsPerPage * (pageIndex + 1)) - this.elementsPerPage // 175
@@ -200,3 +228,5 @@ exports.ModsSheetFile = class {
     return rows
   }
 };
+
+// TODO: rework, this file is a mess.

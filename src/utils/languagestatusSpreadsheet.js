@@ -1,12 +1,31 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet')
+
 exports.LanguagestatusFile = class LanguagestatusInstance {
   constructor() {
+    /**
+     * @type {GoogleSpreadsheet}
+     */
     this.doc = global.OutFoxGlobal ? global.OutFoxGlobal.databaseDoc : null
+    /**
+     * @type {string[]}
+     */
     this.versions = null
+    /**
+     * @type {Array<string[]>}
+     */
     this.languages = null
+    /**
+     * @type {Array<string[]>}
+     */
     this.status = null
   }
 
+  /**
+   * @async
+   * @function
+   * @property
+   * @returns {Promise<GoogleSpreadsheet>}
+   */
   async init() {
     /*
     The case bellow will only happen if src/index.js is not run.
@@ -38,6 +57,11 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
     return this.doc
   }
 
+  /**
+   *
+   * @param {OutFoxLanguages} language
+   * @returns {string[]}
+   */
   statusFromLanguage(language) {
     const languageIndex = this.languages.indexOf(language)
     const statuses = []
@@ -49,6 +73,11 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
     return statuses
   }
 
+  /**
+   *
+   * @param {string} version
+   * @returns {string[]}
+   */
   statusFromVersion(version) {
     const versionIndex = this.versions.indexOf(version)
 

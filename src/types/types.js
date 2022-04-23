@@ -1,3 +1,4 @@
+const DiscordJS = require('discord.js')
 /**
  * @typedef {{
  *  'Bug Reporter': '687824517422383282'
@@ -505,4 +506,20 @@
  * @property {string} Name
  * @property {string} [Link] - Can end with .smzip or .zip
  * @property {string} [Date] - YYYY/MM/DD
+ */
+
+/**
+ * @typedef {'pt-BR' | 'Español' | 'Japanese' | 'German' | 'Polish' | 'French' | 'Italian' | 'Hebrew' | 'Slovak' | 'Czech' | 'Simplified Chinese'} OutFoxLanguages
+ */
+
+/**
+ * @typedef {Object} LeaderboardElementObject
+ * @property {string} description
+ * @property {import('discord.js').EmojiIdentifierResolvable} [emoji]
+ */
+
+/**
+ * @typedef {Object} LeaderboardPagesObject
+ * @property {string[]} pageList
+ * @property {Array<string[] | LeaderboardElementObject[]>} individualElements
  */

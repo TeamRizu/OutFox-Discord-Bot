@@ -1,20 +1,74 @@
+const SlashCreate = require('slash-create');
 const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { range } = require('./constants.js')
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   constructor({ interaction, commandArguments }) {
+    /**
+     * A array of individual elements that makes the pages.
+     * @type {Array<string> | Array<object>}
+     */
     this.elements = [];
+    /**
+     * Which page we're currently in.
+     * @type {number}
+     */
     this.page = 0;
+    /**
+     * How many elements should be displayed for each page.
+     * @type {number}
+     */
     this.elementsPerPage = 25;
+    /**
+     * How many characters should be displayed for each element.
+     * @type {number}
+     */
     this.charsPerElement = 80;
+    /**
+     * How many characters should be displayed for each page.
+     * @type {number}
+     */
     this.charsPerPage = 1024;
-    this.supportLookUp = false; // If enabled, the message author can type the number of the element to read more about it. Only supported for Object elements.
+    /**
+     * If enabled, the message author can type the number of the element to read more about it.
+     * @type {boolean}
+     */
+    this.supportLookUp = false;
+    /**
+     * Should be set to true to give the option to leave the lookUp.
+     * @type {boolean}
+     */
     this.lookingUp = false;
+    /**
+     * Select Menu Placeholder Text.
+     * @type {string}
+     */
     this.menuSelectPlaceholder = 'Look up element';
+    /**
+     * @type {SlashCreate.ComponentContext}
+     */
     this.ctx = interaction.ctx;
+    /**
+     * @type {string}
+     */
     this.commandID = commandArguments?.commandID || null;
+    /**
+     * @type {string | number}
+     */
     this.commandVersion = commandArguments?.version || null;
+    /**
+     * @type {string}
+     */
     this.primalArgument = commandArguments?.primalArgument || null;
+    /**
+     * @type {string[]}
+     */
     this.arguments = commandArguments?.arguments || null;
+    /**
+     *
+     * @param {string | import('../types/types.js').LeaderboardElementObject} e - The element string or object
+     * @param {number} i - The element Index
+     * @returns {string}
+     */
     this.formatElement = (e, i) => {
       if (typeof e === 'object') {
         return i ? `${i}° ${e.description}` : e.description || 'UNKNOWN_OBJECT_ELEMENT_DESCRIPTION';
@@ -24,6 +78,11 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     };
   }
 
+  /**
+   *
+   * @param {string | import('../types/types.js').LeaderboardElementObject} element
+   * @returns {boolean}
+   */
   addElement(element) {
     if (typeof element === 'string' || typeof element === 'object') {
       if (this.elements.length !== 0 && !this.elements.every((e) => typeof e === typeof element)) {
@@ -49,6 +108,9 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     return false;
   }
 
+  /**
+   * @returns {import('../types/types.js').LeaderboardPagesObject}
+   */
   get pages() {
     const pageList = [];
     const individualElements = [[]];
@@ -99,6 +161,9 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     };
   }
 
+  /**
+   * @returns {MessageActionRow[]}
+   */
   get pageComponents() {
     if (!this.commandID) {
       return [];
@@ -148,7 +213,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     if (this.supportLookUp) {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
-      const maxIndex = this.elementsPerPage * (this.page + 1); // 200
+      const maxIndex = this.elementsPerPage * (this.page + 1);
       let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage
       if (this.page >= 1) {
         minIndex = minIndex - this.page
