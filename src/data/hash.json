@@ -1,0 +1,267 @@
+{
+  "a48a1a21b5f": {
+    "date": "20220327",
+    "name": "Project OutFox Alpha 0.4.14.1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
+  "155f0670b57": {
+    "date": "20220325",
+    "name": "Project OutFox Alpha 0.4.14.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix_notice",
+        "hotfix_hash": "a48a1a21b5f"
+      }
+    ]
+  },
+  "795ff1a2488":{
+    "date": "20220209",
+    "name": "Project OutFox Alpha 0.4.13.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "6458158559": {
+    "date": "20211231",
+    "name": "Project OutFox Alpha 0.4.12.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "a8015adee6": {
+    "date": "20211213",
+    "name": "Project OutFox Alpha 0.4.11.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "b2eada2de1": {
+    "date": "20211001",
+    "name": "Project OutFox Alpha 0.4.10.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "20eb7a1f0f": {
+    "date": "20210827",
+    "name": "Project OutFox Alpha 0.4.9.10",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "ddbe0afa93": {
+    "date": "20210809",
+    "name": "Project OutFox Alpha 0.4.9.9 HF3",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
+  "716508bcae": {
+    "date": "20210807",
+    "name": "Project OutFox Alpha 0.4.9.9 HF2",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      },
+      {
+        "type": "hotfix_notice",
+        "hotfix_hash": "ddbe0afa93"
+      }
+    ]
+  },
+  "29f88b7e13": {
+    "date": "20210805",
+    "name": "Project OutFox Alpha 0.4.9.9 HF",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      },
+      {
+        "type": "hotfix_notice",
+        "hotfix_hash": "716508bcae"
+      }
+    ]
+  },
+  "58ac2bb65c": {
+    "date": "20210425",
+    "name": "Project OutFox Alpha 0.4.9.8",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "7bd2118e8c": {
+    "date": "20210224",
+    "name": "Project OutFox Alpha 0.4.9.7 GG",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "768a687e88": {
+    "date": "20201218",
+    "name": "Project OutFox Alpha 0.4.9.6",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "1ced17f540": {
+    "date": "20201130",
+    "name": "Project OutFox Alpha 0.4.9.5",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "a734457cf9": {
+    "date": "20201031",
+    "name": "Project OutFox Alpha 0.4.9.1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "a7f5b4623d": {
+    "date": "20201007",
+    "name": "Project OutFox Alpha 0.4.9.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "4f74b16121": {
+    "date": "20200920",
+    "name": "Project OutFox Alpha 0.4.8.5",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "09ae1e4e29": {
+    "date": "20200819",
+    "name": "Project OutFox Alpha 0.4.8.2",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "24199dfb28": {
+    "date": "20200814",
+    "name": "Project OutFox Alpha 0.4.8.1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "7d67243eaa": {
+    "date": "20200711",
+    "name": "Project OutFox Alpha 0.4.6.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "729268c47b": {
+    "date": "20200701",
+    "name": "Project OutFox Alpha 0.4.6.0 RC3",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "7d67243eaa"
+      }
+    ]
+  },
+  "58dfa8965e": {
+    "date": "20200623",
+    "name": "Project OutFox Alpha 0.4.6.0 RC2",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "7d67243eaa"
+      }
+    ]
+  },
+  "2d82b0fc77": {
+    "date": "20200619",
+    "name": "Project OutFox Alpha 0.4.6.0 RC1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "7d67243eaa"
+      }
+    ]
+  },
+  "920d58bc58": {
+    "date": "20200615",
+    "name": "Project OutFox Alpha 0.4.5.9",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "c3092fe12d": {
+    "date": "20200531",
+    "name": "Project OutFox Alpha 0.4.5.8 HF",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
+  "b6807f0f93": {
+    "date": "20200508",
+    "name": "Project OutFox Alpha 0.4.5.6",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "da183ee479": {
+    "date": "20200404",
+    "name": "Project OutFox Alpha 0.4.5.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "d2f706cd29": {
+    "date": "20200304",
+    "name": "Project OutFox Alpha 0.4.4.1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "62700ed54a": {
+    "date": "20200209",
+    "name": "Project OutFox Alpha 0.4.3.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "24bac069c6f": {
+    "date": "20200104",
+    "name": "Project OutFox Alpha 0.4.1.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
+  "cab4934ee45": {
+    "date": "20191216",
+    "name": "Project OutFox Alpha 0.4.0.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  }
+}
