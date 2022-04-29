@@ -19,6 +19,150 @@
       {
         "type": "hotfix_notice",
         "hotfix_hash": "a48a1a21b5f"
+      },
+      {
+        "type": "notice",
+        "description": "This build is the final release of 0.13.1.0 RC series."
+      }
+    ]
+  },
+  "315f76f1469": {
+    "date": "20220319",
+    "name": "Project OutFox Alpha 0.4.14.0 RC0 1b",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build has broken warps."
+      },
+      {
+        "type": "notice",
+        "description": "This build had last minute changes, which added \"1b\"."
+      },
+      {
+        "type": "notice",
+        "description": "This build has the same hash as 0.14.1 RC1, being the reason RC1 is not listed."
+      }
+    ]
+  },
+  "8c08ec68845": {
+    "date": "20220302",
+    "name": "Project OutFox Alpha 0.4.13.0 RC7",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build has the same hash as 0.13.2.0 RC8, being the reason RC8 is not listed."
+      },
+      {
+        "type": "notice",
+        "description": "This build has broken warps."
+      }
+    ]
+  },
+  "26900aa9725": {
+    "date": "20220227",
+    "name": "Project OutFox Alpha 0.4.13.0 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build has the same hash as 0.13.2.0 RC6, being the reason RC6 is not listed."
+      },
+      {
+        "type": "notice",
+        "description": "This build has broken warps."
+      }
+    ]
+  },
+  "565da203211": {
+    "date": "20220123",
+    "name": "Project OutFox Alpha 0.4.13.0 RC4",
+    "buildtype": "private",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build has broken warps."
+      }
+    ]
+  },
+  "be62b99a5d9": {
+    "date": "20220223",
+    "name": "Project OutFox Alpha 0.4.13.0 RC4",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build has broken warps."
+      },
+      {
+        "type": "notice",
+        "description": "This build will not work with Windows 7"
+      }
+    ]
+  },
+  "2db1b20ea0b": {
+    "date": "20220221",
+    "name": "Project OutFox Alpha 0.4.13.0 RC2",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build has the same hash as 0.13.2.0 RC3 (built 20220223), being the reason RC3 is not listed."
+      },
+      {
+        "type": "notice",
+        "description": "This build has broken warps."
+      },
+      {
+        "type": "notice",
+        "description": "This build will not work with Windows 7"
+      }
+    ]
+  },
+  "76e4db744ad": {
+    "date": "20220215",
+    "name": "Project OutFox Alpha 0.13.1.0 RC1",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "155f0670b57"
+      },
+      {
+        "type": "notice",
+        "description": "This build will not work with Windows 7"
       }
     ]
   },
@@ -28,6 +172,42 @@
     "buildtype": "public",
     "exclusive": null,
     "notes": null
+  },
+  "1524befc6dc": {
+    "date": "20220126",
+    "name": "Project OutFox Alpha 0.4.13.0 RC6",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "795ff1a2488"
+      }
+    ]
+  },
+  "795ff1a2488": {
+    "date": "20220123",
+    "name": "Project OutFox Alpha 0.4.13.0 RC4",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "795ff1a2488"
+      }
+    ]
+  },
+  "b1fcdb77148": {
+    "date": "20220119",
+    "name": "Project OutFox Alpha 0.4.13.0 RC0",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "795ff1a2488"
+      }
+    ]
   },
   "6458158559": {
     "date": "20211231",
@@ -43,6 +223,18 @@
     "exclusive": null,
     "notes": null
   },
+  "435f69ecde": {
+    "date": "20211027",
+    "name": "Project OutFox Alpha 0.4.11.0 RC12",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "a8015adee6"
+      }
+    ]
+  },
   "b2eada2de1": {
     "date": "20211001",
     "name": "Project OutFox Alpha 0.4.10.0",
@@ -50,12 +242,50 @@
     "exclusive": null,
     "notes": null
   },
+  "928b1536ef": {
+    "date": "20210925",
+    "name": "Project OutFox Alpha 0.4.10.0 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "b2eada2de1"
+      }
+    ]
+  },
   "20eb7a1f0f": {
     "date": "20210827",
     "name": "Project OutFox Alpha 0.4.9.10",
     "buildtype": "public",
     "exclusive": null,
     "notes": null
+  },
+  "c905ecddb7": {
+    "date": "20210821",
+    "name": "Project OutFox ALpha 0.4.9.9 HF4 RC6",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
+  "70dbc39ef5": {
+    "date": "20210815",
+    "name": "Project OutFox Alpha 0.4.9.9 HF4 RC1",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      },
+      {
+        "type": "notice",
+        "description": "This build has the same hash as RC2, which is why it's not listed."
+      }
+    ]
   },
   "ddbe0afa93": {
     "date": "20210809",
