@@ -90,22 +90,6 @@
       }
     ]
   },
-  "565da203211": {
-    "date": "20220123",
-    "name": "Project OutFox Alpha 0.4.13.0 RC4",
-    "buildtype": "private",
-    "exclusive": "windows",
-    "notes": [
-      {
-        "type": "release_candidate",
-        "final_hash": "155f0670b57"
-      },
-      {
-        "type": "notice",
-        "description": "This build has broken warps."
-      }
-    ]
-  },
   "be62b99a5d9": {
     "date": "20220223",
     "name": "Project OutFox Alpha 0.4.13.0 RC4",
@@ -185,7 +169,7 @@
       }
     ]
   },
-  "795ff1a2488": {
+  "565da203211": {
     "date": "20220123",
     "name": "Project OutFox Alpha 0.4.13.0 RC4",
     "buildtype": "testbuild",

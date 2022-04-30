@@ -523,3 +523,41 @@ const DiscordJS = require('discord.js')
  * @property {string[]} pageList
  * @property {Array<string[] | LeaderboardElementObject[]>} individualElements
  */
+
+/**
+ * @typedef {Object} HashBuildTypeToName
+ * @property {'public build'} public
+ * @property {'test build'} testbuild
+ * @property {'private'} private
+ */
+
+/**
+ * @typedef {Object} HashBuildTypeToDescription
+ * @property {string} public
+ * @property {string} testbuild
+ * @property {string} private
+ */
+
+/**
+ * @typedef {Object} HashBuildNoteToDescription
+ * @property {string} hotfix
+ * @property {string} hotfix_notice
+ * @property {string} release_candidate
+ */
+
+/**
+ * @typedef {Object} HashBuild
+ * @property {string} date - YYYYMMDD
+ * @property {string} name
+ * @property {'public' | 'testbuild' | 'private'} buildtype
+ * @property {string | null} exclusive
+ * @property {HashBuildNote[]} notes
+ */
+
+/**
+ * @typedef {Object} HashBuildNote
+ * @property {'hotfix' | 'hotfix_notice' | 'release_candidate' | 'notice'} type
+ * @property {string} [final_hash] - Exclusive to release_candidate
+ * @property {string} [description] - Exclusive to notice
+ * @property {string} [hotfix_hash] - Exclusive to hotfix_notice
+ */

@@ -1,6 +1,6 @@
 /**
  * Discord IDs for bug hunter roles
- * @type {BugRoles}
+ * @type {import("../types/types").BugRoles}
  */
 exports.bugRole = {
   'Bug Reporter': '687824517422383282',
@@ -13,7 +13,7 @@ exports.bugRole = {
 
 /**
  * Engine ID accepted by StepMania Archive.
- * @type {ArchiveEngineIDs}
+ * @type {import("../types/types").ArchiveEngineIDs}
  */
 exports.archiveEngineID = [
   'OutFox', // Project OutFox
@@ -28,7 +28,7 @@ exports.archiveEngineID = [
 
 /**
  * Engine names based on Engine ID accepted by StepMania Archive.
- * @type {ArchiveEngineNameObj}
+ * @type {import("../types/types").ArchiveEngineNameObj}
  */
 exports.archiveEngineName = {
   OutFox: 'Project OutFox',
@@ -43,7 +43,7 @@ exports.archiveEngineName = {
 
 /**
  * Discord Emote Data based on Engine ID accepted by StepMania Archive.
- * @type {ArchiveEngineEmoteData}
+ * @type {import("../types/types").ArchiveEngineEmoteData}
  */
 exports.archiveEngineEmoteData = {
   OutFox: {
@@ -82,7 +82,7 @@ exports.archiveEngineEmoteData = {
 
 /**
  * Engine Vibrant Colors Hex format based on Engine ID accepted by StepMania Archive
- * @type {ArchiveEngineColors}
+ * @type {import("../types/types").ArchiveEngineColors}
  */
 exports.archiveEngineColors = {
   OutFox: '#bad0ff',
@@ -96,7 +96,7 @@ exports.archiveEngineColors = {
 };
 
 /**
- * @type {ArchiveEngineLink}
+ * @type {import("../types/types").ArchiveEngineLink}
  */
 exports.archiveEngineLink = {
   OutFox: 'https://josevarela.xyz/SMArchive/Builds/#OUTFOX',
@@ -111,7 +111,7 @@ exports.archiveEngineLink = {
 
 /**
  * Embed fields that should be included on any embed with data from StepMania Archive
- * @type {ArchiveGenericEmbedFields}
+ * @type {import("../types/types").ArchiveGenericEmbedFields}
  */
 exports.archiveGenericEmbedFields = {
   footer: {
@@ -121,7 +121,7 @@ exports.archiveGenericEmbedFields = {
 }
 
 /**
- * @type {ArchiveThemesMusicWheelImage}
+ * @type {import("../types/types").ArchiveThemesMusicWheelImage}
  */
 exports.archiveThemesMusicWheelImage = {
   OITG: {
@@ -152,7 +152,7 @@ exports.archiveThemesMusicWheelImage = {
 }
 
 /**
- * @type {ArchiveThemeDescription}
+ * @type {import("../types/types").ArchiveThemeDescription}
  */
 exports.archiveThemeDescription = {
   'StepMania 5': {
@@ -162,7 +162,7 @@ exports.archiveThemeDescription = {
 }
 
 /**
- * @type {conversionsGenericEmbedFields}
+ * @type {import("../types/types").ConversionsGenericEmbedFields}
  */
 exports.conversionsGenericEmbedFields = {
   footer: {
@@ -172,7 +172,7 @@ exports.conversionsGenericEmbedFields = {
 }
 
 /**
- * @type {ConversionsVersionToEngineID}
+ * @type {import("../types/types").ConversionsVersionToEngineID}
  */
 exports.conversionsVersionToEngineID = {
   '5.0+': 'StepMania 5',
@@ -193,7 +193,7 @@ exports.range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
 }
 
 /**
- * @type {CreditsEngineID}
+ * @type {import("../types/types").CreditsEngineID}
  */
 exports.creditsEngineID = [
   'Stepmania',
@@ -204,7 +204,7 @@ exports.creditsEngineID = [
 ]
 
 /**
- * @type {CreditsEngineIDToEngineTag}
+ * @type {import("../types/types").CreditsEngineIDToEngineTag}
  */
 exports.creditsEngineIDToEngineTag = {
   'Stepmania': 'StepMania',
@@ -215,7 +215,7 @@ exports.creditsEngineIDToEngineTag = {
 }
 
 /**
- * @type {ArchiveListIDs}
+ * @type {import("../types/types").ArchiveListIDs}
  */
 exports.archiveListIDs = [
   'DDRPC',
@@ -235,7 +235,7 @@ exports.archiveListIDs = [
 ]
 
 /**
- * @type {ArchiveListNames}
+ * @type {import("../types/types").ArchiveListNames}
  */
 exports.archiveListNames = [
   'DDR PC Edition ',
@@ -255,7 +255,7 @@ exports.archiveListNames = [
 ]
 
 /**
- * @type {ArchiveListIDToNames}
+ * @type {import("../types/types").ArchiveListIDToNames}
  */
 exports.archiveListIDToNames = {
   'DDRPC': 'DDR PC Edition ',
@@ -275,7 +275,7 @@ exports.archiveListIDToNames = {
 }
 
 /**
- * @type {ArchiveListIdToEngineName}
+ * @type {import("../types/types").ArchiveListIdToEngineName}
  */
 exports.archiveListIDToEngineName = {
   'DDRPC': 'DDR PC Edition',
@@ -295,7 +295,7 @@ exports.archiveListIDToEngineName = {
 }
 
 /**
- * @type {ArchiveBuildEngineIconData}
+ * @type {import("../types/types").ArchiveBuildEngineIconData}
  */
 exports.archiveBuildEngineIconData = {
   DDRPC: {
@@ -443,7 +443,7 @@ exports.archiveBuildEngineIconData = {
 }
 
 /**
- * @type {ArchiveBuildEngineColor}
+ * @type {import("../types/types").ArchiveBuildEngineColor}
  */
 exports.archiveBuildEngineColor = {
   DDRPC: '#d72e3c',
@@ -504,9 +504,9 @@ exports.archiveIconLinkFormat = (name) => {
 /**
  * Converts build name & engine to EngineID, accepted as a key to IconData.
  * @function
- * @param {BuildListID} engine
+ * @param {import("../types/types").BuildListID} engine
  * @param {string} name
- * @returns {BuildEngineIDs}
+ * @returns {import("../types/types").BuildEngineIDs}
  */
 exports.buildNameToEmoteKey = (engine, name) => {
   switch (engine) {
@@ -620,9 +620,37 @@ exports.buildNameToEmoteKey = (engine, name) => {
 }
 
 /**
- * @type {AnnouncersCreators}
+ * @type {import("../types/types").AnnouncersCreators}
  */
 exports.announcersCreators = ['KU+002FStep', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted']
+
+/**
+ * @type {import("../types/types").HashBuildTypeToName}
+ */
+exports.hashBuildTypeToName = {
+  'public': 'public build',
+  'testbuild': 'test build',
+  'private': 'private build'
+}
+
+/**
+ * @type {import("../types/types").HashBuildTypeToDescription}
+ */
+exports.hashBuildTypeToDescription = {
+  'public': 'This is a public build that is available to be downloaded by anyone either by using Project OutFox Website or Team Rizu\'s OutFox Repository.',
+  'testbuild': 'This is a test build, it is not available to the public but, usually, to selected members of Project OutFox Discord Server Alpha Tester Programme.',
+  'private': 'This is a private build, it is only available to Project OutFox Team.'
+}
+
+/**
+ * @type {import("../types/types").HashBuildNoteToDescription}
+ */
+exports.hashBuildNoteToDescription = {
+  'hotfix': "This is a hotfix build, meaning major features, that might or not be available on this version, came from a prior version.",
+  "hotfix_notice": "This build has a hotfix version, it is recommended to use the hotfix version instead.",
+  "release_candidate": "This build is a release candidate, it has experimental features that might not yet have been finalized."
+}
+
 /*
 exports.volumesAdditionalFields = {
   chartInfo: {

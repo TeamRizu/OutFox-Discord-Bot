@@ -38,7 +38,8 @@ const start = async () => {
     'announcers',
     'credits',
     'preference',
-    'builds'
+    'builds',
+    'mybuild'
   ];
 
   creator.on('debug', (message) => logger.log(message));
@@ -67,7 +68,7 @@ const start = async () => {
     // TODO: version verification TBC
 
     // Action verification
-    if (!['lookUp', 'update', 'leaderboard'].includes(action)) return;
+    if (!['lookUp', 'update', 'leaderboard', 'run'].includes(action)) return;
 
     // Argument verification
     if (arguments.length < 1) return;
@@ -80,9 +81,11 @@ const start = async () => {
       case 'lookUp':
         if (isNaN(primalArgument)) return;
       break;
-      default:
+      case 'update':
         if (typeof primalArgument !== 'string') return;
-        break;
+      break;
+      default:
+      break;
     }
 
     const CommandFile = require(`./commands/${commands[commandID]}.js`);
@@ -106,8 +109,11 @@ const start = async () => {
       case 'update':
         await CommandInstance.update({ interaction, commandArguments, interactionCache });
       break
-      default:
+      case 'leaderboard':
         await CommandInstance.leaderboard({ interaction, commandArguments, interactionCache });
+      break
+      default:
+        await CommandInstance.run(ctx, { interaction, commandArguments, interactionCache });
       break
     }
   });
