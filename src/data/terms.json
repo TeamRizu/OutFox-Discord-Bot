@@ -1,0 +1,59 @@
+{
+  "termArr": [
+    {
+      "name": "chart",
+      "aliases": ["map", "beatmap", "pad chart", "keyboard chart"],
+      "explanation": "When you want to play a song you'll also need to select a **chart**, a chart contains difficulty and notedata that you select to play.",
+      "aliasesExplanation": {
+        "map": "Term used for osu!",
+        "beatmap": "Term used for \"beat based\" modes such as bemu/pomu.",
+        "pad chart": "Term used when a chart was created with pad play design.",
+        "keyboard chart": "Term used when a chart was created with keyboard play design, popular in StepMania Fork \"Etterna\"."
+      }
+    },
+    {
+      "name": "modchart",
+      "aliases": ["mods", "modifier charts"],
+      "explanation": "These simfiles have modifiers that are scripted to happen at various points of the song. The difficulty can range between “trivial to read” to “may as well memorize the chart”.\n\nThese usually use the FGCHANGES or BGCHANGES of a simfile to load the lua files (if any are used)."
+    },
+    {
+      "name": "hold",
+      "explanation": "A note that you have to hold to not miss it."
+    },
+    {
+      "name": "roll",
+      "aliases": ["Drill"],
+      "explanation": "A note that you have to keep hitting to not miss it."
+    },
+    {
+      "name": "ng",
+      "explanation": "Missed Hold/(Drill or Roll)"
+    },
+    {
+      "name": "doublestep",
+      "explanation": "A step that is placed in a way where you can't alternate feet as you're playing it."
+    },
+    {
+      "name": "double taps",
+      "aliases": ["mini jacks"],
+      "explanation": "When you’re hitting the same arrow using the same foot."
+    },
+    {
+      "name": "footswiches",
+      "explanation": "You’re hitting the same arrow using different feet. Thoso can look like doublesteps, but if you do it properly, you can still walk through the chart alternating feet."
+    },
+    {
+      "name": "ghosttap",
+      "explanation": "When you hit a place where there’s no step."
+    },
+    {
+      "name": "playfield",
+      "aliases": ["notefield", "receptors", "playerboards"],
+      "explanation": "The targets that notes are going to reach. In dance, the 4 notes that are always at the top. In pump, the 5 notes that are always at the top."
+    },
+    {
+      "name": "lift",
+      "explanation": "Note that you have to release the moment they reach the play field."
+    }
+  ]
+}
