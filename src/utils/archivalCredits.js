@@ -7,7 +7,7 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
      */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Builds/Credits/data.json';
     /**
-     * @type {Object<string, Array<CreditSection>>}
+     * @type {Object<string, Array<import('../types/types').CreditSection>>}
      */
     this.mainObject = null;
   }
@@ -19,7 +19,7 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
   }
 
   /**
-   * @returns {CreditedEngine[]}
+   * @returns {import('../types/types').CreditedEngine[]}
    */
   get engines() {
     return Object.keys(this.mainObject).filter(e => e !== 'Mung3');
@@ -27,7 +27,7 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
 
   /**
    *
-   * @param {CreditedEngine} engine
+   * @param {import('../types/types').CreditedEngine} engine
    * @returns {string[]}
    */
   creditsTitleByEngine(engine) {

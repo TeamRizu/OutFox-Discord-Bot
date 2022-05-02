@@ -1,4 +1,4 @@
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveBuildsFile } = require('../utils/archivalBuilds.js');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
@@ -80,7 +80,7 @@ module.exports = class BuildsCommand extends SlashCommand {
 
     /**
      *
-     * @param {BuildListID} listID
+     * @param {import('../types/types.js').BuildListID} listID
      * @returns {string}
      */
     const archivebuildCountString = (listID) => {
@@ -91,7 +91,7 @@ module.exports = class BuildsCommand extends SlashCommand {
 
     /**
      *
-     * @param {BuildListID} listID
+     * @param {import('../types/types.js').BuildListID} listID
      * @returns {string}
      */
     const buildEmote = (listID) => {
@@ -172,7 +172,7 @@ module.exports = class BuildsCommand extends SlashCommand {
     }
 
     /**
-     * @type {BuildListID}
+     * @type {import('../types/types.js').BuildListID}
      */
     const listID = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);

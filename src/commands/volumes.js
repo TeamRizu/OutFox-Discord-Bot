@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 const embeds = {
   start: new MessageEmbed()
     .setTitle('OutFox Serenity')

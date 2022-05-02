@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 const { ModsSheetFile } = require('../utils/mods.js');
 const { conversionsGenericEmbedFields } = require('../utils/constants.js')
 const nodeuri = require('node-uri');

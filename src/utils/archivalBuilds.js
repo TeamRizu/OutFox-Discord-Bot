@@ -6,7 +6,7 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Builds/BuildListing.json';
     /**
      * The object that contains all BuildListing Data
-     * @type {Object<string, BuildList>}
+     * @type {Object<string, import('../types/types').BuildList>}
     */
     this.mainObject = null;
   }
@@ -18,14 +18,14 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
   }
 
   /**
-   * @returns {ArchiveListIDs}
+   * @returns {import('../types/types').ArchiveListIDs}
    */
   get buildListIDs() {
     return Object.keys(this.mainObject);
   }
 
   /**
-   * @returns {ArchiveListNames}
+   * @returns {import('../types/types').ArchiveListNames}
    */
   get buildListName() {
     const finalArr = []
@@ -39,8 +39,8 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
 
   /**
    *
-   * @param {BuildListID} buildListID
-   * @returns {BuildList}
+   * @param {import('../types/types').BuildListID} buildListID
+   * @returns {import('../types/types').BuildList}
    */
   buildListObjectFromID(buildListID) {
     return this.mainObject[buildListID]
@@ -48,7 +48,7 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
 
   /**
    *
-   * @param {BuildListID} buildListID
+   * @param {import('../types/types').BuildListID} buildListID
    * @returns {string[]}
    */
   listingNamesFromID(buildListID) {

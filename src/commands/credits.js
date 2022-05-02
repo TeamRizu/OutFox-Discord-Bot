@@ -1,4 +1,4 @@
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveCreditsFile } = require('../utils/archivalCredits.js');
@@ -132,7 +132,7 @@ module.exports = class CreditsCommand extends SlashCommand {
     }
 
     /**
-     * @type {CreditedEngine}
+     * @type {import('../types/types.js').CreditedEngine}
      */
     const engine = commandArguments.primalArgument
     const page = Number(commandArguments.arguments[1]);
@@ -190,7 +190,7 @@ module.exports = class CreditsCommand extends SlashCommand {
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
     /**
-     * @type {CreditedEngine}
+     * @type {import('../types/types.js').CreditedEngine}
      */
     const engine = commandArguments.primalArgument
     const section = ArchiveCreditsInstance.mainObject[engine][page]

@@ -1,4 +1,4 @@
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 
 module.exports = class PingCommand extends SlashCommand {
   constructor(creator) {

@@ -1,4 +1,4 @@
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { WikiPreferencesFile } = require('../utils/wikiPreferences.js');

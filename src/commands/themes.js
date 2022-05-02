@@ -1,4 +1,4 @@
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, ComponentContext } = require('slash-create');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveThemesFile } = require('../utils/archivalThemes.js');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
@@ -69,7 +69,7 @@ module.exports = class ThemesCommand extends SlashCommand {
 
     /**
      *
-     * @param {ArchiveEngineID} engine
+     * @param {import('../types/types.js').ArchiveEngineID} engine
      * @returns {string}
      */
     const engineThemeCountString = (engine) => {
@@ -145,7 +145,7 @@ module.exports = class ThemesCommand extends SlashCommand {
     }
 
     /**
-     * @type {ArchiveEngineID}
+     * @type {import('../types/types.js').ArchiveEngineID}
      */
     const fork = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);
@@ -205,7 +205,7 @@ module.exports = class ThemesCommand extends SlashCommand {
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
     /**
-     * @type {ArchiveEngineID}
+     * @type {import('../types/types.js').ArchiveEngineID}
      */
     const engine = commandArguments.primalArgument;
     const themeID = ArchiveThemesInstance.themesForVersion(engine)[page];

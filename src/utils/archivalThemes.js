@@ -7,7 +7,7 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
      */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Themes/db.json';
     /**
-     * @type {Object<string, Object<string, ThemeObject>>}
+     * @type {Object<string, Object<string, import('../types/types').ThemeObject>>}
      */
     this.mainObject = null;
   }
@@ -19,14 +19,14 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
   }
 
   /**
-   * @returns {ArchiveEngineIDs}
+   * @returns {import('../types/types').ArchiveEngineIDs}
    */
   get supportedVersions() {
     return Object.keys(this.mainObject);
   }
 
   /**
-   * @returns {ArchiveEngineName[]}
+   * @returns {import('../types/types').ArchiveEngineName[]}
    */
   get supportedVersionsName() {
     const versions = [];
@@ -40,7 +40,7 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
 
   /**
    *
-   * @param {ArchiveEngineID} version
+   * @param {import('../types/types').ArchiveEngineID} version
    * @returns {string[]}
    */
   themesForVersion(version) {
@@ -54,9 +54,9 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
 
   /**
    *
-   * @param {ArchiveEngineID} version
+   * @param {import('../types/types').ArchiveEngineID} version
    * @param {string} themeName
-   * @returns {ThemeObject}
+   * @returns {import('../types/types').ThemeObject}
    */
   themeFromVersion(version, themeName) {
     if (!this.supportedVersions.includes(version)) return null;
