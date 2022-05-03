@@ -22,7 +22,7 @@
     },
     {
       "name": "roll",
-      "aliases": ["Drill"],
+      "aliases": ["drill"],
       "explanation": "A note that you have to keep hitting to not miss it."
     },
     {
@@ -54,6 +54,100 @@
     {
       "name": "lift",
       "explanation": "Note that you have to release the moment they reach the play field."
+    },
+    {
+      "name": "testbuild",
+      "explanation": "Usually used to mention a Project OutFox Alpha Tester build, those builds are the extreme point of availabla latest code and features, but will also have the most bugs."
+    },
+    {
+      "name": "alphatester",
+      "explanation": "Usually used to mention Project OutFox Alpha Testers, those are selected individuals who can view channels with builds with testing features."
+    },
+    {
+      "name": "serenity",
+      "aliases": ["outfox serenity", "outfox community pack"],
+      "explanation": "OutFox Serenity is a community-driven project; musicians can submit freely-licensed songs for consideration by the Serenity team, which are then assigned to chart artists and designers to create their accompanying charts and graphics."
+    },
+    {
+      "name": "universal builds",
+      "aliases": ["mac universal"],
+      "explanation": "Universal builds are special builds meant for Apple systems, those special builds include code that will run with on both arm and intel mac."
+    },
+    {
+      "name": "umbreon",
+      "explanation": "A branch from Project OutFox repository where magic happens."
+    },
+    {
+      "name": "narumi",
+      "aliases": ["outfox mascot"],
+      "explanation": "Narumi is the name of Project OutFox main mascot."
+    },
+    {
+      "name": "theme",
+      "explanation": "Themes are everything you see when playing StepMania based games (including Project OutFox), they define the function of the game, what it looks like and how things work. Learn more about themes [here](https://outfox.wiki/dev/theming/)."
+    },
+    {
+      "name": "team ssc",
+      "aliases": ["spinal shark collective"],
+      "explanation": "Team SSC, also known as Spinal Shark Collective, started most of the work on StepMania 5 Engine and later left production due to community conflits."
+    },
+    {
+      "name": "sm ssc",
+      "explanation": "Team SSC StepMania fork which later became the official StepMania 5."
+    },
+    {
+      "name": "liro code",
+      "aliases": ["liro liro code code liro code code"],
+      "explanation": "Either the code was made using SM5 paradigm or the code has issues usually found with Lirodon (Project OutFox Designer) code. Usually used when talking about theme code."
+    },
+    {
+      "name": "courses",
+      "explanation": "Courses are playlists of charts, they might contain normal chart or include targets, challenges and attack modifiers."
+    },
+    {
+      "name": "attack",
+      "aliases": ["mod", "attack modifier"],
+      "explanation": "Attacks are inline codes which can be used to apply effects to the playfield or notes."
+    },
+    {
+      "name": "tinyfoxes",
+      "explanation": "TinyFoxes is a community group on GitHub focusing on add-ons and other tools for Project OutFox, including themes, assets, and localization resources."
+    },
+    {
+      "name": "noteloader",
+      "explanation": "Project OutFox noteloaders are what allow different file formats to be loaded and used for different modes."
+    },
+    {
+      "name": "styles",
+      "aliases": ["chart styles"],
+      "explanation": "Project OutFox gamemodes usually includes styles which can be considered subgamemodes that can change the number of keys and/or gamemode behavior, charts can then target a specific style."
+    },
+    {
+      "name": "playmode",
+      "aliases": ["play style"],
+      "explanation": "After changing settings for some themes, they'll allow you to select a play mode, they usually include \"Easy\", \"Normal\", \"Oni\" and \"Extended\"."
+    },
+    {
+      "name": "webmasters",
+      "aliases": ["web translator"],
+      "explanation": "Project OutFox Webmasters is a program that allows selected translators to join our website backend panel and translate pages."
+    },
+    {
+      "name": "expert translator",
+      "explanation": "Any Project OutFox translator who had their translation released with at least one version of the game will be considered a expert translator and be able to view a channel with upcoming strings."
+    },
+    {
+      "name": "notitg",
+      "aliases": ["not in the groove"],
+      "explanation": "NotITG is a OpenITG fork made to design and play modfiles."
+    },
+    {
+      "name": "etterna",
+      "explanation": "Etterna is a StepMania fork designed for keyboard play with online systems."
+    },
+    {
+      "name": "sm52",
+      "explanation": "StepMania 5.2, also known as StepMania 5.1-3, a version that is no longer in development because of developer conflict with the community and legacy content."
     }
   ]
 }
