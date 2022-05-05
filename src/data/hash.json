@@ -1,4 +1,15 @@
 {
+  "652d8534c5e": {
+    "date": "20220505",
+    "name": "Project Outfox Alpha 0.4.14.2 RC3 FOXCLOCK",
+    "buildtype": "testbuild",
+    "exlusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
   "a48a1a21b5f": {
     "date": "20220327",
     "name": "Project OutFox Alpha 0.4.14.1",
