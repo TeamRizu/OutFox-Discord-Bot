@@ -472,6 +472,36 @@
           "term": "stepmania"
         }
       ]
+    },
+    {
+      "name": "noteskin",
+      "properName": "NoteSkin",
+      "explanation": "NoteSkins define the look of your notes, noteskins can be either global (for all modes) or mode specific, noteskin support is different between each engine."
+    },
+    {
+      "name": "preferences",
+      "properName": "Preferences.ini",
+      "explanation": "Preferences.ini holds most of the data that is used by the game, such as: Resolution, gamemode, lifetype, song paths...etc",
+      "references": [
+        {
+          "type": "url",
+          "url": "https://outfox.wiki/user-guide/config/preferences/",
+          "label": "All Preferences"
+        }
+      ]
+    },
+    {
+      "name": "toasties",
+      "properName": "Toasties",
+      "explanation": "Toasties are images that are shown in specific pre-defined moments such as when you hit 50 combos."
+    },
+    {
+      "name": "judgment",
+      "properName": "Judgment",
+      "explanation": "Judgments are images shown to represent how accurate the player timing is when hitting notes, the available judgments depends on the selected timing.",
+      "decorations": {
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971889355507519558/Classic_1x6.png"
+      }
     }
   ]
 }
