@@ -55,11 +55,41 @@ module.exports = class TermCommand extends SlashCommand {
       .setTitle(termData.properName)
       .setDescription(termData.explanation)
 
+    if (termData.decorations) {
+      if (termData.decorations.thumbnail) embed.setThumbnail(termData.decorations.thumbnail)
+      if (termData.decorations.image) embed.setImage(termData.decorations.image)
+      if (termData.decorations.color) embed.setColor(termData.decorations.color)
+    }
+
     if (termData.aliases) {
       embed.addField('Also known as', buildAliases())
     }
 
-    // TODO: add references support
+    if (termData.references) {
+      for (let i = 0; i < termData.references.length; i++) {
+        const currentReference = termData.references[i]
+        const button = new MessageButton()
+
+        switch (currentReference.type) {
+          case 'url':
+            button.setStyle('LINK')
+            button.setURL(currentReference.url)
+            button.setLabel(currentReference.label)
+          break
+          case 'term':
+            const referenceTerm = TermsClass.termObjectByName(currentReference.term)
+
+            button.setStyle('PRIMARY')
+            button.setLabel(referenceTerm.label || `See ${referenceTerm.properName}`)
+            button.setCustomId(`11-${this.commandVersion}-run-${currentReference.term}`)
+          break
+        }
+
+        buttons.addComponents(button)
+      }
+      addedButtons = true
+    }
+
     const components = addedButtons ? [buttons] : []
     if (interaction) {
       ctx.editParent({

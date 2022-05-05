@@ -26,12 +26,18 @@
         "modifier charts": "Modifier Charts"
       },
       "aliases": ["mods", "modifier charts"],
-      "explanation": "These simfiles have modifiers that are scripted to happen at various points of the song. The difficulty can range between “trivial to read” to “may as well memorize the chart”.\n\nThese usually use the FGCHANGES or BGCHANGES of a simfile to load the lua files (if any are used)."
+      "explanation": "These simfiles have modifiers that are scripted to happen at various points of the song. The difficulty can range between “trivial to read” to “may as well memorize the chart”.\n\nThese usually use the FGCHANGES or BGCHANGES of a simfile to load the lua files (if any are used).",
+      "decorations": {
+        "image": "https://thumbs.gfycat.com/MaleCourteousAfricanparadiseflycatcher-size_restricted.gif"
+      }
     },
     {
       "name": "hold",
       "properName": "Hold",
-      "explanation": "A note that you have to hold to not miss it."
+      "explanation": "A note that you have to hold to not miss it.",
+      "decorations": {
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971856290798260254/unknown.png"
+      }
     },
     {
       "name": "roll",
@@ -40,7 +46,10 @@
         "drill": "Drill"
       },
       "aliases": ["drill"],
-      "explanation": "A note that you have to keep hitting to not miss it."
+      "explanation": "A note that you have to keep hitting to not miss it.",
+      "decorations": {
+        "image": "https://media.discordapp.net/attachments/953800884549189662/971856104537591868/unknown.png"
+      }
     },
     {
       "name": "ng",
@@ -50,7 +59,10 @@
     {
       "name": "doublestep",
       "properName": "Doublestep",
-      "explanation": "A step that is placed in a way where you can't alternate feet as you're playing it."
+      "explanation": "A step that is placed in a way where you can't alternate feet as you're playing it.",
+      "decorations": {
+        "image": "https://media.discordapp.net/attachments/953800884549189662/971855777654525992/unknown.png"
+      }
     },
     {
       "name": "double taps",
@@ -59,12 +71,18 @@
         "mini jacks": "Mini Jacks"
       },
       "aliases": ["mini jacks"],
-      "explanation": "When you’re hitting the same arrow using the same foot."
+      "explanation": "When you’re hitting the same arrow using the same foot.",
+      "decorations": {
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971855181241270313/unknown.png"
+      }
     },
     {
       "name": "footswiches",
       "properName": "Footswitches",
-      "explanation": "You’re hitting the same arrow using different feet. Thoso can look like doublesteps, but if you do it properly, you can still walk through the chart alternating feet."
+      "explanation": "You’re hitting the same arrow using different feet. Thoso can look like doublesteps, but if you do it properly, you can still walk through the chart alternating feet.",
+      "decorations": {
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971854933118824508/unknown.png"
+      }
     },
     {
       "name": "ghosttap",
@@ -80,12 +98,18 @@
         "playerboards": "Playerboards"
       },
       "aliases": ["notefield", "receptors", "playerboards"],
-      "explanation": "The targets that notes are going to reach. In dance, the 4 notes that are always at the top. In pump, the 5 notes that are always at the top."
+      "explanation": "The targets that notes are going to reach. In dance, the 4 notes that are always at the top. In pump, the 5 notes that are always at the top.",
+      "decorations": {
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971853229430308934/unknown.png"
+      }
     },
     {
       "name": "lift",
       "properName": "Lift",
-      "explanation": "Note that you have to release the moment they reach the play field."
+      "explanation": "Note that you have to release the moment they reach the play field.",
+      "decorations": {
+        "thumbnail": "https://media.discordapp.net/attachments/953800884549189662/971852733722280006/Down_Hold_LiftTail_Active_res_64x64.png"
+      }
     },
     {
       "name": "testbuild",
@@ -102,10 +126,36 @@
       "properName": "Serenity",
       "properAlias": {
         "outfox serenity": "OutFox Serenity",
-        "outfox community Pack": "OutFox Community Pack"
+        "outfox community pack": "OutFox Community Pack"
       },
       "aliases": ["outfox serenity", "outfox community pack"],
-      "explanation": "OutFox Serenity is a community-driven project; musicians can submit freely-licensed songs for consideration by the Serenity team, which are then assigned to chart artists and designers to create their accompanying charts and graphics."
+      "explanation": "OutFox Serenity is a community-driven project; musicians can submit freely-licensed songs for consideration by the Serenity team, which are then assigned to chart artists and designers to create their accompanying charts and graphics.",
+      "references": [
+        {
+          "type": "url",
+          "url": "https://discord.gg/mNcFU67mK7",
+          "label": "Serenity Server"
+        },
+        {
+          "type": "url",
+          "url": "https://outfox.wiki/user-guide/meta/serenity/",
+          "label": "Serenity Wiki"
+        },
+        {
+          "type": "url",
+          "url": "https://projectoutfox.com/outfox-serenity",
+          "label": "Serenity Page"
+        },
+        {
+          "type": "url",
+          "url": "https://github.com/TeamRizu/OutFox-Serenity",
+          "label": "Serenity Repository"
+        }
+      ],
+      "decorations": {
+        "image": "https://projectoutfox.com/themes/moondance/assets/images/serenity-front-logo.png",
+        "color": "#cfe7bb"
+      }
     },
     {
       "name": "universal build",
@@ -119,7 +169,10 @@
     {
       "name": "umbreon",
       "properName": "Umbreon",
-      "explanation": "A branch from Project OutFox repository where magic happens."
+      "explanation": "A branch from Project OutFox repository where magic happens.",
+      "decorations": {
+        "color": "#081c3c"
+      }
     },
     {
       "name": "narumi",
@@ -128,7 +181,11 @@
         "outfox mascot": "OutFox Mascot"
       },
       "aliases": ["outfox mascot"],
-      "explanation": "Narumi is the name of Project OutFox main mascot."
+      "explanation": "Narumi is the name of Project OutFox main mascot.",
+      "decorations": {
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971848537216266260/mascot.png",
+        "color": "#f38b6f"
+      }
     },
     {
       "name": "theme",
@@ -142,21 +199,36 @@
         "spinal shark collective": "Spinal Shark Collective"
       },
       "aliases": ["spinal shark collective"],
-      "explanation": "Team SSC, started most of the work on StepMania 5 Engine and later left production due to community conflits."
+      "explanation": "Team SSC, started most of the work on StepMania 5 Engine and later left production due to community conflits.",
+      "references": [
+        {
+          "type": "url",
+          "url": "https://ssc.ajworld.net/",
+          "label": "Team SSC Website"
+        },
+        {
+          "type": "url",
+          "url": "https://twitter.com/ssc_kki",
+          "label": "Team SSC Twitter"
+        }
+      ],
+      "decorations": {
+        "thumbnail": "https://avatars.githubusercontent.com/u/6404567?s=280&v=4",
+        "color": "#0b0b0b"
+      }
     },
     {
       "name": "sm ssc",
       "properName": "SM SSC",
-      "explanation": "Team SSC StepMania fork which later became the official StepMania 5.",
+      "explanation": "**Team SSC** StepMania fork which later became the official **StepMania** 5.",
       "references": [
         {
           "type": "term",
           "term": "team ssc"
         },
         {
-          "type": "url",
-          "url": "https://ssc.ajworld.net/",
-          "label": "Team SSC Website"
+          "type": "term",
+          "term": "stepmania"
         }
       ]
     },
@@ -172,7 +244,7 @@
     {
       "name": "courses",
       "properName": "Courses",
-      "explanation": "Courses are playlists of charts, they might contain normal chart or include targets, challenges and attack modifiers.",
+      "explanation": "Courses are playlists of **charts**, they might contain normal chart or include targets, challenges and **attack modifiers**.",
       "references": [
         {
           "type": "term",
@@ -221,7 +293,12 @@
           "url": "https://twitter.com/tiny_foxes",
           "label": "Tiny-Foxes Twitter"
         }
-      ]
+      ],
+      "decorations": {
+        "thumbnail": "https://avatars.githubusercontent.com/u/66173034?s=200&v=4",
+        "image": "https://projectoutfox.com/storage/app/media/uploaded-files/tinyfoxes-small.png",
+        "color": "#bad0ff"
+      }
     },
     {
       "name": "noteloader",
@@ -261,37 +338,140 @@
       "explanation": "Any Project OutFox translator who had their translation released with at least one version of the game will be considered a expert translator and be able to view a channel with upcoming strings."
     },
     {
+      "name": "openitg",
+      "properName": "OpenITG",
+      "explanation": "An open-source rhythm dancing game which is a fork of StepMania 3.95 with the goal of adding arcade-like ITG-style behavior and serving as a drop-in replacement for the ITG binary on arcade cabinents.",
+      "references": [
+        {
+          "type": "url",
+          "url": "https://github.com/openitg/openitg",
+          "label": "OpenITG GitHub"
+        }
+      ],
+      "decorations": {
+        "thumbnail": "https://pbs.twimg.com/media/BA2V690CcAAuTCi.png",
+        "image": "https://josevarela.xyz/SMArchive/Builds/Credits/OpenITGLogo.png",
+        "color": "#cd6d6c"
+      }
+    },
+    {
+      "name": "effect simfiles",
+      "properName": "Effect Simfiles",
+      "explanation": "Normal gameplay is as follows: Notes move up or down towards the target on a usually static background, and the player hits the notes when they reach the target. Simple.\n\nEffect simfiles change this up, which can result in interesting gameplay results.",
+      "references": [
+        {
+          "type": "url",
+          "url": "https://outfox.wiki/dev/effects/",
+          "label": "More about it"
+        }
+      ]
+    },
+    {
       "name": "notitg",
       "properName": "NotITG",
       "properAlias": {
         "not in the groove": "Not In The Groove"
       },
       "aliases": ["not in the groove"],
-      "explanation": "NotITG is a OpenITG fork made to design and play modfiles.",
+      "explanation": "NotITG is a rhythm game with wacky visuals, designed to make it easier for **modfile** creators to implement their ideas. It aims to preserve compatibility with all existing **StepMania** 3.95 and **In The Groove** mod files, and be the definitive environment for creating and enjoying that content.",
       "references": [
         {
           "type": "url",
           "url": "https://www.noti.tg/",
           "label": "NotITG Website"
+        },
+        {
+          "type": "url",
+          "url": "https://twitter.com/NotITG",
+          "label": "NotITG Twitter"
+        },
+        {
+          "type": "term",
+          "term": "openitg"
+        },
+        {
+          "type" : "term",
+          "term": "effect simfiles"
+        },
+        {
+          "type": "term",
+          "term": "stepmania"
         }
-      ]
+      ],
+      "decorations": {
+        "thumbnail": "https://cdn.discordapp.com/attachments/953800884549189662/971813056382402590/b1G2Hl2H_400x400.jpg",
+        "image": "https://pbs.twimg.com/profile_banners/1024444861934497793/1642216076/1500x500",
+        "color": "#395b84"
+      }
     },
     {
       "name": "etterna",
       "properName": "Etterna",
-      "explanation": "Etterna is a StepMania fork designed for keyboard play with online systems.",
+      "explanation": "Etterna is a cross-platform rhythm game similar to Dance Dance Revolution. It started as a fork of **StepMania** 5 (v5.0.12), with a focus on keyboard players. Over time, Etterna evolved into its own game, with in-game multiplayer, the online scoreboard Etterna Online, and a community of over 4,000 players.",
       "references": [
         {
           "type": "url",
           "url": "https://etternaonline.com/",
           "label": "Etterna Website"
+        },
+        {
+          "type": "url",
+          "url": "https://github.com/etternagame/etterna",
+          "label": "Etterna Github"
+        },
+        {
+          "type": "url",
+          "url": "https://mobile.twitter.com/etternagame",
+          "label": "Etterna Twitter"
+        },
+        {
+          "type": "term",
+          "term": "stepmania"
         }
-      ]
+      ],
+      "decorations": {
+        "thumbnail": "https://cdn.discordapp.com/attachments/953800884549189662/971816282842333265/etterna_logo_pal2.png",
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971816383396597871/splash_patreon1600400.jpg",
+        "color": "#412248"
+      }
+    },
+    {
+      "name": "stepmania",
+      "properName": "StepMania",
+      "explanation": "StepMania is a cross-platform rhythm video game and engine. It was originally developed as a clone of Konami's arcade game series Dance Dance Revolution, and has since evolved into an extensible rhythm game engine capable of supporting a variety of rhythm-based game types.",
+      "references": [
+        {
+          "type": "url",
+          "url": "https://www.stepmania.com/",
+          "label": "StepMania Website"
+        },
+        {
+          "type": "url",
+          "url": "https://github.com/stepmania/stepmania",
+          "label": "StepMania GitHub"
+        },
+        {
+          "type": "url",
+          "url": "https://twitter.com/stepmania",
+          "label": "StepMania Twitter"
+        }
+      ],
+      "decorations": {
+        "thumbnail": "https://static-cdn.jtvnw.net/ttv-boxart/6415_IGDB-272x380.jpg",
+        "image": "https://cdn.discordapp.com/attachments/953800884549189662/971846083888185434/pngwing.com.png",
+        "color": "#d73b23"
+      }
     },
     {
       "name": "sm52",
       "properName": "StepMania 5.2",
-      "explanation": "StepMania 5.2, also known as StepMania 5.1-3, a version that is no longer in development because of developer conflict with the community and legacy content."
+      "explanation": "StepMania 5.2, also known as StepMania 5.1-3, a version that is no longer in development because of developer conflict with the community and legacy content.",
+      "references": [
+        {
+          "type": "term",
+          "term": "stepmania"
+        }
+      ]
     }
   ]
 }

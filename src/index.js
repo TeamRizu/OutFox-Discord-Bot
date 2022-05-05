@@ -39,7 +39,8 @@ const start = async () => {
     'credits',
     'preference',
     'builds',
-    'mybuild'
+    'mybuild',
+    'term'
   ];
 
   creator.on('debug', (message) => logger.log(message));
