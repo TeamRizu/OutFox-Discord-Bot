@@ -1,3 +1,4 @@
+const stringSimilarity = require("string-similarity");
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { TermsFile } = require('../utils/terms.js')
@@ -12,11 +13,19 @@ module.exports = class TermCommand extends SlashCommand {
         type: CommandOptionType.STRING,
         name: 'name',
         description: 'Term name',
-        required: true
+        required: true,
+        autocomplete: true
       }]
     });
     this.commandVersion = '0.0.1'
     this.filePath = __filename;
+  }
+
+  async autocomplete(ctx) {
+    const text = ctx.options[ctx.focused]
+    const matches = stringSimilarity.findBestMatch(text, TermsClass.terms)
+
+    return [{name: matches.bestMatch.target || text, value: matches.bestMatch.target || text}]
   }
 
   async run(ctx, { interaction, commandArguments } = {}) {
