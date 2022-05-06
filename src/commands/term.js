@@ -51,7 +51,8 @@ module.exports = class TermCommand extends SlashCommand {
         const properAlias = termData.properAlias[currentAlias]
 
         if (termData.alisesExplanation && termData.alisesExplanation[currentAlias]) {
-          notes += `- ${properAlias}: ${termData.alisesExplanation[currentAlias]}`
+          notes += `- ${properAlias}: ${termData.alisesExplanation[currentAlias]}\n`
+          continue
         }
 
         notes += `- ${properAlias}\n`
