@@ -26,6 +26,7 @@ exports.ChartStepFile = class ChartStep {
   }
 
   parse(chartString) {
+    console.log(chartString)
     // todo: everything.
   }
 }
