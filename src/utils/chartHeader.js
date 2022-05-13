@@ -57,12 +57,6 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
       const line = lines[i]
 
       if (line === '') continue
-      /*
-      Tasks:
-
-      - Use currentState when dealing with multi-line tags (bgchanges, charts..etc)
-      - Use temporaryNotes when dealing with charts for the creation of chartStep class
-      */
 
       if (line.startsWith(';') && this.#currentState === 'chart') { // End of chart
         this.#currentState = ''
@@ -89,7 +83,7 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
 
         const lineTag = splitLine[0].substring(1).toLowerCase()
         const removeLastLine = this.isLastLineToRemove(lineTag, splitLine.slice(1).join())
-        const lineValue = splitLine.slice(1).join().substring(0, splitLine[1].length - (removeLastLine ? 1 : 0))
+        const lineValue = this.clearLine(splitLine.slice(1).join().substring(0, splitLine[1].length - (removeLastLine ? 1 : 0)))
 
         if (lineValue === '') {
           this.#currentState = ''
@@ -173,6 +167,18 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
         break
       }
     }
+  }
+
+  /**
+   * Clear the start and end of a line.
+   * @param {string} line
+   * @returns {string}
+   */
+   clearLine(line) {
+    if (line.startsWith(',')) line = line.substring(0, line.length)
+    if (line.endsWith(';')) line = line.substring(0, line.length - 1)
+
+    return line
   }
 
   removeCommentFromLine(line) {

@@ -50,14 +50,14 @@ exports.ChartStepFile = class ChartStep {
         const splitLine = line.split(':')
 
         if (splitLine.length !== 2) {
-          console.log(`skipped line ${line}`)
+          console.log(`STEP: skipped line ${line}`)
           this.#currentState = ''
           continue // bad file
         }
 
         const lineTag = splitLine[0].substring(1).toLowerCase()
         const removeLastLine = this.isLastLineToRemove(lineTag, splitLine.slice(1).join())
-        const lineValue = splitLine.slice(1).join().substring(0, splitLine[1].length - (removeLastLine ? 1 : 0))
+        const lineValue = this.clearLine(splitLine.slice(1).join().substring(0, splitLine[1].length - (removeLastLine ? 1 : 0)))
 
         if (lineValue === '' && lineTag !== 'notes') {
           this.#currentState = ''
@@ -73,7 +73,7 @@ exports.ChartStepFile = class ChartStep {
 
         if (lineTag === 'radarvalues') {
           this.#currentState = ''
-          this.stepData.radarvalues.concat(lineValue.split(','))
+          this.stepData.radarvalues = this.stepData.radarvalues.concat(lineValue.split(','))
           continue
         }
 
@@ -123,10 +123,61 @@ exports.ChartStepFile = class ChartStep {
             this.pushTimesignatures(lineValue)
           break
         }
+
+        continue
       }
 
-      // todo: Deal with multi lines, and this....thing: ,269.125000=0.000000
+      switch (this.#currentState) {
+        case 'measure':
+          this.pushMeasureLine(this.#currentState)
+          continue
+        case 'attacks':
+          this.pushAttack(this.#currentState)
+        break
+        case 'delays':
+          this.pushDelays(this.#currentState)
+        break
+        case 'labels':
+          this.pushLabels(this.#currentState)
+        break
+        case 'fakes':
+          this.pushFakes(this.#currentState)
+        break
+        case 'combos':
+          this.pushCombos(this.#currentState)
+        break
+        case 'bpms':
+          this.pushBPM(this.#currentState)
+        break
+        case 'warps':
+          this.pushWarps(this.#currentState)
+        break
+        case 'tickcounts':
+          this.pushTickcounts(this.#currentState)
+        break
+        case 'speeds':
+          this.pushSpeeds(this.#currentState)
+        break
+        case 'scrolls':
+          this.pushScrolls(this.#currentState)
+        break
+        case 'timesignatures':
+          this.pushTimesignatures(this.#currentState)
+        break
+      }
     }
+  }
+
+  /**
+   * Clear the start and end of a line.
+   * @param {string} line
+   * @returns {string}
+   */
+  clearLine(line) {
+    if (line.startsWith(',')) line = line.substring(0, line.length)
+    if (line.endsWith(';')) line = line.substring(0, line.length - 1)
+
+    return line
   }
 
   isLastLineToRemove(tag, value) {
@@ -138,8 +189,6 @@ exports.ChartStepFile = class ChartStep {
   }
 
   pushMeasureLine(line) {
-    if (!this.acceptedNotes.includes(line)) return false
-
     if (!this.stepData.notes[this.#currentMeasure]) this.stepData.notes[this.#currentMeasure] = []
 
     this.stepData.notes[this.#currentMeasure].push(line)
