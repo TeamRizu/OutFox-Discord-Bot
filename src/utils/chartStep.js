@@ -127,42 +127,44 @@ exports.ChartStepFile = class ChartStep {
         continue
       }
 
+      const safeLine = this.clearLine(line);
+
       switch (this.#currentState) {
         case 'measure':
-          this.pushMeasureLine(this.#currentState)
+          this.pushMeasureLine(safeLine)
           continue
         case 'attacks':
-          this.pushAttack(this.#currentState)
+          this.pushAttack(safeLine)
         break
         case 'delays':
-          this.pushDelays(this.#currentState)
+          this.pushDelays(safeLine)
         break
         case 'labels':
-          this.pushLabels(this.#currentState)
+          this.pushLabels(safeLine)
         break
         case 'fakes':
-          this.pushFakes(this.#currentState)
+          this.pushFakes(safeLine)
         break
         case 'combos':
-          this.pushCombos(this.#currentState)
+          this.pushCombos(safeLine)
         break
         case 'bpms':
-          this.pushBPM(this.#currentState)
+          this.pushBPM(safeLine)
         break
         case 'warps':
-          this.pushWarps(this.#currentState)
+          this.pushWarps(safeLine)
         break
         case 'tickcounts':
-          this.pushTickcounts(this.#currentState)
+          this.pushTickcounts(safeLine)
         break
         case 'speeds':
-          this.pushSpeeds(this.#currentState)
+          this.pushSpeeds(safeLine)
         break
         case 'scrolls':
-          this.pushScrolls(this.#currentState)
+          this.pushScrolls(safeLine)
         break
         case 'timesignatures':
-          this.pushTimesignatures(this.#currentState)
+          this.pushTimesignatures(safeLine)
         break
       }
     }
