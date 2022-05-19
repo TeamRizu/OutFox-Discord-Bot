@@ -509,6 +509,15 @@
       "decorations": {
         "image": "https://cdn.discordapp.com/attachments/953800884549189662/971889355507519558/Classic_1x6.png"
       }
+    },
+    {
+      "name": "downscroll",
+      "properName": "Downscroll",
+      "aliases": ["reverse"],
+      "properAlias": {
+        "reverse": "Reverse"
+      },
+      "explanation": "By default, in dance modes, the notes will scroll to the top, downscroll is meant to make notes scroll to the bottom.\n\n**HOW TO ENABLE:**\n\n1° - After pressing Start to select a song, press start again\n2° - Scroll down and select \"Modifiers\" in the row named \"Next Screen\" then press Start twice.\n3° - Find \"Reverse\" in the \"Scroll\" row and press Start to enable it\n4° - Scroll down to Exit, press Start, play the song.\n\n**NOTE:** If you don't have a profile this option won't be saved."
     }
   ]
 }
