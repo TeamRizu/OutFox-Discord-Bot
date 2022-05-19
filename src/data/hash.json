@@ -1,4 +1,34 @@
 {
+  "9e9a4933fc6": {
+    "date": "20220519",
+    "name": "Project OutFox Alpha 0.4.15.0 RC0 FOXBLOCK",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "af13b2798e9": {
+    "date": "20220515",
+    "name": "Project OutFox Alpha 0.4.14.2 RC4 FOXCLOCK",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
   "652d8534c5e": {
     "date": "20220505",
     "name": "Project Outfox Alpha 0.4.14.2 RC3 FOXCLOCK",
@@ -7,6 +37,10 @@
     "notes": [
       {
         "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
       }
     ]
   },
