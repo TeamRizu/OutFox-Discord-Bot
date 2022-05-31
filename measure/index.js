@@ -14,10 +14,12 @@ const main = async () => {
 
   // Draw background
   const background = await jimp.read("bg.png");
-
+  const canvasWidth = NoteSkin.styleconfig.canvasWidth || 342
+  const canvasHeight = NoteSkin.styleconfig.canvasHeight || 512
+  
   background.resize(
-    NoteSkin.styleconfig.canvasWidth || 342,
-    NoteSkin.styleconfig.canvasHeight || 512
+    canvasWidth,
+    canvasHeight
   );
 
   // Color Function
@@ -211,6 +213,27 @@ const main = async () => {
   // Measure Data Input
   const measureData = perStyleTestData[curMode + "-" + curStyle];
 
+  const willHeadEnd = (lane, line, measure) => {
+    if (lane > measureData[0][0].length) {
+      console.warn("willHeadEnd(): Out of bounds lane.")
+      return false
+    }
+
+    let desiredLane = ''
+
+    for (let measureI = measure; measureI < 2; measureI++) {
+      const curMeasure = measureData[measureI]
+
+      for (let lineI = line; lineI < curMeasure.length; lineI++) {
+        const curLine = curMeasure[lineI]
+
+        if (curLine[lane] === '3') return true
+      }
+    }
+
+    return false
+  }
+
   // Spacing between note timings
   const noteSpacing = {
     "4th": 64,
@@ -349,14 +372,30 @@ const main = async () => {
               );
               background.blit(holdTop, noteX, noteY);
 
-              // In case you're asking where is the note rendering, it is only rendered on the 3 noteType.
+              
 
-              lastNoteByLane[curLane] = [
-                "hold",
-                noteX,
-                noteY + 32,
-                timing + endChar,
-              ]; // Hold Hook
+              if (willHeadEnd(curLane, line + 1, measure)) {
+                // In case you're asking where is the note rendering, it is only rendered on the 3 noteType.
+
+                lastNoteByLane[curLane] = [
+                  "hold",
+                  noteX,
+                  noteY + 32,
+                  timing + endChar,
+                ]; // Hold Hook                
+              } else {
+                const body = await NoteSkin.collectAsset(
+                  `holdBody`,
+                  timing,
+                  endChar,
+                  noteType,
+                  curLane
+                );
+
+                body.resize(measureNote.width, curMode === 'bm' ? 0 : canvasHeight);
+                background.blit(body, bodyX, curMode === 'bm' ? bodyY - 96 : bodyY);
+              }
+              
             }
             break;
           case "4": // Roll
@@ -386,6 +425,8 @@ const main = async () => {
                 noteType,
                 curLane
               );
+
+              // TODO: check if roll will end
               lastNoteByLane[curLane] = [
                 "roll",
                 noteX,
