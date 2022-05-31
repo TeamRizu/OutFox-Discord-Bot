@@ -43,7 +43,8 @@ const config = {
     notetype,
     lane,
     styleconfig,
-    style
+    style,
+    mode
   ) => {
     return fallbackNoteskin.measurements(asset, timing, endChar, notetype, lane, styleconfig, style, mode)
   },
