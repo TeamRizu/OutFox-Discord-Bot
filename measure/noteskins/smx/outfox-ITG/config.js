@@ -4,7 +4,12 @@ const fallbackNoteskin = require("../outfox-note/config.js").config;
 
 const guessGraphicFolder = (lane, style) => {
   switch (style) {
-    // TODO: someone forget to add more styles
+    case 'double6': {
+      return ['tap', 'center', 'tap', 'tap', 'center', 'tap'][lane]
+    }
+    case 'double10': {
+      return [2,7].includes(lane) ? 'center' : 'tap'
+    }
     default:
       return lane === 2 ? 'center' : 'tap'
   }
