@@ -4,6 +4,12 @@ const fallbackNoteskin = require("../../common/common/config.js").config;
 
 const guessGraphicFolder = (lane, style) => {
   switch (style) {
+    case 'double7': {
+      return ["red", 'white', 'blue', 'white', 'blue', 'white', 'blue', 'white',    "white", "blue", "white", "blue", "white", "blue", "white", "red"][lane]
+    }
+    case 'single7': {
+      return ["red", 'white', 'blue', 'white', 'blue', 'white', 'blue', 'white'][lane]
+    }
     case 'double5': {
       return ["white", "blue", "white", "blue", "white", "red",  "white", "blue", "white", "blue", "white", "red"][lane]
     }

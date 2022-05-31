@@ -178,6 +178,16 @@
             "modeSpacing": [ 4, 41, 70, 107, 136, 173,    234, 271, 300, 337, 366, 403 ],
             "canvasWidth": 554,
             "measureWidth": 466
+        },
+        "single7": {
+            "modeSpacing": [ 4, 65, 102, 131, 168, 197, 234 ],
+            "canvasWidth": 354,
+            "measureWidth": 266
+        },
+        "double7": {
+            "modeSpacing": [ 4, 65, 102, 131, 168, 197, 234, 263,     364, 401, 430, 467, 496, 533, 562, 599],
+            "canvasWidth": 751,
+            "measureWidth": 663
         }
     }
 }

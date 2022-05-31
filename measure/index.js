@@ -4,7 +4,7 @@ const NoteSkinFile = require("./noteskin.js");
 const main = async () => {
   // Selected mode/style input
   const curMode = "bm";
-  const curStyle = "double5" || "single";
+  const curStyle = "double7" || "single";
 
   // Noteskin
   const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle);
@@ -173,6 +173,32 @@ const main = async () => {
         "100000000000", 
         "100000000000", 
         "100000000000"
+      ],
+    ],
+    "bm-single7": [
+      [
+        "11111111", 
+        "MMMMMM00", 
+        "22100200", 
+        "33100300"],
+      [
+        "00000000", 
+        "10000000", 
+        "10000000", 
+        "10000000"
+      ],
+    ],
+    "bm-double7": [
+      [
+        "1111111111111111", 
+        "MMMMMM0011111111", 
+        "2210020011111111", 
+        "3310030011111111"],
+      [
+        "0000000011111111", 
+        "1000000011111111", 
+        "1000000011111111", 
+        "1000000011111111"
       ],
     ],
   };
