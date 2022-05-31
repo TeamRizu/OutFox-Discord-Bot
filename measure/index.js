@@ -40,7 +40,7 @@ const main = async () => {
 
   const perStyleTestData = {
     'dance-single': [
-      ['2424', '03DLDL', '0M00', '00L1'],
+      ['DM424', '03DLDL', '0M00', '00L1'],
       ['0111', '0111', '0111', '0111']
     ],
     'dance-double': [
@@ -165,19 +165,22 @@ const main = async () => {
         const curLine = curMeasure[lineI];
         let curChar = curLine[lane];
 
-        if (curChar === '2' || curChar === '4') return false // Found another head.
+        if (curChar === '2' || curChar === '4') return false; // Found another head.
+
+        if (curChar === 'L' && curLine[lane - 1] === 'D') curChar = curLine[lane + 1];
 
         if (curChar === 'D') {
-
           if (curLine[lane + 1] === 'M') {
-            return false // Found another mine head.
+            return false; // Found another mine head.
           }
 
           curChar = 'DL';
           lineI++;
         }
 
-        if (curChar === '3' || curChar === 'DL') return true;
+        if (curChar === '3' || curChar === 'DL') {
+          return true;
+        }
       }
     }
 
@@ -324,6 +327,7 @@ const main = async () => {
               if (willHeadEnd(curLane, line + 1, measure)) {
                 lastNoteByLane[curLane] = ['roll', noteX, noteY + measureNote.height / 2, timing + endChar]; // Roll Hook
               } else {
+                console.log('will not end');
                 const body = await NoteSkin.collectAsset(`rollBody`, timing, endChar, noteType, curLane);
                 const note = await NoteSkin.collectAsset(`tapNote`, timing, endChar, noteType, curLane);
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
@@ -378,7 +382,7 @@ const main = async () => {
                 }
               }
 
-              delete lastNoteByLane[curLane] // Lucky we don't check lastNoteByLane.length anywhere :)
+              delete lastNoteByLane[curLane]; // Lucky we don't check lastNoteByLane.length anywhere :)
             }
             break;
           case 'M': // Mine
@@ -405,14 +409,17 @@ const main = async () => {
                 if (willHeadEnd(curLane, line + 1, measure)) {
                   lastNoteByLane[curLane] = ['mine', noteX, noteY + measureMineTop.height]; // Minefield Hook
                 } else {
+                  const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
                   const body = await NoteSkin.collectAsset(`mineBody`, timing, endChar, noteType, curLane);
 
                   body.resize(measureNote.width, curMode === 'bm' ? noteY : canvasHeight);
                   background.blit(body, noteX, curMode === 'bm' ? 0 : noteY + 32);
                 }
-
               } else {
                 // Now it can only be lift roll/hold
+
+                if (!lastNoteByLane[curLane]) continue;
+
                 const [type, bodyX, bodyY, timingLane] = lastNoteByLane[curLane];
 
                 const body = await NoteSkin.collectAsset(
@@ -468,7 +475,7 @@ const main = async () => {
                   noteY + measureLift.height / 2 - (curMode === 'smx' ? 8 : 32)
                 );
 
-                delete lastNoteByLane[curLane]
+                delete lastNoteByLane[curLane];
               }
 
               char++; // Jump the "L" or "M" after D.
