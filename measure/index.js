@@ -4,7 +4,7 @@ const NoteSkinFile = require('./noteskin.js');
 const main = async () => {
   // Selected mode/style input
   const curMode = 'dance';
-  const curStyle = 'single' || 'single';
+  const curStyle = 'double' || 'single'; // TODO: Not every mode has 'single', create a object listing every mode default style.
 
   // Noteskin
   const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle);
@@ -28,6 +28,8 @@ const main = async () => {
 
   // Draw measure lines
   const cutLines = curMode === 'bm' ? [3, 7] : [0, 4];
+
+  // TODO: Users should be able to switch measure lines on and off.
   for (let i = 0; i < 8; i++) {
     if (cutLines.includes(i)) {
       background.scan(44, 30 + 64 * i, measureWidth, 3, makeIteratorThatFillsWithColor(0xffffffff));
@@ -40,11 +42,13 @@ const main = async () => {
 
   const perStyleTestData = {
     'dance-single': [
-      ['DM424', '03DLDL', '0M00', '00L1'],
+      ['2424', '33DLDL', '0M00', '00L1'],
       ['0111', '0111', '0111', '0111']
     ],
     'dance-double': [
-      ['124L24MDM', '0330DLDL03', '00000000', '00000000'],
+      [
+        '124L24MDM',
+        '0330DLDL03', '00000000', '00000000'],
       ['00000000', '00000000', '00000000', '00000000']
     ],
     'dance-couple': [
@@ -132,10 +136,10 @@ const main = async () => {
       ['00000000', '10000000', '10000000', '10000000']
     ],
     'bm-double7': [
-      ['1111111111111111', 'MMMMMM0011111111', '2210020011111111', '0310030011111111'],
+      ['1111111111111111', 'MMMMMM0011111111', '2210020011111111', '3310030011111111'],
       ['0000000011111111', '1000000011111111', '1000000011111111', '1000000011111111']
     ]
-  };
+  }; // TODO: Moves this somewhere else.
 
   if (!perStyleTestData[curMode + '-' + curStyle]) {
     console.warn('No steps for that style!');
@@ -145,6 +149,21 @@ const main = async () => {
   // Measure Data Input
   const measureData = perStyleTestData[curMode + '-' + curStyle];
 
+  const apropriateCharByLane = (measureLine, lane) => {
+    let laneArr = []
+    for (let i = 0; i < measureLine.length; i++) {
+      const curChar = measureLine[i]
+
+      if (curChar === 'D' && measureLine.length > (i + 1)) {
+        laneArr.push(curChar + measureLine[i + 1])
+        i++
+        continue
+      }
+
+      laneArr.push(curChar)
+    }
+    return laneArr[lane]
+  };
   /**
    * This function is used to check if a a note had will end, be it hold, roll, liftHold, liftRoll or minefield
    * @param {number} lane - The measure lane we want to start searching.
@@ -158,25 +177,15 @@ const main = async () => {
       return false;
     }
 
+    let laneN = lane;
     for (let measureI = measure; measureI < 2; measureI++) {
       const curMeasure = measureData[measureI];
 
       for (let lineI = line; lineI < curMeasure.length; lineI++) {
         const curLine = curMeasure[lineI];
-        let curChar = curLine[lane];
+        let curChar = apropriateCharByLane(curLine, laneN);
 
-        if (curChar === '2' || curChar === '4') return false; // Found another head.
-
-        if (curChar === 'L' && curLine[lane - 1] === 'D') curChar = curLine[lane + 1];
-
-        if (curChar === 'D') {
-          if (curLine[lane + 1] === 'M') {
-            return false; // Found another mine head.
-          }
-
-          curChar = 'DL';
-          lineI++;
-        }
+        if (['DM', '2', '4'].includes(curChar)) return false; // Found another head.
 
         if (curChar === '3' || curChar === 'DL') {
           return true;
@@ -220,7 +229,9 @@ const main = async () => {
   };
 
   const calculateNoteY = (mode, style, measure, timing, endChar, depth, line, curMeasure) => {
-    switch (mode) {
+    switch (
+      mode // TODO: initial Y should be based around if "reverse scroll" is enabled or not, and should support all modes.
+    ) {
       case 'bm': {
         return (
           [476, 220][measure] -
@@ -327,7 +338,6 @@ const main = async () => {
               if (willHeadEnd(curLane, line + 1, measure)) {
                 lastNoteByLane[curLane] = ['roll', noteX, noteY + measureNote.height / 2, timing + endChar]; // Roll Hook
               } else {
-                console.log('will not end');
                 const body = await NoteSkin.collectAsset(`rollBody`, timing, endChar, noteType, curLane);
                 const note = await NoteSkin.collectAsset(`tapNote`, timing, endChar, noteType, curLane);
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
@@ -395,7 +405,7 @@ const main = async () => {
           case 'D': // MineField End/Lift Hold End/ Lift Roll End
             {
               if (!(curLine[char + 1] === 'L' || curLine[char + 1] === 'M')) continue;
-
+              console.log(char, measure, line);
               // This is either a lift hold/roll, or a minefield
 
               // Supposedly this could also be a hold? But all the holds I've seen end with 3.
@@ -406,7 +416,7 @@ const main = async () => {
 
                 const measureMineTop = await NoteSkin.collectMeasure('mineTop', timing, endChar, noteType, curLane);
 
-                if (willHeadEnd(curLane, line + 1, measure)) {
+                if (willHeadEnd(char, line + 1, measure)) {
                   lastNoteByLane[curLane] = ['mine', noteX, noteY + measureMineTop.height]; // Minefield Hook
                 } else {
                   const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
