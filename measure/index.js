@@ -57,6 +57,12 @@ const main = async () => {
   // Measure Data Input
   const measureData = perStyleTestData[curMode + '-' + curStyle];
 
+  /**
+   * Returns a array of all lane notetypes, each index is a string of the notetype, DL(M) are merged into a single index.
+   * @param {number} measureLine
+   * @param {number} lane
+   * @returns {Array<string>}
+   */
   const apropriateCharByLane = (measureLine, lane) => {
     let laneArr = []
     for (let i = 0; i < measureLine.length; i++) {
@@ -72,6 +78,7 @@ const main = async () => {
     }
     return laneArr[lane]
   };
+
   /**
    * This function is used to check if a a note had will end, be it hold, roll, liftHold, liftRoll or minefield
    * @param {number} lane - The measure lane we want to start searching.
@@ -136,6 +143,18 @@ const main = async () => {
     ]
   };
 
+  /**
+   *
+   * @param {string} mode
+   * @param {string} style
+   * @param {0 | 1} measure
+   * @param {4 | 8 | 12 | 16 | 24 | 32 | 48 | 64 | 192} timing
+   * @param {'th' | 'nd'} endChar
+   * @param {number} depth
+   * @param {number} line
+   * @param {Array<string>} curMeasure
+   * @returns
+   */
   const calculateNoteY = (mode, style, measure, timing, endChar, depth, line, curMeasure) => {
     if (reverse) {
       return (
@@ -276,7 +295,6 @@ const main = async () => {
 
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
 
-              console.log(bodyY, 32, noteY)
               body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
               background.blit(body, bodyX, reverse ? bodyY - (curMode === 'bm' ? 96 : 64) : bodyY - (curMode === 'bm' ? 32 : 0));
 
@@ -368,8 +386,7 @@ const main = async () => {
                 );
 
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
-                console.log('a', noteY, 32, bodyY)
-                // noteY + 32 - bodyY
+
                 body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
                 background.blit(body, bodyX, bodyY - (curMode === 'bm' ? 96 : 64));
 
