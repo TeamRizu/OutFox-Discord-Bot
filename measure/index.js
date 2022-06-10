@@ -6,9 +6,9 @@ const defaultstyle = require('./defaultstyle.js')
 const main = async () => {
 
   // Selected mode/style input
-  const curMode = 'bm';
+  const curMode = 'pnm';
   const curStyle = '' || defaultstyle.defaultstyle[curMode];
-  const reverse = false
+  const reverse = true
   const showMeasureLines = true
 
   // Noteskin
@@ -156,9 +156,27 @@ const main = async () => {
    * @returns
    */
   const calculateNoteY = (mode, style, measure, timing, endChar, depth, line, curMeasure) => {
+
+    const baseY = () => {
+      if (reverse) {
+
+        if (curMode === 'pnm') return [472, 216][measure]
+
+        if (curMode === 'bm') return [476, 220][measure]
+
+        return [448, 192][measure]
+      }
+
+      if (curMode === 'pnm') return [24, 280][measure]
+
+      if (curMode === 'bm') return [28, 284][measure]
+
+      return [0, 256][measure]
+    }
+
     if (reverse) {
       return (
-        (curMode === 'bm' ? [476, 220] : [448, 192])[measure] -
+        baseY() -
         (timing === 4
           ? noteSpacing[timing + endChar] * (line / timings[curMeasure.length].length)
           : noteSpacing[timing + endChar] * depth)
@@ -166,7 +184,7 @@ const main = async () => {
     }
 
     return (
-      (curMode === 'bm' ? [28, 284] : [0, 256])[measure] +
+      baseY() +
       (timing === 4
         ? noteSpacing[timing + endChar] * (line / timings[curMeasure.length].length)
         : noteSpacing[timing + endChar] * depth)
@@ -268,7 +286,11 @@ const main = async () => {
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
 
               if (willHeadEnd(curLane, line + 1, measure)) {
-                lastNoteByLane[curLane] = ['roll', noteX, noteY + measureNote.height / 2, timing + endChar]; // Roll Hook
+                if (curMode === 'pnm') {
+                  lastNoteByLane[curLane] = ['roll', noteX, noteY + measureNote.height / 2 + 24, timing + endChar]; // Roll Hook
+                } else {
+                  lastNoteByLane[curLane] = ['roll', noteX, noteY + measureNote.height / 2, timing + endChar]; // Roll Hook
+                }
               } else {
                 const body = await NoteSkin.collectAsset(`rollBody`, timing, endChar, noteType, curLane);
                 const note = await NoteSkin.collectAsset(`tapNote`, timing, endChar, noteType, curLane);
@@ -296,7 +318,12 @@ const main = async () => {
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
 
               body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
-              background.blit(body, bodyX, reverse ? bodyY - (curMode === 'bm' ? 96 : 64) : bodyY - (curMode === 'bm' ? 32 : 0));
+
+              if (curMode === 'pnm') {
+                background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 24);
+              } else {
+                background.blit(body, bodyX, reverse ? bodyY - (curMode === 'bm' ? 96 : 64) : bodyY - (curMode === 'bm' ? 32 : 0));
+              }
 
               const measureBottom = await NoteSkin.collectMeasure(
                 `${bodyName}Bottom`,
@@ -327,9 +354,14 @@ const main = async () => {
                   noteType,
                   curLane
                 );
-                background.blit(note, bodyX, bodyY - measureNote.height / 2 - (curMode === 'bm' ? 26 : 0));
 
-                if (curMode === 'bm') {
+                if (curMode === 'pnm') {
+                  background.blit(note, bodyX, bodyY - measureNote.height / 2 - 24);
+                } else {
+                  background.blit(note, bodyX, bodyY - measureNote.height / 2 - (curMode === 'bm' ? 26 : 0));
+                }
+
+                if (curMode === 'bm' || curMode === 'pnm') {
                   background.blit(note, noteX, noteY);
                 }
               }

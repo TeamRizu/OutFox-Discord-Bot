@@ -189,5 +189,12 @@
             "canvasWidth": 751,
             "measureWidth": 663
         }
+    },
+    "pnm": {
+      "three": {
+        "modeSpacing": [ 4, 36, 68 ],
+        "measureWidth": 100,
+        "canvasWidth": 188
+      }
     }
 }

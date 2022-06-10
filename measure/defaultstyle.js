@@ -3,5 +3,6 @@ exports.defaultstyle = {
   "pump": "single",
   "smx": "single",
   "techno": "single4",
-  "bm": "single5"
+  "bm": "single5",
+  "pnm": "three"
 }
