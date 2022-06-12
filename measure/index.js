@@ -7,7 +7,7 @@ const main = async () => {
 
   // Selected mode/style input
   const curMode = 'pnm';
-  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+  const curStyle = 'nine-double' || defaultstyle.defaultstyle[curMode];
   const reverse = true
   const showMeasureLines = true
 

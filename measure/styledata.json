@@ -195,6 +195,34 @@
         "modeSpacing": [ 4, 36, 68 ],
         "measureWidth": 100,
         "canvasWidth": 188
+      },
+      "four": {
+        "modeSpacing": [ 4, 36, 68, 100 ],
+        "measureWidth": 132,
+        "canvasWidth": 220
+      },
+      "five": {
+        "modeSpacing": [ 4, 36, 68, 100, 132 ],
+        "measureWidth": 164,
+        "canvasWidth": 252
+      },
+      "seven": {
+        "modeSpacing": [ 4, 36, 68, 100, 132, 164, 196 ],
+        "measureWidth": 224,
+        "canvasWidth": 316
+      },
+      "nine": {
+        "modeSpacing": [ 4, 36, 68, 100, 132, 164, 196, 228, 260 ],
+        "measureWidth": 288,
+        "canvasWidth": 380
+      },
+      "nine-double": {
+        "modeSpacing": [ 
+            4,   36,  68,  100, 132, 164, 196, 228, 260,
+            292, 324, 356, 388, 420, 452, 484, 516, 548
+        ],
+        "measureWidth": 580,
+        "canvasWidth": 668
       }
     }
 }
