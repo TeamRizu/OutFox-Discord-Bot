@@ -518,6 +518,30 @@
         "reverse": "Reverse"
       },
       "explanation": "By default, in dance modes, the notes will scroll to the top, downscroll is meant to make notes scroll to the bottom.\n\n**HOW TO ENABLE:**\n\n1° - After pressing Start to select a song, press start again\n2° - Scroll down and select \"Modifiers\" in the row named \"Next Screen\" then press Start twice.\n3° - Find \"Reverse\" in the \"Scroll\" row and press Start to enable it\n4° - Scroll down to Exit, press Start, play the song.\n\n**NOTE:** If you don't have a profile this option won't be saved."
+    },
+    {
+      "name": "itgmania",
+      "properName": "ITGmania",
+      "explanation": "ITGmania is a fork of StepMania 5.1. It is an effort to make community-focused changes that can't otherwise be done solely through the theme.",
+      "references": [
+        {
+          "type": "term",
+          "term": "stepmania"
+        },
+        {
+          "type": "url",
+          "url": "https://www.itgmania.com/",
+          "label": "ITGmania Website"
+        },
+        {
+          "type": "term",
+          "term": "theme"
+        }
+      ],
+      "decorations": {
+        "thumbnail": "https://www.itgmania.com/images/feature/arrow.png",
+        "color": "#d69227"
+      }
     }
   ]
 }
