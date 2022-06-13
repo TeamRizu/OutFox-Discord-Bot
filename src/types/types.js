@@ -132,7 +132,8 @@ const DiscordJS = require('discord.js')
  *    'starlight': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/starlight/screen3.png',
  *    'ultralight': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/ultralight/screen2.png',
  *    'UPSRT': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/UPSRT/screen4.png',
- *    'XIX.SUPER': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/XIX.SUPER/screen2.png'
+ *    'XIX.SUPER': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/XIX.SUPER/screen2.png',
+ *    'SIGMA': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/SIGMA/screen2.png'
  *   }
  * }} ArchiveThemesMusicWheelImage
  */
@@ -186,22 +187,22 @@ const DiscordJS = require('discord.js')
 
 /**
  * Array of Archive build list IDs
- * @typedef {['DDRPC', 'SM095', 'SM164', 'SM30', 'SM39', 'SM395', 'OITG', 'NOTITG', 'SM4', 'SMSSC', 'SMSSCCUSTOM', 'SM5', 'ETT', 'OUTFOX']} ArchiveListIDs
+ * @typedef {['DDRPC', 'SM095', 'SM164', 'SM30', 'SM39', 'SM395', 'OITG', 'NOTITG', 'SM4', 'SMSSC', 'SMSSCCUSTOM', 'SM5', 'ETT', 'OUTFOX'] | 'ITGM'} ArchiveListIDs
  */
 
 /**
  * Accepted Archive build list IDs
- * @typedef {'DDRPC' | 'SM095' | 'SM164' | 'SM30' | 'SM39' | 'SM395' | 'OITG' | 'NOTITG' | 'SM4' | 'SMSSC' | 'SMSSCCUSTOM' | 'SM5' | 'ETT' | 'OUTFOX'} BuildListID
+ * @typedef {'DDRPC' | 'SM095' | 'SM164' | 'SM30' | 'SM39' | 'SM395' | 'OITG' | 'NOTITG' | 'SM4' | 'SMSSC' | 'SMSSCCUSTOM' | 'SM5' | 'ETT' | 'OUTFOX' | 'ITGM'} BuildListID
  */
 
 /**
  * Array of Archive build list names
- * @typedef {['DDR PC Edition ', 'StepMania 0.9x', 'StepMania 1.64', 'StepMania 3.0', 'StepMania 3.9', 'StepMania 3.95 (Main and Based builds)', 'OpenITG based builds', 'NotITG based builds', 'StepMania 4.0 Normal/CVS Builds', 'SM-SSC - StepMania 5.0 Alpha/Beta Builds', 'SM-SSC - StepMania 5.0 Custom Builds', 'StepMania 5', 'Etterna', 'Project OutFox']} ArchiveListNames
+ * @typedef {['DDR PC Edition ', 'StepMania 0.9x', 'StepMania 1.64', 'StepMania 3.0', 'StepMania 3.9', 'StepMania 3.95 (Main and Based builds)', 'OpenITG based builds', 'NotITG based builds', 'StepMania 4.0 Normal/CVS Builds', 'SM-SSC - StepMania 5.0 Alpha/Beta Builds', 'SM-SSC - StepMania 5.0 Custom Builds', 'StepMania 5', 'Etterna', 'Project OutFox', 'ITGmania']} ArchiveListNames
  */
 
 /**
  * Accepted Archive build list names
- * @typedef {'DDR PC Edition ' | 'StepMania 0.9x' | 'StepMania 1.64' | 'StepMania 3.0' | 'StepMania 3.9' | 'StepMania 3.95 (Main and Based builds)' | 'OpenITG based builds' | 'NotITG based builds' | 'StepMania 4.0 Normal/CVS Builds' | 'SM-SSC - StepMania 5.0 Alpha/Beta Builds' | 'SM-SSC - StepMania 5.0 Custom Builds' | 'StepMania 5' | 'Etterna' | 'Project OutFox'} ArchiveListName
+ * @typedef {'DDR PC Edition ' | 'StepMania 0.9x' | 'StepMania 1.64' | 'StepMania 3.0' | 'StepMania 3.9' | 'StepMania 3.95 (Main and Based builds)' | 'OpenITG based builds' | 'NotITG based builds' | 'StepMania 4.0 Normal/CVS Builds' | 'SM-SSC - StepMania 5.0 Alpha/Beta Builds' | 'SM-SSC - StepMania 5.0 Custom Builds' | 'StepMania 5' | 'Etterna' | 'Project OutFox' | 'ITGmania'} ArchiveListName
  */
 
 /**
@@ -247,7 +248,8 @@ const DiscordJS = require('discord.js')
  *  'SMSSCCUSTOM': 'SM-SSC - StepMania 5.0 Custom Builds',
  *  'SM5': 'StepMania 5',
  *  'ETT': 'Etterna',
- *  'OUTFOX': 'Project OutFox'
+ *  'OUTFOX': 'Project OutFox',
+ *  'ITGM': "ITGmania"
  * }} ArchiveListIDToNames
  */
 
@@ -266,7 +268,8 @@ const DiscordJS = require('discord.js')
  *  'SMSSCCUSTOM': 'SM-SSC',
  *  'SM5': 'StepMania 5',
  *  'ETT': 'Etterna',
- *  'OUTFOX': 'Project OutFox'
+ *  'OUTFOX': 'Project OutFox',
+ *  'ITGM': 'ITGmania'
  * }} ArchiveListIdToEngineName
  */
 
@@ -328,6 +331,10 @@ const DiscordJS = require('discord.js')
  *    name: 'OUTFOX',
  *    id: '959944386609840148'
  *  },
+ *  ITGM: {
+ *    name: 'ITGM',
+ *    id: '985867451843629147'
+ *  }
  *  SMAMX: {
  *    name: 'SMAMX',
  *    id: '965746186470453248'
@@ -431,6 +438,7 @@ const DiscordJS = require('discord.js')
  *  SM5: '#d73b23',
  *  ETT: '#412248',
  *  OUTFOX: '#bad0ff',
+ *  ITGM: '#d69227',
  *  SMAMX: '#28737d',
  *  DDRE: '#024c2d',
  *  MUN1: '#2caff2',
@@ -456,7 +464,7 @@ const DiscordJS = require('discord.js')
  */
 
 /**
- * @typedef {['DDRPC', 'SM095', 'SM164', 'SM30', 'SM39', 'SM395', 'OITG', 'NOTITG', 'SM4', 'SMSSC', 'SMSSCCUSTOM', 'SM5', 'ETT', 'OUTFOX', 'SMAMX', 'DDRE', 'MUN1', 'MUN3', 'BEATUP', 'NEONFM', 'NITG', 'DNOT', 'NITG3', 'NITG4', 'NITG4OR1', 'SPLAT', 'SM4B10', 'SM5TE', 'PARASTAR', 'PULSEN', 'KEY6IX', 'ZETMANIA', 'SUSHI', 'SM5NEW', 'STEPF2']} BuildEngineIDs
+ * @typedef {['DDRPC', 'SM095', 'SM164', 'SM30', 'SM39', 'SM395', 'OITG', 'NOTITG', 'SM4', 'SMSSC', 'SMSSCCUSTOM', 'SM5', 'ETT', 'OUTFOX', 'ITGM', 'SMAMX', 'DDRE', 'MUN1', 'MUN3', 'BEATUP', 'NEONFM', 'NITG', 'DNOT', 'NITG3', 'NITG4', 'NITG4OR1', 'SPLAT', 'SM4B10', 'SM5TE', 'PARASTAR', 'PULSEN', 'KEY6IX', 'ZETMANIA', 'SUSHI', 'SM5NEW', 'STEPF2']} BuildEngineIDs
  */
 
 /**

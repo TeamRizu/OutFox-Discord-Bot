@@ -147,7 +147,8 @@ exports.archiveThemesMusicWheelImage = {
     'starlight': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/starlight/screen3.png',
     'ultralight': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/ultralight/screen2.png',
     'UPSRT': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/UPSRT/screen4.png',
-    'XIX.SUPER': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/XIX.SUPER/screen2.png'
+    'XIX.SUPER': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/XIX.SUPER/screen2.png',
+    'SIGMA': 'https://objects-us-east-1.dream.io/smthemes/StepMania%205/Screenshots/SIGMA/screen2.png'
   }
 }
 
@@ -231,7 +232,8 @@ exports.archiveListIDs = [
   'SMSSCCUSTOM',
   'SM5',
   'ETT',
-  'OUTFOX'
+  'OUTFOX',
+  'ITGM'
 ]
 
 /**
@@ -251,7 +253,8 @@ exports.archiveListNames = [
   'SM-SSC - StepMania 5.0 Custom Builds',
   'StepMania 5',
   'Etterna',
-  'Project OutFox'
+  'Project OutFox',
+  'ITGmania'
 ]
 
 /**
@@ -271,7 +274,8 @@ exports.archiveListIDToNames = {
   'SMSSCCUSTOM': 'SM-SSC - StepMania 5.0 Custom Builds',
   'SM5': 'StepMania 5',
   'ETT': 'Etterna',
-  'OUTFOX': 'Project OutFox'
+  'OUTFOX': 'Project OutFox',
+  'ITGM': 'ITGmania'
 }
 
 /**
@@ -291,7 +295,8 @@ exports.archiveListIDToEngineName = {
   'SMSSCCUSTOM': 'SM-SSC',
   'SM5': 'StepMania 5',
   'ETT': 'Etterna',
-  'OUTFOX': 'Project OutFox'
+  'OUTFOX': 'Project OutFox',
+  "ITGM": "ITGmania"
 }
 
 /**
@@ -353,6 +358,10 @@ exports.archiveBuildEngineIconData = {
   OUTFOX: {
     name: 'OUTFOX',
     id: '959944386609840148'
+  },
+  ITGM: {
+    name: "ITGM",
+    id: '985867451843629147'
   },
 
   // Bellow are icons for Listed Builds, not Build List.
@@ -460,6 +469,7 @@ exports.archiveBuildEngineColor = {
   SM5: '#d73b23',
   ETT: '#412248',
   OUTFOX: '#bad0ff',
+  ITGM: '#d69227',
 
   // Bellow are icons for Listed Builds, not Build List.
   SMAMX: '#28737d',
@@ -515,6 +525,7 @@ exports.buildNameToEmoteKey = (engine, name) => {
     case 'SM164':
     case 'NOTITG':
     case 'OUTFOX':
+    case 'ITGM':
       return engine
     case 'SM30': {
       const unique = ['PLUGIN - EZ2 Support', 'PLUGIN - Para Support', 'PLUGIN - Pump Support']

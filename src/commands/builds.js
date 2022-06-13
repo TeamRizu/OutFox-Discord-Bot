@@ -122,6 +122,7 @@ module.exports = class BuildsCommand extends SlashCommand {
         ${buildEmote('SM5') + ' - ' + archivebuildCountString('SM5')}
         ${buildEmote('ETT') + ' - ' + archivebuildCountString('ETT')}
         ${buildEmote('OUTFOX') + ' - ' + archivebuildCountString('OUTFOX')}
+        ${buildEmote('ITGM') + ' - ' + archivebuildCountString('ITGM')}
         `
       )
       .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
