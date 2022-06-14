@@ -1,4 +1,75 @@
 {
+  "c561d2deb0": {
+    "date": "20220611",
+    "name": "Project OutFox Alpha 0.4.15.0 RC10",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "42142633e1f": {
+    "date": "20220609",
+    "name": "Project OutFox Alpha 0.4.15.0 RC8",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "1d2a9c0e266": {
+    "date": "20220603",
+    "name": "Project OutFox Alpha 0.4.15.0 RC7",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "b073882fa4a": {
+    "date": "20220528",
+    "name": "Project OutFox Alpha 0.4.15.0 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "039ab9d3b21": {
+    "date": "20220523",
+    "name": "Project OutFox Alpha 0.4.15.0 RC3",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
   "9e9a4933fc6": {
     "date": "20220519",
     "name": "Project OutFox Alpha 0.4.15.0 RC0 FOXBLOCK",
