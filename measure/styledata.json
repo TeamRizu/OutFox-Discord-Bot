@@ -224,5 +224,13 @@
         "measureWidth": 580,
         "canvasWidth": 668
       }
+    },
+    "ez2": {
+      "single": {
+        "modeSpacing":  [ 0, 46, 94, 142, 187 ],
+        "noteRotation": [ 0, 0,  0,   0,   270 ],
+        "measureWidth": 250,
+        "canvasWidth": 338
+      }
     }
 }

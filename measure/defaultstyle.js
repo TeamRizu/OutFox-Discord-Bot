@@ -4,5 +4,6 @@ exports.defaultstyle = {
   "smx": "single",
   "techno": "single4",
   "bm": "single5",
-  "pnm": "three"
+  "pnm": "three",
+  "ez2": "single"
 }
