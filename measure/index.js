@@ -6,9 +6,9 @@ const defaultstyle = require('./defaultstyle.js')
 const main = async () => {
 
   // Selected mode/style input
-  const curMode = 'pnm';
-  const curStyle = 'nine-double' || defaultstyle.defaultstyle[curMode];
-  const reverse = true
+  const curMode = 'ez2';
+  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+  const reverse = false
   const showMeasureLines = true
 
   // Noteskin
@@ -268,7 +268,7 @@ const main = async () => {
             {
               const rollTop = await NoteSkin.collectAsset('rollTop', timing, endChar, noteType, curLane);
 
-              if (rollTop) {
+              if (reverse) {
                 rollTop.flip(false, true)
               }
 
@@ -319,10 +319,15 @@ const main = async () => {
 
               body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
 
-              if (curMode === 'pnm') {
-                background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 24);
-              } else {
-                background.blit(body, bodyX, reverse ? bodyY - (curMode === 'bm' ? 96 : 64) : bodyY - (curMode === 'bm' ? 32 : 0));
+              switch (curMode) {
+                case 'pnm':
+                  background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 24);
+                break
+                case 'bm':
+                  background.blit(body, bodyX, reverse ? bodyY - 96 : bodyY - 32);
+                break
+                default:
+                  background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY - 0);
               }
 
               const measureBottom = await NoteSkin.collectMeasure(
@@ -337,7 +342,6 @@ const main = async () => {
 
               if (reverse) {
                 bottom.flip(false, true)
-                // bottom.rotate(90)
               }
 
               if (curMode === 'pump' && bodyName === 'mine' && reverse) {
@@ -389,6 +393,7 @@ const main = async () => {
                 if (reverse) {
                   mineTop.flip(false, true)
                 }
+
                 background.blit(mineTop, noteX, reverse ? noteY + 32: noteY);
 
                 const measureMineTop = await NoteSkin.collectMeasure('mineTop', timing, endChar, noteType, curLane);
@@ -420,7 +425,7 @@ const main = async () => {
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
 
                 body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
-                background.blit(body, bodyX, bodyY - (curMode === 'bm' ? 96 : 64));
+                background.blit(body, bodyX, bodyY - (curMode === 'bm' ? 96 : 0));
 
                 const measureMineBottom = await NoteSkin.collectMeasure(
                   'mineBottom',
