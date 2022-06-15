@@ -1,4 +1,11 @@
 {
+  "524ffd68d0": {
+    "date": "20220614",
+    "name": "Project OutFox Alpha 0.4.15.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": null
+  },
   "c561d2deb0": {
     "date": "20220611",
     "name": "Project OutFox Alpha 0.4.15.0 RC10",
@@ -6,7 +13,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       }
     ]
   },
@@ -17,7 +25,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       },
       {
         "type": "notice",
@@ -32,7 +41,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       },
       {
         "type": "notice",
@@ -47,7 +57,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       },
       {
         "type": "notice",
@@ -62,7 +73,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       },
       {
         "type": "notice",
@@ -77,7 +89,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       },
       {
         "type": "notice",
