@@ -231,6 +231,18 @@
         "noteRotation": [ 0, 0,  0,   0,   270 ],
         "measureWidth": 250,
         "canvasWidth": 338
+      },
+      "real": {
+        "modeSpacing":  [ 0, 46, 94, 142, 187, 232, 277 ],
+        "noteRotation": [ 0, 0,  0,  0,   0,   0,   270 ],
+        "measureWidth": 340,
+        "canvasWidth": 428
+      },
+      "double": {
+        "modeSpacing":  [ 0, 46, 94, 142, 187,        232, 277, 322,  367, 412 ],
+        "noteRotation": [ 0, 0,  0,   0,  270,        0,   0,   0,    0,   270 ],
+        "measureWidth": 475,
+        "canvasWidth": 563
       }
     }
 }
