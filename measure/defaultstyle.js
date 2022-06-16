@@ -5,5 +5,6 @@ exports.defaultstyle = {
   "techno": "single4",
   "bm": "single5",
   "pnm": "three",
-  "ez2": "single"
+  "ez2": "single",
+  "gdgf": "five"
 }
