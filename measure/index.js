@@ -162,18 +162,14 @@ const main = async () => {
 
         if (curMode === 'pnm') return [472, 216][measure]
 
-        if (curMode === 'bm') return [476, 220][measure]
-
-        if (curMode === 'gdgf') return [476, 220][measure]
+        if (['bm', 'gdgf'].includes(curMode)) return [476, 220][measure]
 
         return [448, 192][measure]
       }
 
-      if (curMode === 'gdgf') return [28, 284][measure]
-
       if (curMode === 'pnm') return [24, 280][measure]
 
-      if (curMode === 'bm') return [28, 284][measure]
+      if (['bm', 'gdgf'].includes(curMode)) return [28, 284][measure]
 
       return [0, 256][measure]
     }
@@ -278,15 +274,6 @@ const main = async () => {
 
               background.blit(rollTop, noteX, reverse ? noteY + 32 : noteY);
 
-              // const note = await NoteSkin.collectAsset(
-              //   "tapNote",
-              //   timing,
-              //   endChar,
-              //   noteType,
-              //   curLane
-              // );
-              // background.blit(note, noteX, noteY);
-
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
 
               if (willHeadEnd(curLane, line + 1, measure)) {
@@ -327,6 +314,7 @@ const main = async () => {
                 case 'pnm':
                   background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 24);
                 break
+                case 'gdgf':
                 case 'bm':
                   background.blit(body, bodyX, reverse ? bodyY - 96 : bodyY - 32);
                 break
@@ -366,7 +354,7 @@ const main = async () => {
                 if (curMode === 'pnm') {
                   background.blit(note, bodyX, bodyY - measureNote.height / 2 - 24);
                 } else {
-                  background.blit(note, bodyX, bodyY - measureNote.height / 2 - (curMode === 'bm' ? 26 : 0));
+                  background.blit(note, bodyX, bodyY - measureNote.height / 2 - (['bm', 'gdgf'].includes(curMode) ? 26 : 0));
                 }
 
                 if (curMode === 'bm' || curMode === 'pnm') {
