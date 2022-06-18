@@ -245,7 +245,7 @@
   "gdgf": {
     "five": {
       "modeSpacing": [0, 64, 128, 192, 256, 0, 320],
-      "canvasWidth": 500,
+      "canvasWidth": 468,
       "measureWidth": 380
     }
   }
