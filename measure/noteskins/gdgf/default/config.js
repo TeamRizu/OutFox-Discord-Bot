@@ -4,16 +4,30 @@ const fallbackNoteskin = require('../../common/common/config.js').config;
 
 const guessGraphicFolder = (lane, style) => {
   switch (style) {
-    default: {
+    case 'bass-three':
+    case 'three':
+      return ['fret1', 'fret2', 'fret3', 'open', 'wail'][lane];
+    case 'bass-six':
+    case 'six':
+      return ['fret1', 'fret2', 'fret3', 'fret4', 'fret5', 'fret6', 'open', 'wail'][lane];
+    default: { // five/bass-five
       return ['fret1', 'fret2', 'fret3', 'fret4', 'fret5', 'open', 'wail'][lane];
     }
   }
 };
 
-const noteWidth = (laneName) => {
+const noteWidth = (laneName, style) => {
   switch (laneName) {
     case 'open':
-      return 320;
+      const width = {
+        'bass-three': 192,
+        three: 192,
+        'bass-six': 384,
+        six: 384,
+        'bass-five': 320,
+        five: 320
+      }
+      return width[style];
     default:
       return 64;
   }
@@ -32,13 +46,14 @@ const applyColor = (laneName, note) => {
   switch (laneName) {
     case 'wail':
       note.color([{ apply: 'green', params: ['87'] }])
+
       note.color([{ apply: 'darken', params: ['60'] }])
     break
     case 'fret5':
     case 'open':
       note.color([{ apply: 'red', params: ['255'] }])
-      // note.color([{ apply: 'green', params: ['0'] }])
       note.color([{ apply: 'blue', params: ['255'] }])
+
       note.color([{ apply: 'darken', params: ['20'] }])
     break
     case 'fret1':
@@ -47,15 +62,24 @@ const applyColor = (laneName, note) => {
     break
     case 'fret2':
       note.color([{ apply: 'green', params: ['255'] }])
+
       note.color([{ apply: 'darken', params: ['20'] }])
     break
     case 'fret3':
       note.color([{ apply: 'blue', params: ['255'] }])
+
       note.color([{ apply: 'darken', params: ['20'] }])
     break
     case 'fret4':
       note.color([{ apply: 'red', params: ['255'] }])
       note.color([{ apply: 'green', params: ['255'] }])
+
+      note.color([{ apply: 'darken', params: ['20'] }])
+    break
+    case 'fret6':
+      note.color([{ apply: 'green', params: ['255'] }])
+      note.color([{ apply: 'blue', params: ['255'] }])
+
       note.color([{ apply: 'darken', params: ['20'] }])
     break
   }
@@ -101,13 +125,13 @@ const config = {
     switch (asset) {
       case 'fake': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style)),
+          width: noteWidth(guessGraphicFolder(lane, style), style),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
       case 'tapNote': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style)),
+          width: noteWidth(guessGraphicFolder(lane, style), style),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
@@ -117,7 +141,7 @@ const config = {
         }
 
         return {
-          width: noteWidth(guessGraphicFolder(lane, style)),
+          width: noteWidth(guessGraphicFolder(lane, style), style),
           height: 64
         };
       }
@@ -141,7 +165,7 @@ const config = {
         const type = guessGraphicFolder(lane, style).includes('fret') ? 'tap' : guessGraphicFolder(lane, style)
         const note = await jimp.read(path.join(__dirname, `/${type}.png`));
 
-        note.resize(noteWidth(guessGraphicFolder(lane, style)), noteHeight(guessGraphicFolder(lane, style)));
+        note.resize(noteWidth(guessGraphicFolder(lane, style), style), noteHeight(guessGraphicFolder(lane, style)));
         applyColor(guessGraphicFolder(lane, style), note)
 
         return note;
@@ -150,7 +174,7 @@ const config = {
         const type = guessGraphicFolder(lane, style).includes('fret') ? 'tap' : guessGraphicFolder(lane, style)
         const note = await jimp.read(path.join(__dirname, `/${type}.png`));
 
-        note.resize(noteWidth(guessGraphicFolder(lane, style)), noteHeight(guessGraphicFolder(lane, style)));
+        note.resize(noteWidth(guessGraphicFolder(lane, style), style), noteHeight(guessGraphicFolder(lane, style)));
         applyColor(guessGraphicFolder(lane, style), note)
 
         return note;

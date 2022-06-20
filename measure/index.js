@@ -7,7 +7,7 @@ const main = async () => {
 
   // Selected mode/style input
   const curMode = 'gdgf';
-  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+  const curStyle = 'bass-five' || defaultstyle.defaultstyle[curMode];
   const reverse = false
   const showMeasureLines = true
 
@@ -230,6 +230,8 @@ const main = async () => {
         if (noteType === '}' || noteType === ']') modstring = false; // note attack declaration ended, OPEN THE DOORS.
 
         if (modstring) continue; // We're inside a note attack declaration, ignore everything while this is true.
+
+        if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32
 
         switch (noteType) {
           case '1': // TapNote

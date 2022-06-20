@@ -247,6 +247,31 @@
       "modeSpacing": [0, 64, 128, 192, 256, 0, 320],
       "canvasWidth": 468,
       "measureWidth": 380
+    },
+    "bass-five": {
+      "modeSpacing": [0, 64, 128, 192, 256, 0, 320],
+      "canvasWidth": 468,
+      "measureWidth": 380
+    },
+    "six": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 0, 384],
+      "canvasWidth": 532,
+      "measureWidth": 444
+    },
+    "bass-six": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 0, 384],
+      "canvasWidth": 532,
+      "measureWidth": 444
+    },
+    "three": {
+      "modeSpacing": [0, 64, 128, 0, 192],
+      "canvasWidth": 340,
+      "measureWidth": 252
+    },
+    "bass-three": {
+      "modeSpacing": [0, 64, 128, 0, 192],
+      "canvasWidth": 340,
+      "measureWidth": 252
     }
   }
 }
