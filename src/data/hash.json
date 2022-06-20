@@ -1,10 +1,26 @@
 {
+  "deb0ec26acf": {
+    "date": "20220619",
+    "name": "Project OutFox Alpha 0.4.15.1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
   "524ffd68d0": {
     "date": "20220614",
     "name": "Project OutFox Alpha 0.4.15.0",
     "buildtype": "public",
     "exclusive": null,
-    "notes": null
+    "notes": [
+      {
+        "type": "hotfix_notice",
+        "hotfix_hash": "deb0ec26acf"
+      }
+    ]
   },
   "c561d2deb0": {
     "date": "20220611",
