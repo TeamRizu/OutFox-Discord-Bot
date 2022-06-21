@@ -6,5 +6,6 @@ exports.defaultstyle = {
   "bm": "single5",
   "pnm": "three",
   "ez2": "single",
-  "gdgf": "five"
+  "gdgf": "five",
+  "gddm": "real"
 }

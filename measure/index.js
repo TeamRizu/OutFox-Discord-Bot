@@ -6,8 +6,8 @@ const defaultstyle = require('./defaultstyle.js')
 const main = async () => {
 
   // Selected mode/style input
-  const curMode = 'gdgf';
-  const curStyle = 'bass-five' || defaultstyle.defaultstyle[curMode];
+  const curMode = 'gddm';
+  const curStyle = '' || defaultstyle.defaultstyle[curMode];
   const reverse = false
   const showMeasureLines = true
 
