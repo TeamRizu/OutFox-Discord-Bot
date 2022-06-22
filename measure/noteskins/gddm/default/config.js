@@ -15,7 +15,7 @@ const noteWidth = () => {
 };
 
 const noteHeight = (laneName) => {
-  return 12;
+  return laneName.includes('note') ? 12 : 64;
 };
 
 const applyColor = (laneName, note) => {
@@ -32,6 +32,8 @@ const applyColor = (laneName, note) => {
     case 'hi foot':
       note.color([{ apply: 'red', params: ['255'] }])
       note.color([{ apply: 'blue', params: ['255'] }])
+
+      note.color([{ apply: 'darken', params: ['20'] }])
     break
     case 'note4':
       note.color([{ apply: 'red', params: ['255'] }])
@@ -43,6 +45,9 @@ const applyColor = (laneName, note) => {
     case 'top foot':
       note.color([{ apply: 'red', params: ['128'] }])
       note.color([{ apply: 'blue', params: ['128'] }])
+
+      note.color([{ apply: 'darken', params: ['30'] }])
+
     break
     case 'note7':
       note.color([{ apply: 'red', params: ['255'] }])
@@ -51,9 +56,9 @@ const applyColor = (laneName, note) => {
       note.color([{ apply: 'red', params: ['255'] }])
       note.color([{ apply: 'green', params: ['165'] }])
     break
-    case 'note10':
-      note.color([{ apply: 'red', params: ['165'] }])
+    case 'note10':    
       note.color([{ apply: 'green', params: ['255'] }])
+      note.color([{ apply: 'brighten', params: ['30'] }])
     break
   }
 
@@ -145,21 +150,42 @@ const config = {
         return note;
       }
       case 'tapNote': {
-        const note = await jimp.read(path.join(__dirname, `/tap.png`));
+        const graphicFolder = guessGraphicFolder(lane, style)
+        const isFoot = graphicFolder.includes('foot')
+        if (!graphicFolder.includes('note')) {
+          const extra = await jimp.read(path.join(__dirname, `/${isFoot ? 'foot' : graphicFolder}.png`));
+          const note = await jimp.read(path.join(__dirname, `/tap.png`));
 
-        note.resize(noteWidth(), noteHeight(guessGraphicFolder(lane, style)));
-        applyColor(guessGraphicFolder(lane, style), note)
+          note.resize(noteWidth(), 12);
+          applyColor(guessGraphicFolder(lane, style), note)
 
-        return note;
-      }
-      case 'holdBody': {
-        if (['open', 'wail'].includes(guessGraphicFolder(lane, style))) {
-          return fallbackNoteskin.collectAsset(asset, timing, endChar, notetype, lane, styleconfig);
+          if (graphicFolder.includes('hi')) {
+            extra.flip(true, false)
+            extra.rotate(20, false)
+          }
+
+          if (graphicFolder.includes('top')) {
+            extra.rotate(340, false)
+          }
+
+          if (graphicFolder === 'crash') {
+            extra.flip(true, false)
+          }
+
+          extra.resize(noteWidth(), noteHeight(graphicFolder));
+          applyColor(graphicFolder, extra)
+
+          extra.blit(note, 0, 28)
+
+          return extra
         }
 
-        const holdBody = await jimp.read(path.join(__dirname, `/body/${guessGraphicFolder(lane, style)}.png`));
+        const note = await jimp.read(path.join(__dirname, `/tap.png`));
 
-        return holdBody;
+        note.resize(noteWidth(), noteHeight(graphicFolder));
+        applyColor(graphicFolder, note)
+
+        return note;
       }
       case 'holdBottom': {
         const blank = await jimp.read(path.join(__dirname, `/_blank.png`))

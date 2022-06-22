@@ -155,7 +155,7 @@ const main = async () => {
    * @param {Array<string>} curMeasure
    * @returns
    */
-  const calculateNoteY = (mode, style, measure, timing, endChar, depth, line, curMeasure) => {
+  const calculateNoteY = (mode, style, measure, timing, endChar, depth, line, curMeasure, curLane) => {
 
     const baseY = () => {
       if (reverse) {
@@ -164,12 +164,24 @@ const main = async () => {
 
         if (['bm', 'gdgf'].includes(curMode)) return [476, 220][measure]
 
+        if (curMode === 'gddm') {
+          const bigLanes = [1, 2, 5, 8] // Needs special condition for "old" style
+
+          return bigLanes.includes(curLane) ? [448, 192][measure] : [476, 220][measure]
+        }
+
         return [448, 192][measure]
       }
 
       if (curMode === 'pnm') return [24, 280][measure]
 
       if (['bm', 'gdgf'].includes(curMode)) return [28, 284][measure]
+
+      if (curMode === 'gddm') {
+        const bigLanes = [1, 2, 5, 8]
+
+        return bigLanes.includes(curLane) ? [0, 256][measure] : [28, 284][measure]
+      }
 
       return [0, 256][measure]
     }
@@ -225,7 +237,7 @@ const main = async () => {
         // Look every char from the line
         const noteType = curLine[char];
         const noteX = 44 + NoteSkin.styleconfig.modeSpacing[curLane];
-        let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure);
+        let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
 
         if (noteType === '}' || noteType === ']') modstring = false; // note attack declaration ended, OPEN THE DOORS.
 
