@@ -247,6 +247,16 @@
       "modeSpacing": [0, 64, 128, 192, 256, 320, 384, 448, 512, 576],
       "canvasWidth": 728,
       "measureWidth": 640
+    },
+    "new": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 384, 448, 512],
+      "canvasWidth": 664,
+      "measureWidth": 576
+    },
+    "old": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320],
+      "canvasWidth": 472,
+      "measureWidth": 384
     }
   },
   "gdgf": {

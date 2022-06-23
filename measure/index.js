@@ -7,7 +7,7 @@ const main = async () => {
 
   // Selected mode/style input
   const curMode = 'gddm';
-  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+  const curStyle = 'old' || defaultstyle.defaultstyle[curMode];
   const reverse = false
   const showMeasureLines = true
 
@@ -165,7 +165,7 @@ const main = async () => {
         if (['bm', 'gdgf'].includes(curMode)) return [476, 220][measure]
 
         if (curMode === 'gddm') {
-          const bigLanes = [1, 2, 5, 8] // Needs special condition for "old" style
+          const bigLanes = style === 'old' ? [0, 2, 5] : [1, 2, 5, 8]
 
           return bigLanes.includes(curLane) ? [448, 192][measure] : [476, 220][measure]
         }
@@ -178,7 +178,7 @@ const main = async () => {
       if (['bm', 'gdgf'].includes(curMode)) return [28, 284][measure]
 
       if (curMode === 'gddm') {
-        const bigLanes = [1, 2, 5, 8]
+        const bigLanes = style === 'old' ? [0, 2, 5] : [1, 2, 5, 8]
 
         return bigLanes.includes(curLane) ? [0, 256][measure] : [28, 284][measure]
       }

@@ -4,7 +4,11 @@ const fallbackNoteskin = require('../../common/common/config.js').config;
 
 const guessGraphicFolder = (lane, style) => {
   switch (style) {
-    default: { // five/bass-five
+    case 'old':
+      return ['hat', 'note4', 'top foot', 'note5', 'note7', 'crash'][lane];
+    case 'new':
+      return ['note1', 'hat', 'hi foot', 'note4', 'note5', 'top foot', 'note7', 'note8', 'crash'][lane];
+    default: {
       return ['note1', 'hat', 'hi foot', 'note4', 'note5', 'top foot', 'note7', 'note8', 'crash', 'note10'][lane];
     }
   }
@@ -56,7 +60,7 @@ const applyColor = (laneName, note) => {
       note.color([{ apply: 'red', params: ['255'] }])
       note.color([{ apply: 'green', params: ['165'] }])
     break
-    case 'note10':    
+    case 'note10':
       note.color([{ apply: 'green', params: ['255'] }])
       note.color([{ apply: 'brighten', params: ['30'] }])
     break
