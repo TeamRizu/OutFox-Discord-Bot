@@ -290,5 +290,10 @@
       "canvasWidth": 340,
       "measureWidth": 252
     }
+  },
+  "gh": {
+    "solo": {
+      "modeSpacing": [0, 66, 126, 189, 252]
+    }
   }
 }

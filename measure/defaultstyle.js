@@ -7,5 +7,6 @@ exports.defaultstyle = {
   "pnm": "three",
   "ez2": "single",
   "gdgf": "five",
-  "gddm": "real"
+  "gddm": "real",
+  "gh": "solo"
 }
