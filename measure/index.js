@@ -1,15 +1,14 @@
 const jimp = require('jimp');
 const NoteSkinFile = require('./noteskin.js');
-const stylechart = require('./stylechart.js')
-const defaultstyle = require('./defaultstyle.js')
+const stylechart = require('./stylechart.js');
+const defaultstyle = require('./defaultstyle.js');
 
 const main = async () => {
-
   // Selected mode/style input
   const curMode = 'gh';
   const curStyle = '' || defaultstyle.defaultstyle[curMode];
-  const reverse = false
-  const showMeasureLines = true
+  const reverse = false;
+  const showMeasureLines = true;
 
   // Noteskin
   const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle);
@@ -46,8 +45,7 @@ const main = async () => {
     }
   }
 
-
-  const perStyleTestData = stylechart.stylechart
+  const perStyleTestData = stylechart.stylechart;
 
   if (!perStyleTestData[curMode + '-' + curStyle]) {
     console.warn('No steps for that style!');
@@ -64,19 +62,20 @@ const main = async () => {
    * @returns {Array<string>}
    */
   const apropriateCharByLane = (measureLine, lane) => {
-    let laneArr = []
+    let laneArr = [];
     for (let i = 0; i < measureLine.length; i++) {
-      const curChar = measureLine[i]
+      const curChar = measureLine[i];
 
-      if (curChar === 'D' && measureLine.length > (i + 1)) {
-        laneArr.push(curChar + measureLine[i + 1])
-        i++
-        continue
+      if (curChar === 'D' && measureLine.length > i + 1) {
+        laneArr.push(curChar + measureLine[i + 1]);
+        i++;
+        continue;
       }
 
-      laneArr.push(curChar)
+      laneArr.push(curChar);
     }
-    return laneArr[lane]
+
+    return laneArr[lane];
   };
 
   /**
@@ -153,38 +152,41 @@ const main = async () => {
    * @param {number} depth
    * @param {number} line
    * @param {Array<string>} curMeasure
+   * @param {number} curLane
    * @returns
    */
   const calculateNoteY = (mode, style, measure, timing, endChar, depth, line, curMeasure, curLane) => {
-
     const baseY = () => {
       if (reverse) {
+        if (curMode === 'pnm') return [472, 216][measure];
 
-        if (curMode === 'pnm') return [472, 216][measure]
-
-        if (['bm', 'gdgf'].includes(curMode)) return [476, 220][measure]
+        if (['bm', 'gdgf'].includes(curMode)) return [476, 220][measure];
 
         if (curMode === 'gddm') {
-          const bigLanes = style === 'old' ? [0, 2, 5] : [1, 2, 5, 8]
+          const bigLanes = style === 'old' ? [0, 2, 5] : [1, 2, 5, 8];
 
-          return bigLanes.includes(curLane) ? [448, 192][measure] : [476, 220][measure]
+          return bigLanes.includes(curLane) ? [448, 192][measure] : [476, 220][measure];
         }
 
-        return [448, 192][measure]
+        if (curMode === 'gh' && curLane === 5) return [476, 220][measure]
+
+        return [448, 192][measure];
       }
 
-      if (curMode === 'pnm') return [24, 280][measure]
+      if (curMode === 'pnm') return [24, 280][measure];
 
-      if (['bm', 'gdgf'].includes(curMode)) return [28, 284][measure]
+      if (['bm', 'gdgf'].includes(curMode)) return [28, 284][measure];
 
       if (curMode === 'gddm') {
-        const bigLanes = style === 'old' ? [0, 2, 5] : [1, 2, 5, 8]
+        const bigLanes = style === 'old' ? [0, 2, 5] : [1, 2, 5, 8];
 
-        return bigLanes.includes(curLane) ? [0, 256][measure] : [28, 284][measure]
+        return bigLanes.includes(curLane) ? [0, 256][measure] : [28, 284][measure];
       }
 
-      return [0, 256][measure]
-    }
+      if (curMode === 'gh' && curLane === 5) return [28, 286][measure]
+
+      return [0, 256][measure];
+    };
 
     if (reverse) {
       return (
@@ -243,7 +245,7 @@ const main = async () => {
 
         if (modstring) continue; // We're inside a note attack declaration, ignore everything while this is true.
 
-        if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32
+        if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32;
 
         switch (noteType) {
           case '1': // TapNote
@@ -258,7 +260,7 @@ const main = async () => {
               const holdTop = await NoteSkin.collectAsset('holdTop', timing, endChar, noteType, curLane);
 
               if (reverse) {
-                holdTop.flip(false, true)
+                holdTop.flip(false, true);
               }
               background.blit(holdTop, noteX, reverse ? noteY + 32 : noteY);
 
@@ -266,7 +268,7 @@ const main = async () => {
                 // In case you're asking where is the note rendering, it is only rendered on the 3 noteType.
 
                 lastNoteByLane[curLane] = ['hold', noteX, noteY + 32, timing + endChar]; // Hold Hook
-              } else {
+              } else { // FIXME: This will totally break for non-dance modes as it hasn't been updated. The impact hasn't been tested.
                 // If there is not head found in the given 2 measures, then draw a hold till either top of bottom of the canvas.
                 const body = await NoteSkin.collectAsset(`holdBody`, timing, endChar, noteType, curLane);
                 const note = await NoteSkin.collectAsset(`tapNote`, timing, endChar, noteType, curLane);
@@ -283,7 +285,7 @@ const main = async () => {
               const rollTop = await NoteSkin.collectAsset('rollTop', timing, endChar, noteType, curLane);
 
               if (reverse) {
-                rollTop.flip(false, true)
+                rollTop.flip(false, true);
               }
 
               background.blit(rollTop, noteX, reverse ? noteY + 32 : noteY);
@@ -321,17 +323,21 @@ const main = async () => {
               const body = await NoteSkin.collectAsset(`${bodyName}Body`, timing, endChar, noteType, curLane);
 
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
+              const bodyMeasure = await NoteSkin.collectMeasure(`${bodyName}Body`, timing, endChar, noteType, curLane);
 
-              body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+              body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
 
               switch (curMode) {
                 case 'pnm':
                   background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 24);
-                break
+                  break;
                 case 'gdgf':
                 case 'bm':
                   background.blit(body, bodyX, reverse ? bodyY - 96 : bodyY - 32);
-                break
+                  break;
+                case 'gh':
+                  background.blit(body, bodyX + (curLane === 5 ? 80 : 19), reverse ? bodyY - (curLane === 5 ? 32 : 64) : bodyY - (curLane === 5 ? 35 : 0));
+                break;
                 default:
                   background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY - 0);
               }
@@ -347,13 +353,17 @@ const main = async () => {
               const bottom = await NoteSkin.collectAsset(`${bodyName}Bottom`, timing, endChar, noteType, curLane);
 
               if (reverse) {
-                bottom.flip(false, true)
+                bottom.flip(false, true);
               }
 
               if (curMode === 'pump' && bodyName === 'mine' && reverse) {
                 background.blit(bottom, noteX, noteY + measureBottom.height - 32);
               } else {
-                background.blit(bottom, noteX, noteY + measureBottom.height + (reverse ? (curMode === 'pump' ? -64 : -32) : 0));
+                background.blit(
+                  bottom,
+                  noteX,
+                  noteY + measureBottom.height + (reverse ? (curMode === 'pump' ? -64 : -32) : 0)
+                );
               }
 
               if (bodyName !== 'mine') {
@@ -368,7 +378,13 @@ const main = async () => {
                 if (curMode === 'pnm') {
                   background.blit(note, bodyX, bodyY - measureNote.height / 2 - 24);
                 } else {
-                  background.blit(note, bodyX, bodyY - measureNote.height / 2 - (['bm', 'gdgf'].includes(curMode) ? 26 : 0));
+                  let cursedNoteY = bodyY - measureNote.height / 2 - (['bm', 'gdgf'].includes(curMode) ? 26 : 0)
+                  if (curMode === 'gh' && curLane === 5) cursedNoteY = reverse ? cursedNoteY + 32 : cursedNoteY - 32 // HACK: This is for strum holds. (Reverse false)
+                  background.blit(
+                    note,
+                    bodyX,
+                    cursedNoteY
+                  );
                 }
 
                 if (curMode === 'bm' || curMode === 'pnm') {
@@ -397,10 +413,10 @@ const main = async () => {
                 const mineTop = await NoteSkin.collectAsset(`mineTop`, timing, endChar, noteType + 'M', curLane);
 
                 if (reverse) {
-                  mineTop.flip(false, true)
+                  mineTop.flip(false, true);
                 }
 
-                background.blit(mineTop, noteX, reverse ? noteY + 32: noteY);
+                background.blit(mineTop, noteX, reverse ? noteY + 32 : noteY);
 
                 const measureMineTop = await NoteSkin.collectMeasure('mineTop', timing, endChar, noteType, curLane);
 
@@ -429,9 +445,22 @@ const main = async () => {
                 );
 
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
+                const measureBody = await NoteSkin.collectMeasure(`${type}Body`, timing, endChar, noteType, curLane);
 
-                body.resize(measureNote.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
-                background.blit(body, bodyX, bodyY - (curMode === 'bm' ? 96 : 0));
+                body.resize(measureBody.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+
+                switch (curMode) {
+                  case 'bm':
+                    background.blit(body, bodyX, bodyY - 96);
+                  break
+                  case 'gh':
+                    background.blit(body, bodyX + (curLane === 5 ? 80 : 19), bodyY - (curLane === 5 ? 32 : 0));
+                  break
+                  default:
+                    background.blit(body, bodyX, bodyY);
+                  break
+                }
+                // background.blit(body, bodyX + (curMode === 'gh' ? (curLane === 5 ? 80 : 19) : 0), bodyY - (curMode === 'bm' ? 96 : 0));
 
                 const measureMineBottom = await NoteSkin.collectMeasure(
                   'mineBottom',
@@ -448,11 +477,25 @@ const main = async () => {
                   curLane
                 );
 
-                if (reverse) bottom.flip(false, true)
+                if (reverse) bottom.flip(false, true);
+
                 background.blit(bottom, noteX, noteY + measureMineBottom.height + (reverse ? -32 : 0));
 
                 const note = await NoteSkin.collectAsset(`tapNote`, timing, endChar, noteType + 'L', curLane);
-                background.blit(note, bodyX, bodyY - measureNote.height / 2);
+
+                switch (curMode) {
+                  case 'gh':
+                    background.blit(note, bodyX, bodyY - (curLane === 5 ? (reverse ? -32 : 32) : (measureNote.height / 2)));
+                  break
+                  default:
+                    background.blit(note, bodyX, bodyY - measureNote.height / 2);
+                  break
+                }
+
+                if (curMode === 'gh') {
+                  const hopo = await NoteSkin.collectAsset(`lift`, timing, endChar, noteType + 'L', curLane);
+                  background.blit(hopo, bodyX, bodyY + (reverse && curLane === 5 ? -32 : 32));
+                }
 
                 const capitalizeType = type[0].toUpperCase() + type.slice(1);
                 const measureLift = await NoteSkin.collectMeasure(

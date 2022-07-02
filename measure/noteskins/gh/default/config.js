@@ -22,7 +22,7 @@ const noteWidth = (laneName, style) => {
 const noteHeight = (laneName) => {
   switch (laneName) {
     case 'strum':
-      return 12;
+      return 8;
     default:
       return 64;
   }
@@ -71,6 +71,12 @@ const config = {
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
+      case 'lift': {
+        return {
+          width: noteWidth(guessGraphicFolder(lane, style), style),
+          height: noteHeight(guessGraphicFolder(lane, style))
+        };
+      }
       case 'tapNote': {
         return {
           width: noteWidth(guessGraphicFolder(lane, style), style),
@@ -78,8 +84,13 @@ const config = {
         };
       }
       case 'holdBody': {
+
+        if (guessGraphicFolder(lane, style) === 'strum') return {
+          width: 160,
+          height: 8
+        }
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: 26,
           height: 64
         };
       }
@@ -122,6 +133,13 @@ const config = {
         const blank = await jimp.read(path.join(__dirname, `/_blank.png`))
 
         return blank
+      }
+      case 'lift': {
+        const note = await jimp.read(path.join(__dirname, `/${guessGraphicFolder(lane, style)}/hopo.png`));
+
+        note.resize(noteWidth(guessGraphicFolder(lane, style), style), noteHeight(guessGraphicFolder(lane, style)));
+
+        return note;
       }
       default:
         return fallbackNoteskin.collectAsset(asset, timing, endChar, notetype, lane, styleconfig);
