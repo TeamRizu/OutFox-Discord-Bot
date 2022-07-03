@@ -296,6 +296,16 @@
       "modeSpacing": [0, 66, 126, 189, 252, 0],
       "canvasWidth": 404,
       "measureWidth": 316
+    },
+    "bass": {
+      "modeSpacing": [0, 66, 126, 189, 252, 0],
+      "canvasWidth": 404,
+      "measureWidth": 316
+    },
+    "rhythm": {
+      "modeSpacing": [0, 66, 126, 189, 252, 0],
+      "canvasWidth": 404,
+      "measureWidth": 316
     }
   }
 }
