@@ -16,7 +16,7 @@ module.exports = class MyBuildCommand extends SlashCommand {
         required: true
       }]
     });
-    this.commandVersion = '0.0.1'
+    this.commandVersion = '0.0.2'
     this.filePath = __filename;
   }
 
@@ -25,8 +25,6 @@ module.exports = class MyBuildCommand extends SlashCommand {
      * @type {string}
      */
     const hash = commandArguments ? commandArguments.primalArgument : ctx.options.hash
-
-    if (hash.length !== 11) return 'Hash length is 11 chars long, your hash does not follow that length.'
 
     const buildData = HashBuildClass.buildByHash(hash)
 

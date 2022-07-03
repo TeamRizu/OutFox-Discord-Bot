@@ -1,4 +1,34 @@
 {
+  "ec7f1436de": {
+    "date": "20220703",
+    "name": "Project OutFox Alpha 0.4.15.2 RC1 64bit",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This is a 64bit build."
+      }
+    ]
+  },
+  "b34528bcd4e": {
+    "date": "20220626",
+    "name": "Project OutFox Alpha 0.4.15.2 RC0 64bit",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This is a 64bit build."
+      }
+    ]
+  },
   "deb0ec26acf": {
     "date": "20220619",
     "name": "Project OutFox Alpha 0.4.15.1",
