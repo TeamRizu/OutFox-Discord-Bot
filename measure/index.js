@@ -5,7 +5,7 @@ const defaultstyle = require('./defaultstyle.js');
 
 const main = async () => {
   // Selected mode/style input
-  const curMode = 'gh';
+  const curMode = 'para';
   const curStyle = '' || defaultstyle.defaultstyle[curMode];
   const reverse = false;
   const showMeasureLines = true;
@@ -387,7 +387,7 @@ const main = async () => {
                   );
                 }
 
-                if (curMode === 'bm' || curMode === 'pnm') {
+                if (['bm', 'pnm', 'para'].includes(curMode)) {
                   background.blit(note, noteX, noteY);
                 }
               }

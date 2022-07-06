@@ -307,5 +307,13 @@
       "canvasWidth": 404,
       "measureWidth": 316
     }
+  },
+  "para": {
+    "single": {
+      "modeSpacing": [0, 52, 105, 158, 210],
+      "noteRotation": [270, 225, 180, 135, 90],
+      "measureWidth": 274,
+      "canvasWidth": 362
+    }
   }
 }

@@ -8,5 +8,6 @@ exports.defaultstyle = {
   "ez2": "single",
   "gdgf": "five",
   "gddm": "real",
-  "gh": "solo"
+  "gh": "solo",
+  "para": "single"
 }
