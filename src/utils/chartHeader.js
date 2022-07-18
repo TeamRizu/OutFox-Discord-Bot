@@ -21,6 +21,7 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
       background: '',
       lyricspath: '',
       cdtitle: '',
+      jacket: '',
       music: '',
       instrumenttrack: '',
       samplestart: '',
