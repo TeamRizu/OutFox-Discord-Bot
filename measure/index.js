@@ -185,6 +185,8 @@ const main = async () => {
         return bigLanes.includes(curLane) ? [0, 256][measure] : [28, 284][measure];
       }
 
+      if (curMode.includes('kb')) return [16, 272][measure]
+
       if (curMode === 'gh' && curLane === 5) return [28, 286][measure]
 
       return [0, 256][measure];
