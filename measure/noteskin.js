@@ -8,7 +8,7 @@ exports.NoteSkinClass = class NoteSkin {
     this.styleconfig = this.styledata[this.mode][style]
     this.noteskin = this.styleconfig.defaultNoteskin || 'default'
     this.noteskinPath = 'noteskins' + '/' + this.mode + '/' + this.noteskin
-    this.noteskinConfig = require(`./noteskins/${this.mode}/${this.noteskin}/config.js`).config
+    this.noteskinConfig = require(`./noteskins/${this.mode.includes('kb') ? 'kbx' : this.mode}/${this.noteskin}/config.js`).config
     // this.lanes = this.styleconfig.noteRotation?.length
   }
 

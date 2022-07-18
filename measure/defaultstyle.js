@@ -9,5 +9,6 @@ exports.defaultstyle = {
   "gdgf": "five",
   "gddm": "real",
   "gh": "solo",
-  "para": "single"
+  "para": "single",
+  "kb4": "single"
 }

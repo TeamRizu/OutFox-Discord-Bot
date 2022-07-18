@@ -5,9 +5,9 @@ const defaultstyle = require('./defaultstyle.js');
 
 const main = async () => {
   // Selected mode/style input
-  const curMode = 'para';
+  const curMode = 'kb4';
   const curStyle = '' || defaultstyle.defaultstyle[curMode];
-  const reverse = false;
+  const reverse = true;
   const showMeasureLines = true;
 
   // Noteskin
@@ -167,6 +167,8 @@ const main = async () => {
 
           return bigLanes.includes(curLane) ? [448, 192][measure] : [476, 220][measure];
         }
+
+        if (curMode.includes('kb')) return [464, 208][measure]
 
         if (curMode === 'gh' && curLane === 5) return [476, 220][measure]
 
