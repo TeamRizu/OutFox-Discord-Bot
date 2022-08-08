@@ -316,6 +316,13 @@
       "canvasWidth": 362
     }
   },
+  "kb3": {
+    "single": {
+      "modeSpacing": [0, 65, 130],
+      "measureWidth": 194,
+      "canvasWidth": 282
+    }
+  },
   "kb4": {
     "single": {
       "modeSpacing": [0, 65, 130, 195]
