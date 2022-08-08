@@ -155,6 +155,11 @@ const config = {
 
         return bottom;
       }
+      case "mine": {
+        const mine = await jimp.read(path.join(__dirname, `/mine.png`));
+
+        return mine;
+      }
       default:
         return fallbackNoteskin.collectAsset(
           asset,
