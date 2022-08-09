@@ -460,5 +460,13 @@
       "measureWidth": 1234,
       "canvasWidth": 1322
     }
+  },
+  "ds3ddx": {
+    "single": {
+      "modeSpacing": [0, 44, 95, 147, 146, 198, 249, 292],
+      "noteRotation": [0, 0, 0, 0, 180, 270, 90, 180],
+      "measureWidth": 355,
+      "canvasWidth": 443
+    }
   }
 }

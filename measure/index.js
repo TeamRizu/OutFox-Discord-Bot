@@ -5,9 +5,9 @@ const defaultstyle = require('./defaultstyle.js');
 
 const main = async () => {
   // Selected mode/style input
-  const curMode = 'para';
-  const curStyle = 'double' || defaultstyle.defaultstyle[curMode];
-  const reverse = false;
+  const curMode = 'ds3ddx';
+  const curStyle = 'single' || defaultstyle.defaultstyle[curMode];
+  const reverse = true;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {
     if (curMode.includes('kb')) return 'kbx'
@@ -297,7 +297,13 @@ const main = async () => {
                 rollTop.flip(false, true);
               }
 
-              background.blit(rollTop, noteX, reverse ? noteY + 32 : noteY);
+              switch (curMode) {
+                case 'ds3ddx':
+                  background.blit(rollTop, noteX, noteY);
+                  break;
+                default:
+                  background.blit(rollTop, noteX, reverse ? noteY + 32 : noteY);
+              }
 
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
 
@@ -340,7 +346,13 @@ const main = async () => {
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
               const bodyMeasure = await NoteSkin.collectMeasure(`${bodyName}Body`, timing, endChar, noteType, curLane);
 
-              body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+              switch (curMode) {
+                case 'ds3ddx':
+                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 86 - noteY);
+                  break;
+                default:
+                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+              }
 
               switch (curMode) {
                 case 'pnm':
@@ -355,7 +367,7 @@ const main = async () => {
                   break;
                 case 'gh':
                   background.blit(body, bodyX + (curLane === 5 ? 80 : 19), reverse ? bodyY - (curLane === 5 ? 32 : 64) : bodyY - (curLane === 5 ? 35 : 0));
-                break;
+                  break;
                 default:
                   background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY - 0);
               }
@@ -371,6 +383,7 @@ const main = async () => {
               const bottom = await NoteSkin.collectAsset(`${bodyName}Bottom`, timing, endChar, noteType, curLane);
 
               if (reverse) {
+
                 bottom.flip(false, true);
               }
 
@@ -387,6 +400,7 @@ const main = async () => {
                   }
                   break;
                 case 'kbx':
+                case 'ds3ddx':
                   background.blit(
                     bottom,
                     noteX,
