@@ -7,7 +7,7 @@ const main = async () => {
   // Selected mode/style input
   const curMode = 'ds3ddx';
   const curStyle = 'single' || defaultstyle.defaultstyle[curMode];
-  const reverse = true;
+  const reverse = false;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {
     if (curMode.includes('kb')) return 'kbx'
