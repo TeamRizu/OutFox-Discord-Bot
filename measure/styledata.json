@@ -316,6 +316,20 @@
       "canvasWidth": 362
     }
   },
+  "kb1": {
+    "single": {
+      "modeSpacing": [0],
+      "measureWidth": 64,
+      "canvasWidth": 152
+    }
+  },
+  "kb2": {
+    "single": {
+      "modeSpacing": [0, 65],
+      "measureWidth": 134,
+      "canvasWidth": 222
+    }
+  },
   "kb3": {
     "single": {
       "modeSpacing": [0, 65, 130],
@@ -325,7 +339,114 @@
   },
   "kb4": {
     "single": {
-      "modeSpacing": [0, 65, 130, 195]
+      "modeSpacing": [0, 65, 130, 195],
+      "measureWidth": 259,
+      "canvasWidth": 347
+    }
+  },
+  "kb5": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260],
+      "measureWidth": 324,
+      "canvasWidth": 412
+    }
+  },
+  "kb6": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325],
+      "measureWidth": 389,
+      "canvasWidth": 477
+    }
+  },
+  "kb7": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390],
+      "measureWidth": 454,
+      "canvasWidth": 542
+    }
+  },
+  "kb8": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455],
+      "measureWidth": 519,
+      "canvasWidth": 607
+    }
+  },
+  "kb9": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520],
+      "measureWidth": 584,
+      "canvasWidth": 672
+    }
+  },
+  "kb10": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585],
+      "measureWidth": 649,
+      "canvasWidth": 737
+    }
+  },
+  "kb11": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650],
+      "measureWidth": 714,
+      "canvasWidth": 802
+    }
+  },
+  "kb12": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715],
+      "measureWidth": 779,
+      "canvasWidth": 867
+    }
+  },
+  "kb13": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780],
+      "measureWidth": 844,
+      "canvasWidth": 932
+    }
+  },
+  "kb14": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845],
+      "measureWidth": 909,
+      "canvasWidth": 997
+    }
+  },
+  "kb15": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910],
+      "measureWidth": 974,
+      "canvasWidth": 1062
+    }
+  },
+  "kb16": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975],
+      "measureWidth": 1039,
+      "canvasWidth": 1127
+    }
+  },
+  "kb17": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975, 1040],
+      "measureWidth": 1104,
+      "canvasWidth": 1192
+    }
+  },
+  "kb18": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975, 1040, 1105],
+      "measureWidth": 1169,
+      "canvasWidth": 1257
+    }
+  },
+  "kb19": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975, 1040, 1105, 1170],
+      "measureWidth": 1234,
+      "canvasWidth": 1322
     }
   }
 }
