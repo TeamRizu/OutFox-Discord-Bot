@@ -5,8 +5,8 @@ const defaultstyle = require('./defaultstyle.js');
 
 const main = async () => {
   // Selected mode/style input
-  const curMode = 'kb19';
-  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+  const curMode = 'para';
+  const curStyle = 'double' || defaultstyle.defaultstyle[curMode];
   const reverse = false;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {

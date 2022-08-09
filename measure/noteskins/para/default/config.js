@@ -2,6 +2,17 @@ const jimp = require("jimp");
 const path = require("path");
 const fallbackNoteskin = require("../../common/common/config.js").config;
 
+const isSideNote = (curStyle, curLane) => {
+  switch (curStyle) {
+    case 'eight':
+      if (curLane >= 5) return true
+
+      return false
+    default:
+      return false
+  }
+}
+
 const config = {
   features: {
     coloredMine: false,
@@ -124,7 +135,7 @@ const config = {
       case "tapNote": {
         const isHold = ['DL', '3'].includes(notetype)
         const note = await jimp.read(
-          path.join(__dirname, `/tapNote${+ isHold ? 'hold': ''}.png`)
+          path.join(__dirname, `/tapNote${(isHold ? 'hold': '') + (isSideNote(style, lane) ? 'S' : '')}.png`)
         );
 
         note.rotate(styleconfig.noteRotation[lane], false);

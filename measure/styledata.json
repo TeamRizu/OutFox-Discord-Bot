@@ -314,6 +314,18 @@
       "noteRotation": [270, 225, 180, 135, 90],
       "measureWidth": 274,
       "canvasWidth": 362
+    },
+    "eight": {
+      "modeSpacing": [0, 52, 105, 158, 210,   262, 314, 366],
+      "noteRotation": [270, 225, 180, 135, 90,   320, 0, 45],
+      "measureWidth": 422,
+      "canvasWidth": 512
+    },
+    "double": {
+      "modeSpacing": [0, 52, 105, 158, 210,      263, 315, 368, 421, 473],
+      "noteRotation": [270, 225, 180, 135, 90,   270, 225, 180, 135, 90],
+      "measureWidth": 537,
+      "canvasWidth": 625
     }
   },
   "kb1": {
