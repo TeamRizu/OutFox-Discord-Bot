@@ -1,9 +1,10 @@
 const fs = require('fs')
 
 exports.NoteSkinClass = class NoteSkin {
-  constructor(mode, style = 'single') {
+  constructor(mode, style = 'single', reverse) {
     this.mode = mode
     this.style = style
+    this.reverse = reverse
     this.styledata = JSON.parse( fs.readFileSync('./styledata.json', { encoding: 'utf-8' }) )
     this.styleconfig = this.styledata[this.mode][style]
     this.noteskin = this.styleconfig.defaultNoteskin || 'default'
@@ -13,7 +14,7 @@ exports.NoteSkinClass = class NoteSkin {
   }
 
   async collectAsset(asset, timing, endChar, notetype, lane) {
-    const assetJimp = await this.noteskinConfig.collectAsset(asset, timing, endChar, notetype, lane, this.styleconfig, this.style, this.mode)
+    const assetJimp = await this.noteskinConfig.collectAsset(asset, timing, endChar, notetype, lane, this.styleconfig, this.style, this.mode, this)
 
     return assetJimp
   }

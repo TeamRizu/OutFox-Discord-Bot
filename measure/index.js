@@ -7,7 +7,7 @@ const main = async () => {
   // Selected mode/style input
   const curMode = 'ds3ddx';
   const curStyle = 'single' || defaultstyle.defaultstyle[curMode];
-  const reverse = false;
+  const reverse = true;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {
     if (curMode.includes('kb')) return 'kbx'
@@ -16,7 +16,7 @@ const main = async () => {
   }
 
   // Noteskin
-  const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle);
+  const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle, reverse);
 
   // Measure Width
   const measureWidth = NoteSkin.styleconfig.measureWidth || 254;
@@ -271,7 +271,13 @@ const main = async () => {
               if (reverse) {
                 holdTop.flip(false, true);
               }
-              background.blit(holdTop, noteX, reverse ? noteY + 32 : noteY);
+              switch (curMode) {
+                case 'ds3ddx':
+                  background.blit(holdTop, noteX, noteY);
+                  break;
+                default:
+                  background.blit(holdTop, noteX, reverse ? noteY + 32 : noteY);
+              }
 
               if (willHeadEnd(curLane, line + 1, measure)) {
                 // In case you're asking where is the note rendering, it is only rendered on the 3 noteType.
@@ -383,7 +389,6 @@ const main = async () => {
               const bottom = await NoteSkin.collectAsset(`${bodyName}Bottom`, timing, endChar, noteType, curLane);
 
               if (reverse) {
-
                 bottom.flip(false, true);
               }
 

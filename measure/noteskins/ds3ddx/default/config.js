@@ -116,7 +116,9 @@ const config = {
    * @param {number} lane
    * @returns {Promise<any>}
    */
-  collectAsset: async (asset, timing, endChar, notetype, lane, styleconfig, style) => {
+  collectAsset: async (asset, timing, endChar, notetype, lane, styleconfig, style, NoteClass) => {
+    const graphicName = lane >= 5 && !laneName(style, lane).includes('Hand') ? laneName(style, lane).replace('Left', 'Right') : laneName(style, lane)
+
     switch (asset) {
       case 'fake': {
         const note = await jimp.read(
@@ -139,63 +141,46 @@ const config = {
         return note;
       }
       case "holdTop": {
-        const holdTop = await jimp.read(path.join(__dirname, `/holdTop/${laneName(style, lane)}.png`));
+        const holdTop = await jimp.read(path.join(__dirname, `/holdTop/${graphicName}.png`));
 
         holdTop.resize(64, 64);
-
-        if ([5, 6].includes(lane)) {
-          holdTop.flip(false, true)
-          holdTop.rotate(180)
-        }
 
         return holdTop;
       }
       case "holdBody": {
-        const body = await jimp.read(path.join(__dirname, `/holdBody/${laneName(style, lane)}.png`));
+        const body = await jimp.read(path.join(__dirname, `/holdBody/${graphicName}.png`));
 
         // Resizing hold/roll bodies are not done here.
 
         return body;
       }
       case "holdBottom": {
-        const bottom = await jimp.read(path.join(__dirname, `/holdBottom/${laneName(style, lane)}.png`));
+        const bottom = await jimp.read(path.join(__dirname, `/holdBottom/${graphicName}.png`));
 
         bottom.resize(64, 64);
-
-        if ([5, 6].includes(lane)) {
-          bottom.flip(false, true)
-          bottom.rotate(180)
-        }
 
         return bottom;
       }
       case "rollTop": {
-        const rollTop = await jimp.read(path.join(__dirname, `/rollTop/${laneName(style, lane)}.png`));
+        // TODO: Cut the graphics to be able to flip them, right new they also include part of body.
+        const rollTop = await jimp.read(path.join(__dirname, `/rollTop/${graphicName}.png`));
 
         rollTop.resize(64, 64);
-        if ([5, 6].includes(lane)) {
-          rollTop.flip(false, true)
-          rollTop.rotate(180)
-        }
 
         return rollTop;
       }
       case "rollBody": {
-        const body = await jimp.read(path.join(__dirname, `/rollBody/${laneName(style, lane)}.png`));
+        const body = await jimp.read(path.join(__dirname, `/rollBody/${graphicName}.png`));
 
         // Resizing hold/roll bodies are not done here.
 
         return body;
       }
       case "rollBottom": {
-        const bottom = await jimp.read(path.join(__dirname, `/rollBottom/${laneName(style, lane)}.png`));
+        const bottom = await jimp.read(path.join(__dirname, `/rollBottom/${graphicName}.png`));
 
         bottom.resize(64, 64);
 
-        if ([5, 6].includes(lane)) {
-          bottom.flip(false, true)
-          bottom.rotate(180)
-        }
 
         return bottom;
       }
