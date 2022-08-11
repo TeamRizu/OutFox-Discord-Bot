@@ -1,7 +1,3 @@
-/**
- * Discord IDs for bug hunter roles
- * @type {import("../types/types").BugRoles}
- */
 exports.bugRole = {
   'Bug Reporter': '687824517422383282',
   'Bug Catcher': '736367693443235841',
@@ -11,10 +7,6 @@ exports.bugRole = {
   'Bug Banned': '707360111076835369'
 };
 
-/**
- * Engine ID accepted by StepMania Archive.
- * @type {import("../types/types").ArchiveEngineIDs}
- */
 exports.archiveEngineID = [
   'OutFox', // Project OutFox
   'StepMania 5', // StepMania 5
@@ -26,10 +18,6 @@ exports.archiveEngineID = [
   'SM3.9' // StepMania 3.9
 ];
 
-/**
- * Engine names based on Engine ID accepted by StepMania Archive.
- * @type {import("../types/types").ArchiveEngineNameObj}
- */
 exports.archiveEngineName = {
   OutFox: 'Project OutFox',
   'StepMania 5': 'StepMania 5',
@@ -41,10 +29,6 @@ exports.archiveEngineName = {
   'SM3.9': 'StepMania 3.9'
 };
 
-/**
- * Discord Emote Data based on Engine ID accepted by StepMania Archive.
- * @type {import("../types/types").ArchiveEngineEmoteData}
- */
 exports.archiveEngineEmoteData = {
   OutFox: {
     name: 'OUTFOX',
@@ -80,10 +64,6 @@ exports.archiveEngineEmoteData = {
   }
 };
 
-/**
- * Engine Vibrant Colors Hex format based on Engine ID accepted by StepMania Archive
- * @type {import("../types/types").ArchiveEngineColors}
- */
 exports.archiveEngineColors = {
   OutFox: '#bad0ff',
   NITG: '#e2e5e0',
@@ -95,9 +75,6 @@ exports.archiveEngineColors = {
   'SM3.9_Plus': '#b9b423'
 };
 
-/**
- * @type {import("../types/types").ArchiveEngineLink}
- */
 exports.archiveEngineLink = {
   OutFox: 'https://josevarela.xyz/SMArchive/Builds/#OUTFOX',
   'StepMania 5': 'https://josevarela.xyz/SMArchive/Builds/#SM5',
@@ -109,10 +86,6 @@ exports.archiveEngineLink = {
   'SM3.9': 'https://josevarela.xyz/SMArchive/Builds/#SM39'
 }
 
-/**
- * Embed fields that should be included on any embed with data from StepMania Archive
- * @type {import("../types/types").ArchiveGenericEmbedFields}
- */
 exports.archiveGenericEmbedFields = {
   footer: {
     text: 'StepMania Archive made by Jose_Varela',
@@ -120,9 +93,6 @@ exports.archiveGenericEmbedFields = {
   }
 }
 
-/**
- * @type {import("../types/types").ArchiveThemesMusicWheelImage}
- */
 exports.archiveThemesMusicWheelImage = {
   OITG: {
     'DECO': 'https://objects-us-east-1.dream.io/smthemes/OITG/Screenshots/Deco/screen3.png',
@@ -152,9 +122,6 @@ exports.archiveThemesMusicWheelImage = {
   }
 }
 
-/**
- * @type {import("../types/types").ArchiveThemeDescription}
- */
 exports.archiveThemeDescription = {
   'StepMania 5': {
     'UPSRT': 'This theme is a "Story" theme, you need the UPSRT pack to experience the whole story.',
@@ -162,9 +129,6 @@ exports.archiveThemeDescription = {
   }
 }
 
-/**
- * @type {import("../types/types").ConversionsGenericEmbedFields}
- */
 exports.conversionsGenericEmbedFields = {
   footer: {
     text: 'StepMania Conversions by MrThatKid4',
@@ -172,9 +136,6 @@ exports.conversionsGenericEmbedFields = {
   }
 }
 
-/**
- * @type {import("../types/types").ConversionsVersionToEngineID}
- */
 exports.conversionsVersionToEngineID = {
   '5.0+': 'StepMania 5',
   '5.1+': 'StepMania 5',
@@ -193,9 +154,6 @@ exports.range = (size, startAt = 0) => { // https://stackoverflow.com/a/10050831
   return [...Array(size).keys()].map(i => i + startAt);
 }
 
-/**
- * @type {import("../types/types").CreditsEngineID}
- */
 exports.creditsEngineID = [
   'Stepmania',
   'Pulsen',
@@ -204,9 +162,6 @@ exports.creditsEngineID = [
   'OpenITG'
 ]
 
-/**
- * @type {import("../types/types").CreditsEngineIDToEngineTag}
- */
 exports.creditsEngineIDToEngineTag = {
   'Stepmania': 'StepMania',
   'Pulsen': 'Pulsen',
@@ -215,9 +170,6 @@ exports.creditsEngineIDToEngineTag = {
   'OpenITG': 'OpenITG'
 }
 
-/**
- * @type {import("../types/types").ArchiveListIDs}
- */
 exports.archiveListIDs = [
   'DDRPC',
   'SM095',
@@ -236,9 +188,6 @@ exports.archiveListIDs = [
   'ITGM'
 ]
 
-/**
- * @type {import("../types/types").ArchiveListNames}
- */
 exports.archiveListNames = [
   'DDR PC Edition ',
   'StepMania 0.9x',
@@ -257,9 +206,6 @@ exports.archiveListNames = [
   'ITGmania'
 ]
 
-/**
- * @type {import("../types/types").ArchiveListIDToNames}
- */
 exports.archiveListIDToNames = {
   'DDRPC': 'DDR PC Edition ',
   'SM095': 'StepMania 0.9x',
@@ -278,9 +224,6 @@ exports.archiveListIDToNames = {
   'ITGM': 'ITGmania'
 }
 
-/**
- * @type {import("../types/types").ArchiveListIdToEngineName}
- */
 exports.archiveListIDToEngineName = {
   'DDRPC': 'DDR PC Edition',
   'SM095': 'StepMania 0.9x',
@@ -299,9 +242,6 @@ exports.archiveListIDToEngineName = {
   "ITGM": "ITGmania"
 }
 
-/**
- * @type {import("../types/types").ArchiveBuildEngineIconData}
- */
 exports.archiveBuildEngineIconData = {
   DDRPC: {
     name: 'SM164',
@@ -451,9 +391,6 @@ exports.archiveBuildEngineIconData = {
   }
 }
 
-/**
- * @type {import("../types/types").ArchiveBuildEngineColor}
- */
 exports.archiveBuildEngineColor = {
   DDRPC: '#d72e3c',
   SM095: '#d72e3c',
@@ -514,9 +451,9 @@ exports.archiveIconLinkFormat = (name) => {
 /**
  * Converts build name & engine to EngineID, accepted as a key to IconData.
  * @function
- * @param {import("../types/types").BuildListID} engine
+ * @param {string} engine
  * @param {string} name
- * @returns {import("../types/types").BuildEngineIDs}
+ * @returns {string}
  */
 exports.buildNameToEmoteKey = (engine, name) => {
   switch (engine) {
@@ -630,32 +567,20 @@ exports.buildNameToEmoteKey = (engine, name) => {
   }
 }
 
-/**
- * @type {import("../types/types").AnnouncersCreators}
- */
 exports.announcersCreators = ['KU+002FStep', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted']
 
-/**
- * @type {import("../types/types").HashBuildTypeToName}
- */
 exports.hashBuildTypeToName = {
   'public': 'public build',
   'testbuild': 'test build',
   'private': 'private build'
 }
 
-/**
- * @type {import("../types/types").HashBuildTypeToDescription}
- */
 exports.hashBuildTypeToDescription = {
   'public': 'This is a public build that is available to be downloaded by anyone either by using Project OutFox Website or Team Rizu\'s OutFox Repository.',
   'testbuild': 'This is a test build, it is not available to the public but, usually, to selected members of Project OutFox Discord Server Alpha Tester Programme.',
   'private': 'This is a private build, it is only available to Project OutFox Team.'
 }
 
-/**
- * @type {import("../types/types").HashBuildNoteToDescription}
- */
 exports.hashBuildNoteToDescription = {
   'hotfix': "This is a hotfix build, meaning major features, that might or not be available on this version, came from a prior version.",
   "hotfix_notice": "This build has a hotfix version, it is recommended to use the hotfix version instead.",

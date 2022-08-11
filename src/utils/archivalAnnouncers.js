@@ -7,26 +7,29 @@ exports.ArchiveAnnouncersFile = class ArchiveAnnouncersInstance {
      */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Announcers/db.json';
     /**
-     * @type {Object<string, import('../types/types').AnnouncerObject>}
+     * @type {import('../types/tsTypes/types').ArchiveAnnouncers}
      */
     this.mainObject = null;
   }
 
   async setup() {
+    /**
+     * @type {import('../types/tsTypes/types').ArchiveAnnouncers}
+     */
     const body = await request(this.sourceURL);
 
     this.mainObject = JSON.parse(body);
   }
 
   /**
-   * @returns {import('../types/types').AnnouncersNames}
+   * @returns {Array<string>}
    */
   get announcers() {
     return Object.keys(this.mainObject);
   }
 
   /**
-   * @returns {Object<string, import('../types/types').AnnouncerName[]>}
+   * @returns {Object<string, Array<string>>}
    */
   get announcersFromAuthors() {
     const finalObj = {}
@@ -48,8 +51,8 @@ exports.ArchiveAnnouncersFile = class ArchiveAnnouncersInstance {
 
   /**
    *
-   * @param {import('../types/types').AnnouncerCreator} author
-   * @returns {import('../types/types').AnnouncerName[]}
+   * @param {string} author
+   * @returns {Array<string>}
    */
   announcersByAuthor(author) {
     if (!this.announcersFromAuthors[author]) {

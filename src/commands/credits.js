@@ -132,7 +132,7 @@ module.exports = class CreditsCommand extends SlashCommand {
     }
 
     /**
-     * @type {import('../types/types.js').CreditedEngine}
+     * @type {string}
      */
     const engine = commandArguments.primalArgument
     const page = Number(commandArguments.arguments[1]);
@@ -190,7 +190,7 @@ module.exports = class CreditsCommand extends SlashCommand {
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
     /**
-     * @type {import('../types/types.js').CreditedEngine}
+     * @type {string}
      */
     const engine = commandArguments.primalArgument
     const section = ArchiveCreditsInstance.mainObject[engine][page]

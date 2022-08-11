@@ -6,26 +6,29 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Builds/BuildListing.json';
     /**
      * The object that contains all BuildListing Data
-     * @type {Object<string, import('../types/types').BuildList>}
+     * @type {import('../types/tsTypes/types').ArchiveBuilds}
     */
     this.mainObject = null;
   }
 
   async setup() {
+    /**
+     * @type {import('../types/tsTypes/types').ArchiveBuilds}
+     */
     const body = await request(this.sourceURL);
 
     this.mainObject = JSON.parse(body);
   }
 
   /**
-   * @returns {import('../types/types').ArchiveListIDs}
+   * @returns {Array<string>}
    */
   get buildListIDs() {
     return Object.keys(this.mainObject);
   }
 
   /**
-   * @returns {import('../types/types').ArchiveListNames}
+   * @returns {Array<string>}
    */
   get buildListName() {
     const finalArr = []
@@ -39,8 +42,8 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
 
   /**
    *
-   * @param {import('../types/types').BuildListID} buildListID
-   * @returns {import('../types/types').BuildList}
+   * @param {string} buildListID
+   * @returns {import('../types/tsTypes/types').BuildList}
    */
   buildListObjectFromID(buildListID) {
     return this.mainObject[buildListID]
@@ -48,7 +51,7 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
 
   /**
    *
-   * @param {import('../types/types').BuildListID} buildListID
+   * @param {string} buildListID
    * @returns {string[]}
    */
   listingNamesFromID(buildListID) {

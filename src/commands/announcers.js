@@ -72,7 +72,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
 
     /**
      *
-     * @param {AnnouncerCreator} author
+     * @param {string} author
      * @returns {string}
      */
     const announcersCountString = (author) => {
@@ -105,7 +105,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
     const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors)
     for (let i = 0; i < announcersAuthors.length; i++) {
       /**
-       * @type {AnnouncerCreator}
+       * @type {string}
        */
       const currentAuthor = announcersAuthors[i]
       const tempObj = {}
@@ -146,7 +146,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
     }
 
     /**
-     * @type {AnnouncerCreator}
+     * @type {string}
      */
     const author = commandArguments.primalArgument.replace('U+002F', '-');
     const page = Number(commandArguments.arguments[1]);
@@ -204,7 +204,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
     const interactionSplit = interaction.values[0].split('-');
     const page = Number(interactionSplit[3]);
     /**
-     * @type {AnnouncerCreator}
+     * @type {string}
      */
     const author = commandArguments.primalArgument.replace('U+002F', '-')
     const announcer = ArchiveAnnouncersInstance.announcersByAuthor(author)[page]

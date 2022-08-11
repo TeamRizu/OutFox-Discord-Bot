@@ -65,7 +65,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     this.arguments = commandArguments?.arguments || null;
     /**
      *
-     * @param {string | import('../types/types.js').LeaderboardElementObject} e - The element string or object
+     * @param {string | import('../types/tsTypes/types').LeaderboardElementObject} e - The element string or object
      * @param {number} i - The element Index
      * @returns {string}
      */
@@ -80,7 +80,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
   /**
    *
-   * @param {string | import('../types/types.js').LeaderboardElementObject} element
+   * @param {string | import('../types/tsTypes/types').LeaderboardElementObject} element
    * @returns {boolean}
    */
   addElement(element) {
@@ -109,7 +109,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   }
 
   /**
-   * @returns {import('../types/types.js').LeaderboardPagesObject}
+   * @returns {import('../types/tsTypes/types').LeaderboardPagesObject}
    */
   get pages() {
     const pageList = [];

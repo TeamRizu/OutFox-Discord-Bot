@@ -80,7 +80,7 @@ module.exports = class BuildsCommand extends SlashCommand {
 
     /**
      *
-     * @param {import('../types/types.js').BuildListID} listID
+     * @param {string} listID
      * @returns {string}
      */
     const archivebuildCountString = (listID) => {
@@ -91,7 +91,7 @@ module.exports = class BuildsCommand extends SlashCommand {
 
     /**
      *
-     * @param {import('../types/types.js').BuildListID} listID
+     * @param {string} listID
      * @returns {string}
      */
     const buildEmote = (listID) => {
@@ -173,7 +173,7 @@ module.exports = class BuildsCommand extends SlashCommand {
     }
 
     /**
-     * @type {import('../types/types.js').BuildListID}
+     * @type {string}
      */
     const listID = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);
