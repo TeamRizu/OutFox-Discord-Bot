@@ -74,7 +74,6 @@ module.exports = class ThemesCommand extends SlashCommand {
      */
     const engineThemeCountString = (engine) => {
       const themeCount = ArchiveThemesInstance.themesForVersion(engine).length
-
       return `${archiveEngineName[engine]}: **${themeCount} ${1 >= themeCount ? 'Theme' : 'Themes'}**`
     }
 
@@ -93,6 +92,7 @@ module.exports = class ThemesCommand extends SlashCommand {
         ${engineThemeCountString('SM4')}
         ${engineThemeCountString('OITG')}
         ${engineThemeCountString('NITG')}
+        ${engineThemeCountString('SM━SSC')}
         ${engineThemeCountString('StepMania 5')}
         ${engineThemeCountString('OutFox')}
         `
@@ -148,8 +148,7 @@ module.exports = class ThemesCommand extends SlashCommand {
      * @type {string}
      */
     const fork = commandArguments.primalArgument;
-    const page = Number(commandArguments.arguments[1]);
-    const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
+    const page = Number(commandArguments.arguments[1]);    const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
     const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
 
     LeaderboardMessageInstance.supportLookUp = true;

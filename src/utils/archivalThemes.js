@@ -49,6 +49,7 @@ exports.ArchiveThemesFile = class ArchiveThemesInstance {
     const themes = Object.keys(this.mainObject[version]);
 
     themes.shift(); // Remove version name.
+    console.log('Themes for version returning: \n\n', themes)
     return themes;
   }
 

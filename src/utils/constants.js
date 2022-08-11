@@ -10,6 +10,7 @@ exports.bugRole = {
 exports.archiveEngineID = [
   'OutFox', // Project OutFox
   'StepMania 5', // StepMania 5
+  'SM━SSC',
   'SM4', // StepMania 4
   'NITG', // NotITG
   'OITG', // OpenITG
@@ -21,6 +22,7 @@ exports.archiveEngineID = [
 exports.archiveEngineName = {
   OutFox: 'Project OutFox',
   'StepMania 5': 'StepMania 5',
+  'SM━SSC': 'SM━SSC', // TODO: I'm not sure if this is working
   SM4: 'StepMania 4',
   NITG: 'NotITG',
   OITG: 'OpenITG',
@@ -33,6 +35,10 @@ exports.archiveEngineEmoteData = {
   OutFox: {
     name: 'OUTFOX',
     id: '959944386609840148'
+  },
+  'SM━SSC': {
+    name: 'SM5',
+    id: '959944386567897138'
   },
   'StepMania 5': {
     name: 'SM5',
@@ -68,6 +74,7 @@ exports.archiveEngineColors = {
   OutFox: '#bad0ff',
   NITG: '#e2e5e0',
   OITG: '#e00207',
+  'SM━SSC': '#fc9768',
   'StepMania 5': '#fc9768',
   SM4: '#cc0000',
   'SM3.95': '#b9b423',
@@ -78,6 +85,7 @@ exports.archiveEngineColors = {
 exports.archiveEngineLink = {
   OutFox: 'https://josevarela.xyz/SMArchive/Builds/#OUTFOX',
   'StepMania 5': 'https://josevarela.xyz/SMArchive/Builds/#SM5',
+  'SM━SSC': 'https://josevarela.xyz/SMArchive/Builds/index.html#SMSSCCUSTOM',
   NITG: 'https://josevarela.xyz/SMArchive/Builds/#OITG',
   SM4: 'https://josevarela.xyz/SMArchive/Builds/#SM4',
   OITG: 'https://josevarela.xyz/SMArchive/Builds/#OITG',
