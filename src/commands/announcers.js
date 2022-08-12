@@ -2,10 +2,7 @@ const { SlashCommand } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveAnnouncersFile } = require('../utils/archivalAnnouncers.js');
-const {
-  archiveGenericEmbedFields,
-  announcersCreators
-} = require('../utils/constants.js')
+const { archiveGenericEmbedFields, announcersCreators } = require('../utils/constants.js');
 const ArchiveAnnouncersInstance = new ArchiveAnnouncersFile();
 
 module.exports = class AnnouncersCommand extends SlashCommand {
@@ -46,11 +43,11 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       await this.leaderboard({
         interaction,
         commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          primalArgument: interaction.values[0].split('━')[3],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -61,10 +58,10 @@ module.exports = class AnnouncersCommand extends SlashCommand {
         interaction,
         commandArguments: {
           primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -76,10 +73,10 @@ module.exports = class AnnouncersCommand extends SlashCommand {
      * @returns {string}
      */
     const announcersCountString = (author) => {
-      const announcersCount = ArchiveAnnouncersInstance.announcersFromAuthors[author].length
+      const announcersCount = ArchiveAnnouncersInstance.announcersFromAuthors[author].length;
 
-      return `${author}: **${announcersCount} ${1 >= announcersCount ? 'Announcer' : 'Announcers'}**`
-    }
+      return `${author}: **${announcersCount} ${1 >= announcersCount ? 'Announcer' : 'Announcers'}**`;
+    };
 
     const announcersEmbed = new MessageEmbed()
       .setTitle('StepMania Archive Announcers')
@@ -100,25 +97,25 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
       .setColor('#30c3c4');
 
-    const authorOptions = []
+    const authorOptions = [];
 
-    const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors)
+    const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors);
     for (let i = 0; i < announcersAuthors.length; i++) {
       /**
        * @type {string}
        */
-      const currentAuthor = announcersAuthors[i]
-      const tempObj = {}
+      const currentAuthor = announcersAuthors[i];
+      const tempObj = {};
 
-      tempObj.label = currentAuthor
-      tempObj.value = `6-${this.commandVersion}-leaderboard-${currentAuthor.replace('-', 'U+002F')}-0`
+      tempObj.label = currentAuthor;
+      tempObj.value = `6━${this.commandVersion}━leaderboard━${currentAuthor.replace('-', 'U+002F')}━0`;
 
-      authorOptions.push(tempObj)
+      authorOptions.push(tempObj);
     }
 
     const smSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`6-${this.commandVersion}-update-authorSelected`)
+        .setCustomId(`6━${this.commandVersion}━update━authorSelected`)
         .setPlaceholder('Select Author')
         .addOptions(authorOptions)
     );
@@ -150,7 +147,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
      */
     const author = commandArguments.primalArgument.replace('U+002F', '-');
     const page = Number(commandArguments.arguments[1]);
-    const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author)
+    const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author);
     const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
 
     LeaderboardMessageInstance.supportLookUp = true;
@@ -161,23 +158,23 @@ module.exports = class AnnouncersCommand extends SlashCommand {
     }
 
     const pageEmbed = new MessageEmbed()
-    .setTitle('Select Announcer')
-    .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
-    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+      .setTitle('Select Announcer')
+      .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
+      .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+      .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
         .setLabel('Another Announcer')
         .setStyle('PRIMARY')
-        .setCustomId(`6-${this.commandVersion}-update-0`)
+        .setCustomId(`6━${this.commandVersion}━update━0`)
     );
 
     LeaderboardMessageInstance.page = page;
 
-    const components = LeaderboardMessageInstance.pageComponents
+    const components = LeaderboardMessageInstance.pageComponents;
 
-    components.push(buttons)
+    components.push(buttons);
 
     const msgData = {
       embeds: [
@@ -201,13 +198,13 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       return;
     }
 
-    const interactionSplit = interaction.values[0].split('-');
+    const interactionSplit = interaction.values[0].split('━');
     const page = Number(interactionSplit[3]);
     /**
      * @type {string}
      */
-    const author = commandArguments.primalArgument.replace('U+002F', '-')
-    const announcer = ArchiveAnnouncersInstance.announcersByAuthor(author)[page]
+    const author = commandArguments.primalArgument.replace('U+002F', '-');
+    const announcer = ArchiveAnnouncersInstance.announcersByAuthor(author)[page];
 
     const announcerEmbed = new MessageEmbed()
       .setTitle(`${announcer.name}`)
@@ -221,7 +218,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       new MessageButton()
         .setLabel('Another Announcer')
         .setStyle('PRIMARY')
-        .setCustomId(`6-${this.commandVersion}-leaderboard-${author.replace('-', 'U+002F')}-0`)
+        .setCustomId(`6━${this.commandVersion}━leaderboard━${author.replace('-', 'U+002F')}━0`)
     );
 
     if (author !== 'Unlisted') announcerEmbed.addField('Author', author, true);

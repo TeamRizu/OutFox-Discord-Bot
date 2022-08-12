@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { SlashCommand, ComponentContext } = require('slash-create');
 const { ModsSheetFile } = require('../utils/mods.js');
-const { conversionsGenericEmbedFields } = require('../utils/constants.js')
+const { conversionsGenericEmbedFields } = require('../utils/constants.js');
 const nodeuri = require('node-uri');
 const Vibrant = require('node-vibrant');
 const ModsSheetInstance = new ModsSheetFile();
@@ -54,18 +54,18 @@ module.exports = class ModsCommand extends SlashCommand {
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`2-${this.commandVersion}-update-${leastPageNum}`)
+        .setCustomId(`2━${this.commandVersion}━update━${leastPageNum}`)
         .setLabel('Back')
         .setStyle('PRIMARY'),
       new MessageButton()
-        .setCustomId(`2-${this.commandVersion}-update-${maxPageNum}`)
+        .setCustomId(`2━${this.commandVersion}━update━${maxPageNum}`)
         .setLabel('Next')
         .setStyle('PRIMARY')
     );
 
     const selectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`2-${this.commandVersion}-lookUp-${pageIndex}`)
+        .setCustomId(`2━${this.commandVersion}━lookUp━${pageIndex}`)
         .setPlaceholder('Select file')
         .addOptions(ModsSheetInstance.chartsSelectMenuFromPage(rows, pageIndex, interaction.ctx))
     );
@@ -91,7 +91,7 @@ module.exports = class ModsCommand extends SlashCommand {
     if (!ModsSheetInstance.convertedMods) {
       return;
     }
-    const portID = interaction.values[0].split('-')[2]; // commandID-interactionID-fileID-select
+    const portID = interaction.values[0].split('━')[2]; // commandID-interactionID-fileID-select
     const rows = await ModsSheetInstance.chartsToArrayObjectRows();
     const file = rows.find((element) => element.portID === portID);
 
@@ -102,7 +102,7 @@ module.exports = class ModsCommand extends SlashCommand {
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`2-${this.commandVersion}-update-${commandArguments.primalArgument}`)
+        .setCustomId(`2━${this.commandVersion}━update-${commandArguments.primalArgument}`)
         .setLabel('Back to Select')
         .setStyle('PRIMARY'),
       new MessageButton().setLabel('Watch Video').setStyle('LINK').setURL(file.youtube)

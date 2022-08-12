@@ -1,6 +1,6 @@
 const SlashCreate = require('slash-create');
 const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { range } = require('./constants.js')
+const { range } = require('./constants.js');
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   constructor({ interaction, commandArguments }) {
     /**
@@ -172,7 +172,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     if (this.lookingUp) {
       const stopLookingButton = new MessageButton()
         .setLabel('Go Back')
-        .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${this.arguments[1]}`)
+        .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${this.arguments[1]}`)
         .setStyle('PRIMARY');
 
       return [new MessageActionRow().addComponents(stopLookingButton)];
@@ -184,12 +184,12 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     const backButton = new MessageButton()
       .setLabel('Back')
-      .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${leastPageNum}`)
+      .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${leastPageNum}`)
       .setStyle('PRIMARY');
 
     const nextButton = new MessageButton()
       .setLabel('Next')
-      .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${maxPageNum}`)
+      .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${maxPageNum}`)
       .setStyle('PRIMARY');
 
     if (this.page === maxPageNum) {
@@ -214,31 +214,35 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
       const maxIndex = this.elementsPerPage * (this.page + 1);
-      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage
+      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage;
       if (this.page >= 1) {
-        minIndex = minIndex - this.page
+        minIndex = minIndex - this.page;
       }
 
       const selectElement = [];
-      for (let i = 0; i < currentPageElements.length; i++) {
 
-        if (typeof currentPageElements === 'object') {
+      for (let i = 0; i < currentPageElements.length; i++) {
+        // This was currentPageElements, I'm not sure why, currentPageElements would always be object, so this condition would always run.
+        // I changed it to lookup the type of the element which is what it should always have been, I'm not sure if this will break something, I hope not.
+        if (typeof currentPageElements[i] === 'object') {
           selectElement.push({
-            value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
+            value: `${this.commandID}━${this.commandVersion}━lookUp━${range(maxIndex, minIndex)[i]}━${
+              this.arguments[1]
+            }`,
             label: individualElements[this.page][i].description,
             emoji: individualElements[this.page][i].emoji
           });
-          continue
+          continue;
         }
 
         selectElement.push({
-          value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
+          value: `${this.commandID}━${this.commandVersion}━lookUp━${range(maxIndex, minIndex)[i]}━${this.arguments[1]}`,
           label: individualElements[this.page][i]
         });
       }
 
       const elementSelector = new MessageSelectMenu()
-        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}-${this.arguments[1]}`)
+        .setCustomId(`${this.commandID}━${this.commandVersion}━update━${this.primalArgument}━${this.arguments[1]}`)
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 
@@ -248,5 +252,4 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     return components;
   }
-
 };

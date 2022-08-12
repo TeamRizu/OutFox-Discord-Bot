@@ -7,7 +7,7 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
     /**
      * The object that contains all BuildListing Data
      * @type {import('../types/tsTypes/types').ArchiveBuilds}
-    */
+     */
     this.mainObject = null;
   }
 
@@ -31,13 +31,13 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
    * @returns {Array<string>}
    */
   get buildListName() {
-    const finalArr = []
+    const finalArr = [];
 
     for (let i = 0; i < this.buildListIDs.length; i++) {
-      finalArr.push(this.mainObject[this.buildListIDs[i]].Name)
+      finalArr.push(this.mainObject[this.buildListIDs[i]].Name);
     }
 
-    return finalArr
+    return finalArr;
   }
 
   /**
@@ -46,7 +46,7 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
    * @returns {import('../types/tsTypes/types').BuildList}
    */
   buildListObjectFromID(buildListID) {
-    return this.mainObject[buildListID]
+    return this.mainObject[buildListID];
   }
 
   /**
@@ -55,13 +55,13 @@ exports.ArchiveBuildsFile = class ArchiveBuildsInstance {
    * @returns {string[]}
    */
   listingNamesFromID(buildListID) {
-    const engine = this.buildListObjectFromID(buildListID)
-    const finalArr = []
+    const engine = this.buildListObjectFromID(buildListID);
+    const finalArr = [];
 
     for (let i = 0; i < engine.Listing.length; i++) {
-      finalArr.push(engine.Listing[i].Name)
+      finalArr.push(engine.Listing[i].Name);
     }
 
-    return finalArr
+    return finalArr;
   }
 };

@@ -34,16 +34,15 @@ module.exports = class PreferenceCommand extends SlashCommand {
   }
 
   async update({ interaction, commandArguments }) {
-
     if (interaction.values[0]) {
       await this.lookUp({
         interaction,
         commandArguments: {
           primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -69,7 +68,7 @@ module.exports = class PreferenceCommand extends SlashCommand {
       LeaderboardMessageInstance.addElement(PreferencesInstance.preferences[i]);
     }
 
-    preferencesEmbed.setFooter({ text: `Page ${page + 1}/${LeaderboardMessageInstance.pages.pageList.length}` })
+    preferencesEmbed.setFooter({ text: `Page ${page + 1}/${LeaderboardMessageInstance.pages.pageList.length}` });
     preferencesEmbed.setDescription(
       `
       Preferences.ini is a file that contains many of the system preferences. Some of them are accessible within Project OutFox’s settings menu, but some of them are only accessible by editing the file. Manual edits to Preferences.ini must be performed when the game is closed, or else they may be automatically overwritten.
@@ -80,7 +79,7 @@ module.exports = class PreferenceCommand extends SlashCommand {
 
       ${LeaderboardMessageInstance.pages.pageList[page]}
       `
-    )
+    );
 
     LeaderboardMessageInstance.page = page;
 
@@ -97,29 +96,29 @@ module.exports = class PreferenceCommand extends SlashCommand {
   }
 
   async lookUp({ interaction, commandArguments }) {
-    const interactionSplit = interaction.values[0].split('-');
+    const interactionSplit = interaction.values[0].split('━');
     const page = Number(interactionSplit[3]);
-    const preferenceName = PreferencesInstance.preferences[page]
-    const documentation = PreferencesInstance.mainObject[PreferencesInstance.preferences[page]]
+    const preferenceName = PreferencesInstance.preferences[page];
+    const documentation = PreferencesInstance.mainObject[PreferencesInstance.preferences[page]];
     const preferenceEmbed = new MessageEmbed()
       .setTitle(preferenceName)
       .setColor('#002c73')
-      .setDescription(documentation)
-      const buttons = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setURL(`https://outfox.wiki/user-guide/config/preferences/#${preferenceName.toLowerCase().replace(' ', '-')}`)
-          .setLabel('See on Page')
-          .setStyle('LINK'),
-        new MessageButton()
-          .setLabel('Another Preference')
-          .setStyle('PRIMARY')
-          .setCustomId(`8-${this.commandVersion}-leaderboard-0-${commandArguments.arguments[1]}`)
+      .setDescription(documentation);
+    const buttons = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setURL(`https://outfox.wiki/user-guide/config/preferences/#${preferenceName.toLowerCase().replace(' ', '-')}`)
+        .setLabel('See on Page')
+        .setStyle('LINK'),
+      new MessageButton()
+        .setLabel('Another Preference')
+        .setStyle('PRIMARY')
+        .setCustomId(`8━${this.commandVersion}━leaderboard━0━${commandArguments.arguments[1]}`)
     );
 
     const msgData = {
       embeds: [preferenceEmbed],
       components: [buttons]
-    }
+    };
 
     if (commandArguments.firstSend) {
       interaction.ctx.send(msgData);

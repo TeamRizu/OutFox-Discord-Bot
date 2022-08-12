@@ -2,7 +2,7 @@ const { SlashCommand, ComponentContext } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveCreditsFile } = require('../utils/archivalCredits.js');
-const { archiveGenericEmbedFields, creditsEngineID, creditsEngineIDToEngineTag } = require('../utils/constants.js')
+const { archiveGenericEmbedFields, creditsEngineID, creditsEngineIDToEngineTag } = require('../utils/constants.js');
 const ArchiveCreditsInstance = new ArchiveCreditsFile();
 
 module.exports = class CreditsCommand extends SlashCommand {
@@ -43,11 +43,11 @@ module.exports = class CreditsCommand extends SlashCommand {
       await this.leaderboard({
         interaction,
         commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          primalArgument: interaction.values[0].split('━')[3],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -58,10 +58,10 @@ module.exports = class CreditsCommand extends SlashCommand {
         interaction,
         commandArguments: {
           primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -89,22 +89,22 @@ module.exports = class CreditsCommand extends SlashCommand {
       .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
       .setColor('#30c3c4');
 
-    const engineOptions = []
+    const engineOptions = [];
 
-    const engines = ArchiveCreditsInstance.engines
+    const engines = ArchiveCreditsInstance.engines;
     for (let i = 0; i < engines.length; i++) {
-      const currentEngine = engines[i]
-      const tempObj = {}
+      const currentEngine = engines[i];
+      const tempObj = {};
 
-      tempObj.label = currentEngine
-      tempObj.value = `7-${this.commandVersion}-leaderboard-${currentEngine}-0`
+      tempObj.label = currentEngine;
+      tempObj.value = `7━${this.commandVersion}━leaderboard━${currentEngine}━0`;
 
-      engineOptions.push(tempObj)
+      engineOptions.push(tempObj);
     }
 
     const smSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`7-${this.commandVersion}-update-engineSelected`)
+        .setCustomId(`7━${this.commandVersion}━update━engineSelected`)
         .setPlaceholder('Select Engine')
         .addOptions(engineOptions)
     );
@@ -134,9 +134,9 @@ module.exports = class CreditsCommand extends SlashCommand {
     /**
      * @type {string}
      */
-    const engine = commandArguments.primalArgument
+    const engine = commandArguments.primalArgument;
     const page = Number(commandArguments.arguments[1]);
-    const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine)
+    const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine);
     const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
 
     LeaderboardMessageInstance.supportLookUp = true;
@@ -147,23 +147,23 @@ module.exports = class CreditsCommand extends SlashCommand {
     }
 
     const pageEmbed = new MessageEmbed()
-    .setTitle('Select Section')
-    .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
-    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+      .setTitle('Select Section')
+      .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
+      .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+      .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
         .setLabel('Another Engine')
         .setStyle('PRIMARY')
-        .setCustomId(`7-${this.commandVersion}-update-0`)
+        .setCustomId(`7━${this.commandVersion}━update━0`)
     );
 
     LeaderboardMessageInstance.page = page;
 
-    const components = LeaderboardMessageInstance.pageComponents
+    const components = LeaderboardMessageInstance.pageComponents;
 
-    components.push(buttons)
+    components.push(buttons);
 
     const msgData = {
       embeds: [
@@ -187,34 +187,34 @@ module.exports = class CreditsCommand extends SlashCommand {
       return;
     }
 
-    const interactionSplit = interaction.values[0].split('-');
+    const interactionSplit = interaction.values[0].split('━');
     const page = Number(interactionSplit[3]);
     /**
      * @type {string}
      */
-    const engine = commandArguments.primalArgument
-    const section = ArchiveCreditsInstance.mainObject[engine][page]
-    let sectionMembers = ''
+    const engine = commandArguments.primalArgument;
+    const section = ArchiveCreditsInstance.mainObject[engine][page];
+    let sectionMembers = '';
 
     for (let i = 0; i < section.members.length; i++) {
-      let currentMember = section.members[i]
+      let currentMember = section.members[i];
 
       if (currentMember.includes('strong>')) {
-        currentMember = currentMember.replace('<strong>', '**')
-        currentMember = currentMember.replace('</strong>', '**')
+        currentMember = currentMember.replace('<strong>', '**');
+        currentMember = currentMember.replace('</strong>', '**');
       }
 
       if (currentMember.includes('i>')) {
-        currentMember = currentMember.replace('<i>', '_')
-        currentMember = currentMember.replace('</i>', '_')
+        currentMember = currentMember.replace('<i>', '_');
+        currentMember = currentMember.replace('</i>', '_');
       }
 
       if ('small>') {
-        currentMember = currentMember.replace('<small>', '')
-        currentMember = currentMember.replace('</small>', '')
+        currentMember = currentMember.replace('<small>', '');
+        currentMember = currentMember.replace('</small>', '');
       }
 
-      sectionMembers = sectionMembers + currentMember + '\n'
+      sectionMembers = sectionMembers + currentMember + '\n';
     }
     const announcerEmbed = new MessageEmbed()
       .setTitle(`${section.title}`)
@@ -229,7 +229,7 @@ module.exports = class CreditsCommand extends SlashCommand {
       new MessageButton()
         .setLabel('Another section')
         .setStyle('PRIMARY')
-        .setCustomId(`7-${this.commandVersion}-leaderboard-${engine}-0`)
+        .setCustomId(`7━${this.commandVersion}━leaderboard━${engine}━0`)
     );
 
     const msgData = {

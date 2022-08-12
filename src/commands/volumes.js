@@ -24,7 +24,9 @@ const embeds = {
     .setURL('https://projectoutfox.com/outfox-serenity/volume-i')
     .setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-update-jk.png')
     .addField('OutFox Serenity Server', '[https://discord.gg/mNcFU67mK7](https://discord.gg/mNcFU67mK7)')
-    .setImage('https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/main/OutFox%20Serenity%20Volume%201/banner.png'),
+    .setImage(
+      'https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/main/OutFox%20Serenity%20Volume%201/banner.png'
+    ),
   'volume 2': new MessageEmbed()
     .setTitle('OutFox Serenity Volume 2')
     .setDescription(
@@ -34,8 +36,8 @@ const embeds = {
     .setURL('https://projectoutfox.com/news/outfox-serenity-volume-2-more')
     .setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-2-jk-small.png')
     .addField('OutFox Serenity Server', '[https://discord.gg/mNcFU67mK7](https://discord.gg/mNcFU67mK7)')
-    .setImage('https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/v2/OutFox%20Serenity%20Volume%202/banner.png'),
-}
+    .setImage('https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/v2/OutFox%20Serenity%20Volume%202/banner.png')
+};
 
 module.exports = class VolumesCommand extends SlashCommand {
   constructor(creator) {
@@ -43,7 +45,7 @@ module.exports = class VolumesCommand extends SlashCommand {
       name: 'volumes',
       description: 'Get information for Serenity Volumes.'
     });
-    this.commandVersion = '0.0.1'
+    this.commandVersion = '0.0.1';
   }
 
   /**
@@ -62,25 +64,24 @@ module.exports = class VolumesCommand extends SlashCommand {
         version: this.commandVersion,
         firstSend: true
       }
-    })
+    });
   }
 
-  async update({interaction, commandArguments}) {
-
+  async update({ interaction, commandArguments }) {
     const checkoutVolumeSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`0-${this.commandVersion}-lookUp-2`)
+        .setCustomId(`0━${this.commandVersion}━lookUp-2`)
         .setPlaceholder('Checkout Volumes')
         .addOptions([
           {
-            label: `Volume 1 Winter Update`,
+            label: `Volume 1`,
             description: `Released August 27, 2021`,
-            value: `0-${this.commandVersion}-lookUp-0`
+            value: `0━${this.commandVersion}━lookUp━0`
           },
           {
             label: `Volume 2`,
             description: `In production`,
-            value: `0-${this.commandVersion}-lookUp-1`
+            value: `0━${this.commandVersion}━lookUp━1`
           }
         ])
     );
@@ -97,13 +98,13 @@ module.exports = class VolumesCommand extends SlashCommand {
     }
   }
 
-  async lookUp({interaction, commandArguments}) {
-    const page = interaction.values[0].split('-')[3]
-    const pageIntoVolume = ['volume 1', 'volume 2'][page]
+  async lookUp({ interaction, commandArguments }) {
+    const page = interaction.values[0].split('━')[3];
+    const pageIntoVolume = ['volume 1', 'volume 2'][page];
 
     const button = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId(`0-${this.commandVersion}-update-start`)
+        .setCustomId(`0━${this.commandVersion}━update━start`)
         .setLabel('Back to Serenity')
         .setStyle('PRIMARY')
     );
@@ -111,6 +112,6 @@ module.exports = class VolumesCommand extends SlashCommand {
     interaction.ctx.send({
       embeds: [embeds[pageIntoVolume]],
       components: [button]
-    })
+    });
   }
-}
+};

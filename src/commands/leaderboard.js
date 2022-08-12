@@ -56,11 +56,11 @@ module.exports = class LeaderboardCommand extends SlashCommand {
     const buttons = new MessageActionRow()
     .addComponents(
       new MessageButton()
-        .setCustomId(`1-${this.commandVersion}-update-${leastPageNum}`)
+        .setCustomId(`1━${this.commandVersion}━update━${leastPageNum}`)
         .setLabel("Back")
         .setStyle('PRIMARY'),
       new MessageButton()
-        .setCustomId(`1-${this.commandVersion}-update-${maxPageNum}`)
+        .setCustomId(`1━${this.commandVersion}━update━${maxPageNum}`)
         .setLabel('Next')
         .setStyle('PRIMARY')
     )

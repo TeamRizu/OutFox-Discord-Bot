@@ -2,7 +2,16 @@ const { SlashCommand, ComponentContext } = require('slash-create');
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
 const { ArchiveThemesFile } = require('../utils/archivalThemes.js');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
-const { archiveThemeDescription, archiveThemesMusicWheelImage, archiveEngineID, archiveEngineName, archiveEngineEmoteData, archiveEngineColors, archiveGenericEmbedFields, archiveEngineLink } = require('../utils/constants.js')
+const {
+  archiveThemeDescription,
+  archiveThemesMusicWheelImage,
+  archiveEngineID,
+  archiveEngineName,
+  archiveEngineEmoteData,
+  archiveEngineColors,
+  archiveGenericEmbedFields,
+  archiveEngineLink
+} = require('../utils/constants.js');
 const ArchiveThemesInstance = new ArchiveThemesFile();
 
 module.exports = class ThemesCommand extends SlashCommand {
@@ -43,11 +52,11 @@ module.exports = class ThemesCommand extends SlashCommand {
       await this.leaderboard({
         interaction,
         commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          primalArgument: interaction.values[0].split('━')[3],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -58,10 +67,10 @@ module.exports = class ThemesCommand extends SlashCommand {
         interaction,
         commandArguments: {
           primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
+          arguments: interaction.values[0].split('━').slice(3),
+          version: interaction.values[0].split('━')[1],
           firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
+          commandID: interaction.values[0].split('━')[0]
         }
       });
       return;
@@ -73,9 +82,9 @@ module.exports = class ThemesCommand extends SlashCommand {
      * @returns {string}
      */
     const engineThemeCountString = (engine) => {
-      const themeCount = ArchiveThemesInstance.themesForVersion(engine).length
-      return `${archiveEngineName[engine]}: **${themeCount} ${1 >= themeCount ? 'Theme' : 'Themes'}**`
-    }
+      const themeCount = ArchiveThemesInstance.themesForVersion(engine).length;
+      return `${archiveEngineName[engine]}: **${themeCount} ${1 >= themeCount ? 'Theme' : 'Themes'}**`;
+    };
 
     const themesInfoEmbed = new MessageEmbed()
       .setTitle('StepMania Archive Themes')
@@ -92,7 +101,7 @@ module.exports = class ThemesCommand extends SlashCommand {
         ${engineThemeCountString('SM4')}
         ${engineThemeCountString('OITG')}
         ${engineThemeCountString('NITG')}
-        ${engineThemeCountString('SM━SSC')}
+        ${engineThemeCountString('SM-SSC')}
         ${engineThemeCountString('StepMania 5')}
         ${engineThemeCountString('OutFox')}
         `
@@ -101,22 +110,22 @@ module.exports = class ThemesCommand extends SlashCommand {
       .setURL('https://josevarela.xyz/SMArchive/Themes/index.html')
       .setColor('#30c3c4');
 
-    const smOptions = []
+    const smOptions = [];
 
     for (let i = 0; i < archiveEngineID.length; i++) {
-      const currentEngine = archiveEngineID[i]
-      const tempObj = {}
+      const currentEngine = archiveEngineID[i];
+      const tempObj = {};
 
-      tempObj.label = archiveEngineName[currentEngine]
-      tempObj.value = `5-${this.commandVersion}-leaderboard-${currentEngine}-0`
-      tempObj.emoji = archiveEngineEmoteData[currentEngine]
+      tempObj.label = archiveEngineName[currentEngine];
+      tempObj.value = `5━${this.commandVersion}━leaderboard━${currentEngine}━0`;
+      tempObj.emoji = archiveEngineEmoteData[currentEngine];
 
-      smOptions.push(tempObj)
+      smOptions.push(tempObj);
     }
 
     const smSelectMenu = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId(`5-${this.commandVersion}-update-smSelected`)
+        .setCustomId(`5━${this.commandVersion}━update━smSelected`)
         .setPlaceholder('Select StepMania Engine')
         .addOptions(smOptions)
     );
@@ -139,7 +148,6 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async leaderboard({ interaction, commandArguments }) {
-
     if (!ArchiveThemesInstance.mainObject) {
       return;
     }
@@ -148,7 +156,8 @@ module.exports = class ThemesCommand extends SlashCommand {
      * @type {string}
      */
     const fork = commandArguments.primalArgument;
-    const page = Number(commandArguments.arguments[1]);    const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
+    const page = Number(commandArguments.arguments[1]);
+    const themesForFork = ArchiveThemesInstance.themesForVersion(fork);
     const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
 
     LeaderboardMessageInstance.supportLookUp = true;
@@ -159,24 +168,23 @@ module.exports = class ThemesCommand extends SlashCommand {
     }
 
     const pageEmbed = new MessageEmbed()
-    .setTitle('Select Theme')
-    .setColor(archiveEngineColors[fork])
-    .setURL('https://josevarela.xyz/SMArchive/Themes/index.html')
-    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+      .setTitle('Select Theme')
+      .setColor(archiveEngineColors[fork])
+      .setURL('https://josevarela.xyz/SMArchive/Themes/index.html')
+      .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+      .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
         .setLabel('Select Another Engine')
         .setStyle('PRIMARY')
-        .setCustomId(`5-${this.commandVersion}-update-0`)
+        .setCustomId(`5━${this.commandVersion}━update━0`)
     );
 
     LeaderboardMessageInstance.page = page;
+    const components = LeaderboardMessageInstance.pageComponents;
 
-    const components = LeaderboardMessageInstance.pageComponents
-
-    components.push(buttons)
+    components.push(buttons);
 
     const msgData = {
       embeds: [
@@ -196,12 +204,11 @@ module.exports = class ThemesCommand extends SlashCommand {
   }
 
   async lookUp({ interaction, commandArguments }) {
-
     if (!ArchiveThemesInstance.mainObject) {
       return;
     }
 
-    const interactionSplit = interaction.values[0].split('-');
+    const interactionSplit = interaction.values[0].split('━');
     const page = Number(interactionSplit[3]);
     /**
      * @type {string}
@@ -215,29 +222,33 @@ module.exports = class ThemesCommand extends SlashCommand {
       .addField('Engine', archiveEngineName[engine], true)
       .setColor(archiveEngineColors[engine])
       .setThumbnail(`https://cdn.discordapp.com/emojis/${archiveEngineEmoteData[engine].id}.webp?quality=lossless`)
-      .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`);
+      .setURL(
+        `https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`
+      );
 
     if (themeData.HasImages) {
-      const engineThemesImg = archiveThemesMusicWheelImage[engine]
+      const engineThemesImg = archiveThemesMusicWheelImage[engine];
 
       if (engineThemesImg[themeID]) {
-        themeEmbed.setImage(engineThemesImg[themeID])
+        themeEmbed.setImage(engineThemesImg[themeID]);
       }
     }
 
     const buttons = new MessageActionRow().addComponents(
       new MessageButton()
-        .setURL(`https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(' ', '%20')}&ID=${themeID}`)
+        .setURL(
+          `https://josevarela.xyz/SMArchive/Themes/ThemePreview.html?Category=${engine.replace(
+            ' ',
+            '%20'
+          )}&ID=${themeID}`
+        )
         .setLabel('Theme Page')
         .setStyle('LINK'),
-      new MessageButton()
-        .setURL(archiveEngineLink[engine])
-        .setLabel('Engine Page')
-        .setStyle('LINK'),
+      new MessageButton().setURL(archiveEngineLink[engine]).setLabel('Engine Page').setStyle('LINK'),
       new MessageButton()
         .setLabel('Another Theme')
         .setStyle('PRIMARY')
-        .setCustomId(`5-${this.commandVersion}-leaderboard-${engine}-0`)
+        .setCustomId(`5━${this.commandVersion}━leaderboard━${engine}━0`)
     );
 
     if (themeData.Date) themeEmbed.addField('Creation Date', themeData.Date, true);

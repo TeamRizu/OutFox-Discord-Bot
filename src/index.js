@@ -56,8 +56,7 @@ const start = async () => {
   creator.withServer(new FastifyServer()).registerCommandsIn(path.join(__dirname, 'commands')).startServer();
 
   creator.on('componentInteraction', async (ctx) => {
-
-    const IDSplit = ctx.customID.split('-');
+    const IDSplit = ctx.customID.split('━');
     const commandID = IDSplit[0];
     const version = IDSplit[1];
     const action = IDSplit[2];
@@ -77,16 +76,16 @@ const start = async () => {
     const primalArgument = arguments[0];
     switch (action) {
       case 'leaderboard':
-        if (typeof primalArgument !== 'string' || arguments.length < 2 || isNaN(arguments[1] )) return;
-      break
+        if (typeof primalArgument !== 'string' || arguments.length < 2 || isNaN(arguments[1])) return;
+        break;
       case 'lookUp':
         if (isNaN(primalArgument)) return;
-      break;
+        break;
       case 'update':
         if (typeof primalArgument !== 'string') return;
-      break;
+        break;
       default:
-      break;
+        break;
     }
 
     const CommandFile = require(`./commands/${commands[commandID]}.js`);
@@ -106,20 +105,20 @@ const start = async () => {
     switch (action) {
       case 'lookUp':
         await CommandInstance.lookUp({ interaction, commandArguments, interactionCache });
-      break
+        break;
       case 'update':
         await CommandInstance.update({ interaction, commandArguments, interactionCache });
-      break
+        break;
       case 'leaderboard':
         await CommandInstance.leaderboard({ interaction, commandArguments, interactionCache });
-      break
+        break;
       default:
         await CommandInstance.run(ctx, { interaction, commandArguments, interactionCache });
-      break
+        break;
     }
   });
 
   console.log(`Starting server at "localhost:${creator.options.serverPort}/interactions"`);
-}
+};
 
-start()
+start();

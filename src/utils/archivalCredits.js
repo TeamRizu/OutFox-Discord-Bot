@@ -25,7 +25,7 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
    * @returns {Array<string>}
    */
   get engines() {
-    return Object.keys(this.mainObject).filter(e => e !== 'Mung3');
+    return Object.keys(this.mainObject).filter((e) => e !== 'Mung3');
   }
 
   /**
@@ -35,16 +35,16 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
    */
   creditsTitleByEngine(engine) {
     if (!this.engines.includes(engine)) {
-      return []
+      return [];
     }
 
-    const credits = this.mainObject[engine]
-    const finalArr = []
+    const credits = this.mainObject[engine];
+    const finalArr = [];
 
     for (let i = 0; i < credits.length; i++) {
-      finalArr.push(credits[i].title)
+      finalArr.push(credits[i].title);
     }
 
-    return finalArr
+    return finalArr;
   }
 };
