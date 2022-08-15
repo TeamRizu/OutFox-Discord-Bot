@@ -7,7 +7,7 @@ const main = async () => {
   // Selected mode/style input
   const curMode = 'ds3ddx';
   const curStyle = 'single' || defaultstyle.defaultstyle[curMode];
-  const reverse = true;
+  const reverse = false;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {
     if (curMode.includes('kb')) return 'kbx'
@@ -273,7 +273,7 @@ const main = async () => {
               }
               switch (curMode) {
                 case 'ds3ddx':
-                  background.blit(holdTop, noteX, noteY);
+                  background.blit(holdTop, noteX, reverse ? noteY + 20 : noteY - 20);
                   break;
                 default:
                   background.blit(holdTop, noteX, reverse ? noteY + 32 : noteY);
@@ -305,7 +305,7 @@ const main = async () => {
 
               switch (curMode) {
                 case 'ds3ddx':
-                  background.blit(rollTop, noteX, noteY);
+                  background.blit(rollTop, noteX, reverse ? noteY + 20 : noteY - 20);
                   break;
                 default:
                   background.blit(rollTop, noteX, reverse ? noteY + 32 : noteY);
@@ -354,10 +354,10 @@ const main = async () => {
 
               switch (curMode) {
                 case 'ds3ddx':
-                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 86 - noteY);
+                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 56 - noteY);
                   break;
                 default:
-                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
               }
 
               switch (curMode) {
@@ -373,6 +373,9 @@ const main = async () => {
                   break;
                 case 'gh':
                   background.blit(body, bodyX + (curLane === 5 ? 80 : 19), reverse ? bodyY - (curLane === 5 ? 32 : 64) : bodyY - (curLane === 5 ? 35 : 0));
+                  break;
+                case 'ds3ddx':
+                  background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY + 10);
                   break;
                 default:
                   background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY - 0);
@@ -405,11 +408,17 @@ const main = async () => {
                   }
                   break;
                 case 'kbx':
-                case 'ds3ddx':
                   background.blit(
                     bottom,
                     noteX,
                     noteY + measureBottom.height - 32
+                  );
+                  break;
+                case 'ds3ddx':
+                  background.blit(
+                    bottom,
+                    noteX,
+                    noteY + measureBottom.height - (reverse ? 48 : 32)
                   );
                   break;
                 default:
@@ -532,7 +541,7 @@ const main = async () => {
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
                 const measureBody = await NoteSkin.collectMeasure(`${type}Body`, timing, endChar, noteType, curLane);
 
-                body.resize(measureBody.width, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+                body.resize(measureBody.width - 64, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
 
                 switch (curMode) {
                   case 'bm':
@@ -542,7 +551,7 @@ const main = async () => {
                     background.blit(body, bodyX + (curLane === 5 ? 80 : 19), bodyY - (curLane === 5 ? 32 : 0));
                   break
                   default:
-                    background.blit(body, bodyX, bodyY);
+                    background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY);
                   break
                 }
                 // background.blit(body, bodyX + (curMode === 'gh' ? (curLane === 5 ? 80 : 19) : 0), bodyY - (curMode === 'bm' ? 96 : 0));

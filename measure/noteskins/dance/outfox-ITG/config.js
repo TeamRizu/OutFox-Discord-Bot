@@ -59,6 +59,18 @@ const config = {
           height: 64
         }
       }
+      case 'holdBody': {
+        return {
+          width: 64,
+          height: 64
+        }
+      }
+      case 'rollBody': {
+        return {
+          width: 64,
+          height: 64
+        }
+      }
       default:
         return fallbackNoteskin.measurements(asset, timing, endChar, notetype, lane, styleconfig, style)
     }

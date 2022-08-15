@@ -3,7 +3,7 @@ const path = require('path')
 const fallbackNoteskin = require("../default/config.js").config;
 
 /**
- * 
+ *
  * @param {'single' | 'halfdouble' | 'double'} [style]
  * @returns {Array<string>}
  */
@@ -93,7 +93,7 @@ const config = {
       }
       case 'holdBody': {
         return {
-          width: 256,
+          width: 128,
           height: 256
         }
       }
@@ -101,6 +101,18 @@ const config = {
         return {
           width: 64,
           height: 32
+        }
+      }
+      case 'rollBody': {
+        return {
+          width: 128,
+          height: 256
+        }
+      }
+      case 'mineBody': {
+        return {
+          width: 128,
+          height: 64
         }
       }
       default:
