@@ -6,7 +6,7 @@ const defaultstyle = require('./defaultstyle.js');
 const main = async () => {
   // Selected mode/style input
   const curMode = 'ds3ddx';
-  const curStyle = 'single' || defaultstyle.defaultstyle[curMode];
+  const curStyle = '' || defaultstyle.defaultstyle[curMode];
   const reverse = false;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {
@@ -421,6 +421,14 @@ const main = async () => {
                     noteY + measureBottom.height - (reverse ? 48 : 32)
                   );
                   break;
+                case 'bm':
+                  const toFixBMMineFieldY = curMode === 'bm' && bodyName === 'mine'
+                  background.blit(
+                    bottom,
+                    noteX,
+                    noteY + measureBottom.height + (reverse ? -32 : 0) - (toFixBMMineFieldY ? 32 : 0)
+                  );
+                  break;
                 default:
                   background.blit(
                     bottom,
@@ -455,7 +463,7 @@ const main = async () => {
                     );
                     break;
                   case 'gh':
-                    let ghFixedBodyY = bodyY - measureNote.height / 2 - 26
+                    let ghFixedBodyY = bodyY - measureNote.height / 2
 
                     if (curLane === 5) ghFixedBodyY = reverse ? ghFixedNoteY + 32 : ghFixedNoteY - 32 // HACK: This is for strum holds. (Reverse false)
 
@@ -510,7 +518,13 @@ const main = async () => {
                   mineTop.flip(false, true);
                 }
 
-                background.blit(mineTop, noteX, reverse ? noteY + 32 : noteY);
+                switch (curMode) {
+                  case 'bm':
+                    background.blit(mineTop, noteX, reverse ? noteY : noteY - 32);
+                    break;
+                  default:
+                    background.blit(mineTop, noteX, reverse ? noteY + 32 : noteY);
+                }
 
                 const measureMineTop = await NoteSkin.collectMeasure('mineTop', timing, endChar, noteType, curLane);
 
@@ -545,7 +559,7 @@ const main = async () => {
 
                 switch (curMode) {
                   case 'bm':
-                    background.blit(body, bodyX, bodyY - 96);
+                    background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY - 32);
                   break
                   case 'gh':
                     background.blit(body, bodyX + (curLane === 5 ? 80 : 19), bodyY - (curLane === 5 ? 32 : 0));
@@ -577,6 +591,9 @@ const main = async () => {
                   case 'kbx':
                     background.blit(bottom, noteX, noteY + measureMineBottom.height - 32);
                     break;
+                  case 'bm':
+                    background.blit(bottom, noteX, noteY + measureMineBottom.height + (reverse ? -64 : -32));
+                    break
                   default:
                     background.blit(bottom, noteX, noteY + measureMineBottom.height + (reverse ? -32 : 0));
                 }
@@ -589,6 +606,9 @@ const main = async () => {
                   break
                   case 'kbx':
                     background.blit(note, bodyX, bodyY - measureNote.height / 2 - 16);
+                    break;
+                  case 'bm':
+                    background.blit(note, bodyX, bodyY - measureNote.height / 2 + (reverse ? 0 : -32));
                     break;
                   default:
                     background.blit(note, bodyX, bodyY - measureNote.height / 2);
@@ -618,7 +638,7 @@ const main = async () => {
                 background.blit(
                   lift,
                   curMode === 'smx' ? bodyX + 16 : bodyX,
-                  noteY + measureLift.height / 2 - (curMode === 'smx' ? 8 : 32)
+                  noteY + measureLift.height / 2 - (curMode === 'smx' ? 0 : 32)
                 );
 
                 delete lastNoteByLane[curLane];

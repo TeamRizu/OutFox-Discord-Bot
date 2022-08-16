@@ -101,7 +101,7 @@ const config = {
       }
       case 'holdBody': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style)),
+          width: 64 + noteWidth(guessGraphicFolder(lane, style)),
           height: 1
         }
       }

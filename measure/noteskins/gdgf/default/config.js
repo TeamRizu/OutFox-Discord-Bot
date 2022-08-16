@@ -16,7 +16,7 @@ const guessGraphicFolder = (lane, style) => {
   }
 };
 
-const noteWidth = (laneName, style) => {
+const noteWidth = (laneName, style, fromSelf = true) => {
   switch (laneName) {
     case 'open':
       const width = {
@@ -27,9 +27,9 @@ const noteWidth = (laneName, style) => {
         'bass-five': 320,
         five: 320
       }
-      return width[style];
+      return width[style] + (fromSelf ? 0 : 64);
     default:
-      return 64;
+      return fromSelf ? 64 : 128;
   }
 };
 
@@ -125,13 +125,13 @@ const config = {
     switch (asset) {
       case 'fake': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: noteWidth(guessGraphicFolder(lane, style), style, false),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
       case 'tapNote': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: noteWidth(guessGraphicFolder(lane, style), style, false),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
@@ -141,7 +141,7 @@ const config = {
         }
 
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: noteWidth(guessGraphicFolder(lane, style), style, false),
           height: 64
         };
       }

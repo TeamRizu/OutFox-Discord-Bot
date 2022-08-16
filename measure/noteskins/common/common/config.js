@@ -91,7 +91,7 @@ const config = {
       }
       case 'holdBody': {
         return {
-          width: 64,
+          width: 128,
           height: 128
         }
       }
@@ -109,7 +109,7 @@ const config = {
       }
       case 'rollBody': {
         return {
-          width: 64,
+          width: 128,
           height: 128
         }
       }
@@ -127,7 +127,7 @@ const config = {
       }
       case 'mineBody': {
         return {
-          width: 64,
+          width: 128,
           height: 128
         }
       }

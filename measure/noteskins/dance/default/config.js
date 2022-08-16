@@ -59,12 +59,6 @@ const config = {
           height: 64
         }
       }
-      case 'lift': {
-        return {
-          width: 64,
-          height: 64
-        }
-      }
       case 'liftHold': {
         return {
           width: 64,
@@ -148,14 +142,6 @@ const config = {
         note.resize(64, 64);
 
         return note;
-      }
-      case "lift": {
-        const lift = await jimp.read(path.join(__dirname, `/lift.png`));
-
-        lift.rotate(styleconfig.noteRotation[lane], false);
-        lift.resize(64, 64);
-
-        return lift;
       }
       case "liftHold": {
         const liftHold = await jimp.read(path.join(__dirname, "/liftHold.png"));

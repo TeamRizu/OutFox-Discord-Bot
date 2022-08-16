@@ -10,12 +10,12 @@ const guessGraphicFolder = (lane, style) => {
   }
 };
 
-const noteWidth = (laneName, style) => {
+const noteWidth = (laneName, style, fromSelf = true) => {
   switch (laneName) {
     case 'strum':
-      return 320;
+      return 320 + (fromSelf ? 0 : 64);
     default:
-      return 64;
+      return 64 + (fromSelf ? 0 : 64);
   }
 };
 
@@ -67,30 +67,31 @@ const config = {
     switch (asset) {
       case 'fake': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: noteWidth(guessGraphicFolder(lane, style), style, false),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
       case 'lift': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: noteWidth(guessGraphicFolder(lane, style), style, false),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
       case 'tapNote': {
         return {
-          width: noteWidth(guessGraphicFolder(lane, style), style),
+          width: noteWidth(guessGraphicFolder(lane, style), style, false),
           height: noteHeight(guessGraphicFolder(lane, style))
         };
       }
       case 'holdBody': {
 
         if (guessGraphicFolder(lane, style) === 'strum') return {
-          width: 160,
+          width: 160 + 64,
           height: 8
         }
+
         return {
-          width: 26,
+          width: 26 + 64,
           height: 64
         };
       }
