@@ -4,11 +4,21 @@ const fallbackNoteskin = require("../../common/common/config.js").config;
 
 const laneName = (curStyle, curLane) => {
   switch (curStyle) {
+    case 'double':
+      return ['HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft',         'HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft'][curLane]
     default:
       return ['HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft'][curLane]
   }
 }
 
+const rightOrLeft = (curStyle, curLane) => {
+  switch (curStyle) {
+    case 'double':
+      return [5, 6, 13, 14].includes(curLane) ? laneName(curStyle, curLane).replace('Left', 'Right') : laneName(curStyle, curLane)
+    default:
+      return curLane >= 5 && !laneName(curStyle, curLane).includes('Hand') ? laneName(curStyle, curLane).replace('Left', 'Right') : laneName(curStyle, curLane)
+  }
+}
 const config = {
   features: {
     coloredMine: false,
@@ -117,7 +127,7 @@ const config = {
    * @returns {Promise<any>}
    */
   collectAsset: async (asset, timing, endChar, notetype, lane, styleconfig, style, NoteClass) => {
-    const graphicName = lane >= 5 && !laneName(style, lane).includes('Hand') ? laneName(style, lane).replace('Left', 'Right') : laneName(style, lane)
+    const graphicName = rightOrLeft(style, lane)
 
     switch (asset) {
       case 'fake': {
