@@ -4,6 +4,10 @@ const fallbackNoteskin = require("../../common/common/config.js").config;
 
 const laneName = (curStyle, curLane) => {
   switch (curStyle) {
+    case 'single5':
+      return ['HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'FootCenter', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft'][curLane]
+    case 'double5':
+      return ['HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'FootCenter', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft',         'HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'FootCenter', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft'][curLane]
     case 'double':
       return ['HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft',         'HandLeft', 'FootDownLeft', 'FootUpLeft', 'HandDown', 'HandDown', 'FootUpLeft', 'FootDownLeft', 'HandLeft'][curLane]
     default:
@@ -13,6 +17,10 @@ const laneName = (curStyle, curLane) => {
 
 const rightOrLeft = (curStyle, curLane) => {
   switch (curStyle) {
+    case 'single5':
+      return [6, 7].includes(curLane) ? laneName(curStyle, curLane).replace('Left', 'Right') : laneName(curStyle, curLane)
+    case 'double5':
+      return [6, 7, 14, 15].includes(curLane) ? laneName(curStyle, curLane).replace('Left', 'Right') : laneName(curStyle, curLane)
     case 'double':
       return [5, 6, 13, 14].includes(curLane) ? laneName(curStyle, curLane).replace('Left', 'Right') : laneName(curStyle, curLane)
     default:
