@@ -29,5 +29,6 @@ exports.defaultstyle = {
   "kb17": "single",
   "kb18": "single",
   "kb19": "single",
-  "ds3ddx": "single"
+  "ds3ddx": "single",
+  "maniax": "single"
 }

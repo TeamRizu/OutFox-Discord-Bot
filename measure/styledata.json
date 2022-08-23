@@ -486,5 +486,17 @@
       "measureWidth": 690,
       "canvasWidth": 778
     }
+  },
+  "maniax": {
+    "single": {
+      "modeSpacing": [0, 68, 136, 204],
+      "measureWidth": 268,
+      "canvasWidth": 356
+    },
+    "double": {
+      "modeSpacing": [0, 68, 136, 204,   272, 340, 408, 476],
+      "measureWidth": 540,
+      "canvasWidth": 628
+    }
   }
 }

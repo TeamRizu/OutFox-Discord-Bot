@@ -5,8 +5,14 @@ const defaultstyle = require('./defaultstyle.js');
 
 const main = async () => {
   // Selected mode/style input
-  const curMode = 'ds3ddx';
-  const curStyle = 'double5' || defaultstyle.defaultstyle[curMode];
+  const curMode = 'maniax';
+  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+
+  if (!curStyle) {
+    console.error('No default style set for that mode!')
+    return
+  }
+
   const reverse = false;
   const showMeasureLines = true;
   const curModeOFStyle = (curMode) => {
@@ -53,7 +59,7 @@ const main = async () => {
   const perStyleTestData = stylechart.stylechart;
 
   if (!perStyleTestData[curMode + '-' + curStyle]) {
-    console.warn('No steps for that style!');
+    console.error('No steps for that style!');
     return;
   }
 
