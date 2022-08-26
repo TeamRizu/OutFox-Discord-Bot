@@ -1,20 +1,27 @@
 const jimp = require('jimp');
+const path = require('path')
 const NoteSkinFile = require('./noteskin.js');
-const stylechart = require('./stylechart.js');
+// const stylechart = require('./stylechart.js');
 const defaultstyle = require('./defaultstyle.js');
 
-const main = async () => {
-  // Selected mode/style input
-  const curMode = 'maniax';
-  const curStyle = '' || defaultstyle.defaultstyle[curMode];
+const main = async ({
+  reverse = false,
+  curMode = 'dance',
+  style,
+  showMeasureLines = true,
+  measureData
+}) => {
+  const curStyle = style || defaultstyle.defaultstyle[curMode];
 
   if (!curStyle) {
     console.error('No default style set for that mode!')
     return
   }
 
-  const reverse = false;
-  const showMeasureLines = true;
+  if (!measureData) {
+    console.error('no measureData has been given!')
+  }
+
   const curModeOFStyle = (curMode) => {
     if (curMode.includes('kb')) return 'kbx'
 
@@ -28,7 +35,7 @@ const main = async () => {
   const measureWidth = NoteSkin.styleconfig.measureWidth || 254;
 
   // Draw background
-  const background = await jimp.read('bg.png');
+  const background = await jimp.read(path.join(__dirname, './bg.png'));
   const canvasWidth = NoteSkin.styleconfig.canvasWidth || 342;
   const canvasHeight = NoteSkin.styleconfig.canvasHeight || 512;
 
@@ -56,6 +63,7 @@ const main = async () => {
     }
   }
 
+  /*
   const perStyleTestData = stylechart.stylechart;
 
   if (!perStyleTestData[curMode + '-' + curStyle]) {
@@ -65,6 +73,7 @@ const main = async () => {
 
   // Measure Data Input
   const measureData = perStyleTestData[curMode + '-' + curStyle];
+  */
 
   /**
    * Returns a array of all lane notetypes, each index is a string of the notetype, DL(M) are merged into a single index.
@@ -689,7 +698,11 @@ const main = async () => {
   }
 
   // Write the result.
-  background.write('result.jpg');
+  background.write(path.join(__dirname, './result.jpg'));
+
+  return background
 };
 
-main();
+// main();
+
+exports.generateChart = main
