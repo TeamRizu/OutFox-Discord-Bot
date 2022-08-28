@@ -1,5 +1,5 @@
 const SlashCreate = require('slash-create');
-const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, ButtonStyle } = require('discord.js');
 const { range } = require('./constants.js');
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   constructor({ interaction, commandArguments }) {
@@ -162,7 +162,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   }
 
   /**
-   * @returns {MessageActionRow[]}
+   * @returns {ActionRowBuilder[]}
    */
   get pageComponents() {
     if (!this.commandID) {
@@ -170,27 +170,27 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
     }
 
     if (this.lookingUp) {
-      const stopLookingButton = new MessageButton()
+      const stopLookingButton = new ButtonBuilder()
         .setLabel('Go Back')
         .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${this.arguments[1]}`)
-        .setStyle('PRIMARY');
+        .setStyle(ButtonStyle.Primary);
 
-      return [new MessageActionRow().addComponents(stopLookingButton)];
+      return [new ActionRowBuilder().addComponents(stopLookingButton)];
     }
 
     const pageCount = this.pages.pageList.length;
     const leastPageNum = 0 > this.page - 1 ? 0 : this.page - 1;
     const maxPageNum = this.page + 1 > pageCount - 1 ? pageCount - 1 : this.page + 1;
 
-    const backButton = new MessageButton()
+    const backButton = new ButtonBuilder()
       .setLabel('Back')
       .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${leastPageNum}`)
-      .setStyle('PRIMARY');
+      .setStyle(ButtonStyle.Primary);
 
-    const nextButton = new MessageButton()
+    const nextButton = new ButtonBuilder()
       .setLabel('Next')
       .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${maxPageNum}`)
-      .setStyle('PRIMARY');
+      .setStyle(ButtonStyle.Primary);
 
     if (this.page === maxPageNum) {
       nextButton.setDisabled(true);
@@ -206,7 +206,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     const components = [];
     if (leastPageNum !== maxPageNum) {
-      const buttonsComponents = new MessageActionRow().addComponents(backButton, nextButton);
+      const buttonsComponents = new ActionRowBuilder().addComponents(backButton, nextButton);
       components.push(buttonsComponents);
     }
 
@@ -241,12 +241,12 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
         });
       }
 
-      const elementSelector = new MessageSelectMenu()
+      const elementSelector = new SelectMenuBuilder()
         .setCustomId(`${this.commandID}━${this.commandVersion}━update━${this.primalArgument}━${this.arguments[1]}`)
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 
-      const selectComponent = new MessageActionRow().addComponents(elementSelector);
+      const selectComponent = new ActionRowBuilder().addComponents(elementSelector);
       components.push(selectComponent);
     }
 
