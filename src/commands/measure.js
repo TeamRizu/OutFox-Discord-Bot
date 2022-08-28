@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const { ButtonBuilder, ButtonStyle, SelectMenuBuilder, ActionRowBuilder } = require('discord.js')
 const stringSimilarity = require("string-similarity");
 const { SlashCommand, ComponentContext, CommandOptionType, ComponentType, TextInputStyle } = require('slash-create');
 // const { ChartHeaderFile } = require('../utils/chartHeader.js')
@@ -116,6 +117,7 @@ module.exports = class SMReaderCommand extends SlashCommand {
       value: result
     }]
   }
+
   /**
    *
    * @param {ComponentContext} ctx
@@ -152,13 +154,12 @@ module.exports = class SMReaderCommand extends SlashCommand {
         ]
       },
       async (iCtx) => {
-        console.log(ctx)
         const input = iCtx.values.measure_data
         const measureData = tidyUpInput(input)
         const curMode = ctx.options.gamemode
         const curStyle = ctx.options.style
-        const reverse = !!ctx.options.reverse // reverse might not be present at all
-        const showMeasureLines = Object.keys(ctx.options).includes('lines') ? ctx.options.lines : true
+        const reverse = ctx.options.reverse ?? false // reverse might not be present at all
+        const showMeasureLines = ctx.options.lines ?? true
 
         if (!measureData) {
           iCtx.send('Unable to process given measureData, did you type something funny?')
@@ -178,11 +179,93 @@ module.exports = class SMReaderCommand extends SlashCommand {
           return
         }
 
-        // console.log(image.getBufferAsync("image/png"))
-        iCtx.send({
+        const updateComponents = (reverseStatus, lineStatus) => {
+          console.log('Coming off as ', reverseStatus, lineStatus)
+          const reverseNewToggle = reverseStatus ? 'disable' : 'enable'
+          const reverseNewLabel = reverseNewToggle === 'enable' ? 'Enable' : 'Disable'
+          const linesNewToggle = lineStatus ? 'disable' : 'enable'
+          const linewNewLabel = linesNewToggle === 'enable' ? 'Show' : 'Hide'
+
+          return new ActionRowBuilder()
+            .addComponents(
+              new ButtonBuilder()
+                .setCustomId(`reverse_${reverseNewToggle}-lines_${linesNewToggle}`)
+                .setLabel(`${reverseNewLabel} Reverse`)
+                .setStyle(ButtonStyle.Primary),
+              new ButtonBuilder()
+                .setCustomId(`lines_${linesNewToggle}-reverse_${reverseNewToggle}`)
+                .setLabel(`${linewNewLabel} Lines`)
+                .setStyle(ButtonStyle.Primary)
+            )
+        }
+        const updateImage = async (doReverse, doLines) => {
+          const updatedImage = await generateChart({
+            reverse: doReverse,
+            showMeasureLines: doLines,
+            curMode,
+            style: curStyle,
+            measureData
+          }).catch((r) => console.error(r))
+
+          if (!updatedImage) return null
+
+          return updatedImage
+        }
+        const updatedMessageObject = (image, doReverse) => {
+          return {
+            content: `Viewing ${curMode}-${curStyle}, reverse ${doReverse ? 'ON' : 'OFF'}.`,
+            file: {
+              file: image,
+              name: `${curMode}_${curStyle}.png`
+            }
+          }
+        }
+
+        await iCtx.defer()
+        const message = await iCtx.send({
+          content: `Viewing ${curMode}-${curStyle}, reverse ${reverse ? 'ON' : 'OFF'}.`,
           file: {
             file: await image.getBufferAsync("image/png"),
             name: `${curMode}_${curStyle}.png`
+          },
+          components: [updateComponents(reverse, showMeasureLines)]
+        })
+
+        iCtx.registerWildcardComponent(message.id, async (cCtx) => {
+          const componentData = cCtx.customID.split('-')
+          const reverseStatus = componentData[componentData.findIndex((v) => v.includes('reverse_'))] === 'reverse_enable'
+          const linesStatus = componentData[componentData.findIndex((v) => v.includes('lines_'))] === 'lines_enable'
+          const componentToUpdate = componentData[0].split('_')[0]
+
+          switch (componentToUpdate) {
+            case 'reverse': {
+              const regenImage = await updateImage(reverseStatus, !linesStatus)
+
+              if (!regenImage) {
+                break
+              }
+
+              const messageObject = updatedMessageObject(await regenImage.getBufferAsync("image/png"), reverseStatus)
+              messageObject.components = [updateComponents(reverseStatus, !linesStatus)]
+
+              //await message.edit({content: 'Updating..', file: {}})
+              await message.edit(messageObject)
+              break
+            }
+            case 'lines': {
+              const regenImage = await updateImage(reverseStatus, !linesStatus)
+
+              if (!regenImage) {
+                break
+              }
+
+              const messageObject = updatedMessageObject(await regenImage.getBufferAsync("image/png"), !reverseStatus)
+              messageObject.components = [updateComponents(!reverseStatus, linesStatus)]
+
+              // await message.edit({content: 'Updating..', file: {}})
+              await message.edit(messageObject)
+              break
+            }
           }
         })
       }
