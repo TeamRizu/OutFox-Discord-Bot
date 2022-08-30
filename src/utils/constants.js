@@ -600,7 +600,7 @@ exports.buildNameToEmoteKey = (engine, name) => {
   }
 };
 
-exports.announcersCreators = ['KU+002FStep', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted'];
+exports.announcersCreators = ['K-Step', 'MadkaT', 'Hooky', 'Schizkitty', 'Unlisted'];
 
 exports.hashBuildTypeToName = {
   public: 'public build',
