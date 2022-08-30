@@ -1,13 +1,17 @@
-const SlashCreate = require('slash-create');
 const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, ButtonStyle } = require('discord.js');
 const { range } = require('./constants.js');
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
-  constructor({ interaction, commandArguments }) {
+  constructor() {
     /**
      * A array of individual elements that makes the pages.
      * @type {Array<string> | Array<object>}
      */
     this.elements = [];
+    /**
+     * The separator used between components components customID
+     * @type {string}
+     */
+    this.separator = '-'
     /**
      * Which page we're currently in.
      * @type {number}
@@ -43,26 +47,6 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
      * @type {string}
      */
     this.menuSelectPlaceholder = 'Look up element';
-    /**
-     * @type {SlashCreate.ComponentContext}
-     */
-    this.ctx = interaction.ctx;
-    /**
-     * @type {string}
-     */
-    this.commandID = commandArguments?.commandID || null;
-    /**
-     * @type {string | number}
-     */
-    this.commandVersion = commandArguments?.version || null;
-    /**
-     * @type {string}
-     */
-    this.primalArgument = commandArguments?.primalArgument || null;
-    /**
-     * @type {string[]}
-     */
-    this.arguments = commandArguments?.arguments || null;
     /**
      *
      * @param {string | import('../types/tsTypes/types').LeaderboardElementObject} e - The element string or object
@@ -165,14 +149,11 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
    * @returns {ActionRowBuilder[]}
    */
   get pageComponents() {
-    if (!this.commandID) {
-      return [];
-    }
 
     if (this.lookingUp) {
       const stopLookingButton = new ButtonBuilder()
         .setLabel('Go Back')
-        .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${this.arguments[1]}`)
+        .setCustomId('stoplookup' + this.separator + this.page)
         .setStyle(ButtonStyle.Primary);
 
       return [new ActionRowBuilder().addComponents(stopLookingButton)];
@@ -184,12 +165,12 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     const backButton = new ButtonBuilder()
       .setLabel('Back')
-      .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${leastPageNum}`)
+      .setCustomId('back' + this.separator + leastPageNum)
       .setStyle(ButtonStyle.Primary);
 
     const nextButton = new ButtonBuilder()
       .setLabel('Next')
-      .setCustomId(`${this.commandID}━${this.commandVersion}━leaderboard━${this.primalArgument}━${maxPageNum}`)
+      .setCustomId('next' + this.separator + maxPageNum)
       .setStyle(ButtonStyle.Primary);
 
     if (this.page === maxPageNum) {
@@ -225,24 +206,23 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
         // This was currentPageElements, I'm not sure why, currentPageElements would always be object, so this condition would always run.
         // I changed it to lookup the type of the element which is what it should always have been, I'm not sure if this will break something, I hope not.
         if (typeof currentPageElements[i] === 'object') {
+          const elementObject = individualElements[this.page][i]
           selectElement.push({
-            value: `${this.commandID}━${this.commandVersion}━lookUp━${range(maxIndex, minIndex)[i]}━${
-              this.arguments[1]
-            }`,
-            label: individualElements[this.page][i].description,
-            emoji: individualElements[this.page][i].emoji
+            value: elementObject.value || 'lookup' + this.separator + range(maxIndex, minIndex)[i] + this.separator + this.page,
+            label: elementObject.description,
+            emoji: elementObject.emoji
           });
           continue;
         }
 
         selectElement.push({
-          value: `${this.commandID}━${this.commandVersion}━lookUp━${range(maxIndex, minIndex)[i]}━${this.arguments[1]}`,
+          value: 'lookup' + this.separator + range(maxIndex, minIndex)[i] + this.separator + this.page,
           label: individualElements[this.page][i]
         });
       }
 
       const elementSelector = new SelectMenuBuilder()
-        .setCustomId(`${this.commandID}━${this.commandVersion}━update━${this.primalArgument}━${this.arguments[1]}`)
+        .setCustomId('updatepage' + this.separator + this.page)
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 
