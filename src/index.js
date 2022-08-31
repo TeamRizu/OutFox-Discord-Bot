@@ -55,6 +55,7 @@ const start = async () => {
 
   creator.withServer(new FastifyServer()).registerCommandsIn(path.join(__dirname, 'commands')).startServer();
 
+  /*
   creator.on('componentInteraction', async (ctx) => {
     const IDSplit = ctx.customID.split('━');
     const commandID = IDSplit[0];
@@ -117,7 +118,7 @@ const start = async () => {
         break;
     }
   });
-
+  */
   console.log(`Starting server at "localhost:${creator.options.serverPort}/interactions"`);
 };
 
