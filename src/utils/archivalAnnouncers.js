@@ -50,9 +50,9 @@ exports.ArchiveAnnouncersFile = class ArchiveAnnouncersInstance {
   }
 
   /**
-   *
+   * Gets all announcers made by given author
    * @param {string} author
-   * @returns {Array<string>}
+   * @returns {Array.<{name: string}>}
    */
   announcersByAuthor(author) {
     if (!this.announcersFromAuthors[author]) {
