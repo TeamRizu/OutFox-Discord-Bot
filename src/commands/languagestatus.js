@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { SlashCommand, ComponentContext } = require('slash-create');
 const { LanguagestatusFile } = require('../utils/languagestatusSpreadsheet.js')
 const LanguagestatusInstance = new LanguagestatusFile()
@@ -17,23 +17,10 @@ module.exports = class LanguageStatusCommand extends SlashCommand {
    */
   async run(ctx) {
     await LanguagestatusInstance.init()
-    await this.update({
-      interaction: {
-        ctx,
-        values: []
-      },
-      commandArguments: {
-        primalArgument: '0',
-        arguments: ['0'],
-        version: this.commandVersion,
-        firstSend: true
-      }
-    })
-  }
+    await ctx.defer()
 
-  async update({interaction, commandArguments}) {
     const versionsLanguage = []
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle(`Language status of Project OutFox Alpha ${LanguagestatusInstance.versions[0]} (latest)`)
       .setColor('#ADBAC7')
       .setThumbnail('https://avatars.githubusercontent.com/u/66173034?s=200&v=4')
@@ -44,7 +31,8 @@ module.exports = class LanguageStatusCommand extends SlashCommand {
     }
 
     embed.setDescription(versionsLanguage.join('\n'))
-    interaction.ctx.send({
+
+    await ctx.send({
       embeds: [embed]
     })
   }
