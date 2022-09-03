@@ -20,7 +20,7 @@ module.exports = class BuildsCommand extends SlashCommand {
       name: 'builds',
       description: 'Get a list of builds with info and more.'
     });
-    this.commandVersion = '0.0.1';
+    this.commandVersion = '0.0.2';
   }
 
   /**
