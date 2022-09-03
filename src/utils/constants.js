@@ -612,7 +612,7 @@ exports.hashBuildTypeToDescription = {
   public:
     "This is a public build that is available to be downloaded by anyone either by using Project OutFox Website or Team Rizu's OutFox Repository.",
   testbuild:
-    'This is a test build, it is not available to the public but, usually, to selected members of Project OutFox Discord Server Alpha Tester Programme.',
+    'This is a test build, it is not available to the public but you can get it by joining the Testing Program on Project OutFox Discord Server.',
   private: 'This is a private build, it is only available to Project OutFox Team.'
 };
 

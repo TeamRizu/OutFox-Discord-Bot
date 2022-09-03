@@ -1,5 +1,5 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommand, CommandOptionType, ComponentContext, Message } = require('slash-create');
 const { hashBuildTypeToDescription, hashBuildNoteToDescription } = require('../utils/constants');
 const { HashBuildFile } = require('../utils/hashbuild.js');
 const HashBuildClass = new HashBuildFile();
@@ -18,51 +18,34 @@ module.exports = class MyBuildCommand extends SlashCommand {
         }
       ]
     });
-    this.commandVersion = '0.0.2';
+    this.commandVersion = '0.0.3';
     this.filePath = __filename;
   }
 
-  async run(ctx, { interaction, commandArguments } = {}) {
+  /**
+   *
+   * @param {ComponentContext} ctx
+   */
+  async run(ctx) {
+    await ctx.defer();
+
     /**
      * @type {string}
      */
-    const hash = commandArguments ? commandArguments.primalArgument : ctx.options.hash;
+    const hash = ctx.options.hash;
 
     const buildData = HashBuildClass.buildByHash(hash);
 
     if (!buildData) return 'Could not find build.';
 
-    const buttons = new MessageActionRow();
-    let addedButtons = false;
-
-    const buildNotes = () => {
+    const buildNotes = (build) => {
       let notes = '';
-      for (let i = 0; i < buildData.notes.length; i++) {
-        const currentNote = buildData.notes[i];
+      for (let i = 0; i < build.notes.length; i++) {
+        const currentNote = build.notes[i];
 
         if (currentNote.type === 'notice') {
           notes += `- ${currentNote.description}\n`;
           continue;
-        }
-
-        if (currentNote.type === 'hotfix_notice') {
-          addedButtons = true;
-          buttons.addComponents(
-            new MessageButton()
-              .setCustomId(`10━${this.commandVersion}━run━${currentNote.hotfix_hash}`)
-              .setLabel('Hotfix Build')
-              .setStyle('PRIMARY')
-          );
-        }
-
-        if (currentNote.type === 'release_candidate' && currentNote.final_hash) {
-          addedButtons = true;
-          buttons.addComponents(
-            new MessageButton()
-              .setCustomId(`10━${this.commandVersion}━run━${currentNote.final_hash}`)
-              .setLabel('Final Build')
-              .setStyle('PRIMARY')
-          );
         }
 
         notes += `- ${hashBuildNoteToDescription[currentNote.type]}\n`;
@@ -70,40 +53,87 @@ module.exports = class MyBuildCommand extends SlashCommand {
       return notes;
     };
 
-    const formatDate = () => {
-      const year = buildData.date.substring(0, 4);
-      const month = buildData.date.substring(4, 6);
-      const day = buildData.date.substring(6, 8);
+    const formatDate = (build) => {
+      const year = build.date.substring(0, 4);
+      const month = build.date.substring(4, 6);
+      const day = build.date.substring(6, 8);
 
       return `${day}/${month}/${year}`;
     };
 
-    const embed = new MessageEmbed()
-      .setTitle(`Summary of ${buildData.name}`)
-      .addField('Build Date (DD/MM/YYYY)', formatDate())
-      .setDescription(hashBuildTypeToDescription[buildData.buildtype])
-      .setColor('#bad0ff')
-      .setFooter({ text: `Hash: ${hash}` });
+    const buildComponents = (build) => {
+      const buttons = new ActionRowBuilder();
+      let addedButtons = false
 
-    if (buildData.notes !== null) {
-      embed.addField('Notes', buildNotes());
-    }
+      for (let i = 0; i < build.notes.length; i++) {
+        const currentNote = build.notes[i];
 
-    if (buildData.exclusive !== null) {
-      embed.addField('Exclusive Version', `This build is exclusive to ${buildData.exclusive}`);
-    }
+        if (currentNote.type === 'hotfix_notice') {
+          addedButtons = true;
+          buttons.addComponents(
+            new ButtonBuilder()
+              .setCustomId(`hotfix+${currentNote.hotfix_hash}`)
+              .setLabel('Hotfix Build')
+              .setStyle(ButtonStyle.Primary)
+          );
+        }
 
-    const components = addedButtons ? [buttons] : [];
-    if (interaction) {
-      ctx.editParent({
-        embeds: [embed],
-        components
-      });
-    } else {
-      ctx.send({
-        embeds: [embed],
-        components
-      });
-    }
+        if (currentNote.type === 'release_candidate' && currentNote.final_hash) {
+          addedButtons = true;
+          buttons.addComponents(
+            new ButtonBuilder()
+              .setCustomId(`finalrelease+${currentNote.final_hash}`)
+              .setLabel('Final Build')
+              .setStyle(ButtonStyle.Primary)
+          );
+        }
+      }
+
+      return addedButtons ? [buttons] : [];
+    };
+
+    const buildEmbed = (build) => {
+      const embed = new EmbedBuilder()
+        .setTitle(`Summary of ${build.name}`)
+        .addFields({ name: 'Build Date (DD/MM/YYYY)', value: formatDate(build) })
+        .setDescription(hashBuildTypeToDescription[build.buildtype])
+        .setColor('#bad0ff')
+        .setFooter({ text: `Hash: ${hash}` });
+
+      if (build.notes !== null) {
+        embed.addFields({ name: 'Notes', value: buildNotes(build) })
+      }
+
+      if (build.exclusive !== null) {
+        embed.addFields({ name: 'Exclusive Version', value: `This build is exclusive to ${build.exclusive}` })
+      }
+
+      return embed;
+    };
+
+    const embed = buildEmbed(buildData)
+    const components = buildComponents(buildData)
+
+    /**
+     * @type {Message}
+     */
+    const message = await ctx.send({
+      embeds: [embed],
+      components
+    })
+
+    ctx.registerWildcardComponent(message.id, async (cCtx) => {
+      const component = cCtx.customID
+      const newHash = component.split('+')[1]
+      const newBuildData = HashBuildClass.buildByHash(newHash);
+      const newEmbed = buildEmbed(newBuildData)
+      const newComponents = buildComponents(newBuildData)
+
+      await cCtx.acknowledge()
+      await message.edit({
+        embeds: [newEmbed],
+        components: newComponents
+      })
+    })
   }
 };
