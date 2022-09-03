@@ -48,6 +48,11 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
      */
     this.menuSelectPlaceholder = 'Look up element';
     /**
+     * This argument will be added at the end of a page switch button customID
+     * @type {string}
+     */
+    this.pageSwitchArgument = ''
+    /**
      *
      * @param {string | import('../types/tsTypes/types').LeaderboardElementObject} e - The element string or object
      * @param {number} i - The element Index
@@ -165,12 +170,12 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     const backButton = new ButtonBuilder()
       .setLabel('Back')
-      .setCustomId('back' + this.separator + leastPageNum)
+      .setCustomId('back' + this.separator + leastPageNum + (this.pageSwitchArgument ? `${this.separator + this.pageSwitchArgument}` : ''))
       .setStyle(ButtonStyle.Primary);
 
     const nextButton = new ButtonBuilder()
       .setLabel('Next')
-      .setCustomId('next' + this.separator + maxPageNum)
+      .setCustomId('next' + this.separator + maxPageNum + (this.pageSwitchArgument ? `${this.separator + this.pageSwitchArgument}` : ''))
       .setStyle(ButtonStyle.Primary);
 
     if (this.page === maxPageNum) {
@@ -206,6 +211,9 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
         // This was currentPageElements, I'm not sure why, currentPageElements would always be object, so this condition would always run.
         // I changed it to lookup the type of the element which is what it should always have been, I'm not sure if this will break something, I hope not.
         if (typeof currentPageElements[i] === 'object') {
+          /**
+           * @type {import('../types/tsTypes/common.js').LeaderboardElementObject}
+           */
           const elementObject = individualElements[this.page][i]
           selectElement.push({
             value: elementObject.value || 'lookup' + this.separator + range(maxIndex, minIndex)[i] + this.separator + this.page,
