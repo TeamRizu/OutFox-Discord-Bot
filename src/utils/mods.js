@@ -1,5 +1,4 @@
 const { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } = require('google-spreadsheet');
-const { ComponentContext } = require('slash-create');
 const constants = require('../utils/constants.js')
 exports.ModsSheetFile = class {
   constructor() {
@@ -158,10 +157,9 @@ exports.ModsSheetFile = class {
    *
    * @param {any} rows
    * @param {number} pageIndex
-   * @param {ComponentContext} ctx
    * @returns {import('discord.js').MessageSelectOptionData[]}
    */
-  chartsSelectMenuFromPage(rows, pageIndex, ctx) {
+  chartsSelectMenuFromPage(rows, pageIndex) {
     const maxIndex = (this.elementsPerPage * (pageIndex + 1)) // 200
     const minIndex = (this.elementsPerPage * (pageIndex + 1)) - this.elementsPerPage // 175
 
@@ -193,7 +191,7 @@ exports.ModsSheetFile = class {
       finalArray.push({
         label: `${currentIndex + 1}° - ${file.name}`,
         description: `${!file.author && !file.pack ? 'Unknown Author & Pack' : formatAuthorPack(file.author, file.pack)}`,
-        value: `2-${ctx.interactionID}-${file.portID}-select`,
+        value: file.portID,
         emoji: constants.archiveEngineEmoteData[constants.conversionsVersionToEngineID[file.version]]
       })
     }
