@@ -2,7 +2,7 @@ const { SlashCommand, ComponentContext, Message } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonStyle, SelectMenuBuilder, ButtonBuilder } = require('discord.js');
 const { ArchiveCreditsFile } = require('../utils/archivalCredits.js');
-const { archiveGenericEmbedFields, creditsEngineID, creditsEngineIDToEngineTag } = require('../utils/constants.js');
+const { creditsEngineIDToEngineTag } = require('../utils/constants.js');
 const ArchiveCreditsInstance = new ArchiveCreditsFile();
 
 module.exports = class CreditsCommand extends SlashCommand {
