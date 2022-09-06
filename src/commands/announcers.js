@@ -11,9 +11,6 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       description: 'Get a list of announcers with info and more.'
     });
     this.commandVersion = '0.0.2';
-    this.onError = (err) => {
-      console.error(err);
-    };
   }
 
   /**
@@ -93,13 +90,15 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       const component = cCtx.customID; // cCtx.values[0];
 
       if (component === 'startagain') {
-        await message.edit(msgData)
+        await cCtx.acknowledge()
+        await message.edit(msgData);
       }
 
       if (component.includes('updatepage')) {
         // const page = cCtx.values[0].split('+')[0]
-        const announcerName = cCtx.values[0].split('+')[1]
-        const author = cCtx.values[0].split('+')[2]
+        await cCtx.acknowledge()
+        const announcerName = cCtx.values[0].split('+')[1];
+        const author = cCtx.values[0].split('+')[2];
 
         const announcerEmbed = new EmbedBuilder()
           .setTitle(announcerName)
@@ -110,25 +109,24 @@ module.exports = class AnnouncersCommand extends SlashCommand {
             .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`)
             .setLabel('Find on Page')
             .setStyle(ButtonStyle.Link),
-          new ButtonBuilder()
-            .setLabel('Another Announcer')
-            .setStyle(ButtonStyle.Primary)
-            .setCustomId('startagain')
+          new ButtonBuilder().setLabel('Another Announcer').setStyle(ButtonStyle.Primary).setCustomId('startagain')
         );
 
-        if (author !== 'Unlisted') announcerEmbed.addFields({
-          name: 'Author',
-          value: author,
-          inline: true
-        });
+        if (author !== 'Unlisted')
+          announcerEmbed.addFields({
+            name: 'Author',
+            value: author,
+            inline: true
+          });
 
         await message.edit({
           embeds: [announcerEmbed],
           components: [buttons]
-        })
+        });
       }
 
       if (component === 'authorselected') {
+        await ctx.acknowledge()
         const author = cCtx.values[0].split('+')[0];
         const page = cCtx.values[0].split('+')[1];
         const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author);
@@ -137,7 +135,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
 
         LeaderboardMessageInstance.supportLookUp = true;
         LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Announcer to Look Up';
-        LeaderboardMessageInstance.separator = '+'
+        LeaderboardMessageInstance.separator = '+';
 
         for (let i = 0; i < announcersForAuthor.length; i++) {
           LeaderboardMessageInstance.addElement({
@@ -153,10 +151,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
           .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
         const buttons = new ActionRowBuilder().addComponents(
-          new ButtonBuilder()
-            .setLabel('Another Announcer')
-            .setStyle(ButtonStyle.Primary)
-            .setCustomId(`startagain`)
+          new ButtonBuilder().setLabel('Another Announcer').setStyle(ButtonStyle.Primary).setCustomId(`startagain`)
         );
 
         LeaderboardMessageInstance.page = page;
@@ -165,10 +160,10 @@ module.exports = class AnnouncersCommand extends SlashCommand {
 
         components.push(buttons);
 
-        message.edit({
+        await message.edit({
           embeds: [pageEmbed],
           components
-        })
+        });
       }
     });
   }

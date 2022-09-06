@@ -58,7 +58,8 @@ module.exports = class TermCommand extends SlashCommand {
         const currentAlias = term.aliases[i];
         const properAlias = term.properAlias[currentAlias];
 
-        if (term.alisesExplanation && term.alisesExplanation[currentAlias]) { // FIXME: This might not be working?
+        if (term.alisesExplanation && term.alisesExplanation[currentAlias]) {
+          // FIXME: This might not be working?
           notes += `- ${properAlias}: ${term.alisesExplanation[currentAlias]}\n`;
           continue;
         }
@@ -79,7 +80,7 @@ module.exports = class TermCommand extends SlashCommand {
       }
 
       if (term.aliases) {
-        embed.addFields({ name: 'Also known as', value: buildAliases(term) })
+        embed.addFields({ name: 'Also known as', value: buildAliases(term) });
       }
 
       return embed;
@@ -132,12 +133,12 @@ module.exports = class TermCommand extends SlashCommand {
       if (component.startsWith('term')) {
         const termName = component.split('+')[1];
 
-        await cCtx.acknowledge()
+        await cCtx.acknowledge();
 
         if (!TermsClass.terms.includes(termName)) {
           message.edit({
             content: 'Something is wrong with our data, please report to OutFox Team'
-          })
+          });
           return;
         }
 
@@ -146,7 +147,7 @@ module.exports = class TermCommand extends SlashCommand {
         if (!newTermData) {
           message.edit({
             content: 'Something is wrong with our data, please report to OutFox Team'
-          })
+          });
           return;
         }
 
@@ -156,7 +157,7 @@ module.exports = class TermCommand extends SlashCommand {
         await message.edit({
           embeds: [newEmbed],
           components: newComponents
-        })
+        });
       }
     });
   }

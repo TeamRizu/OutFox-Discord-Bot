@@ -63,7 +63,7 @@ module.exports = class MyBuildCommand extends SlashCommand {
 
     const buildComponents = (build) => {
       const buttons = new ActionRowBuilder();
-      let addedButtons = false
+      let addedButtons = false;
 
       for (let i = 0; i < build.notes.length; i++) {
         const currentNote = build.notes[i];
@@ -101,18 +101,18 @@ module.exports = class MyBuildCommand extends SlashCommand {
         .setFooter({ text: `Hash: ${hash}` });
 
       if (build.notes !== null) {
-        embed.addFields({ name: 'Notes', value: buildNotes(build) })
+        embed.addFields({ name: 'Notes', value: buildNotes(build) });
       }
 
       if (build.exclusive !== null) {
-        embed.addFields({ name: 'Exclusive Version', value: `This build is exclusive to ${build.exclusive}` })
+        embed.addFields({ name: 'Exclusive Version', value: `This build is exclusive to ${build.exclusive}` });
       }
 
       return embed;
     };
 
-    const embed = buildEmbed(buildData)
-    const components = buildComponents(buildData)
+    const embed = buildEmbed(buildData);
+    const components = buildComponents(buildData);
 
     /**
      * @type {Message}
@@ -120,20 +120,20 @@ module.exports = class MyBuildCommand extends SlashCommand {
     const message = await ctx.send({
       embeds: [embed],
       components
-    })
+    });
 
     ctx.registerWildcardComponent(message.id, async (cCtx) => {
-      const component = cCtx.customID
-      const newHash = component.split('+')[1]
+      const component = cCtx.customID;
+      const newHash = component.split('+')[1];
       const newBuildData = HashBuildClass.buildByHash(newHash);
-      const newEmbed = buildEmbed(newBuildData)
-      const newComponents = buildComponents(newBuildData)
+      const newEmbed = buildEmbed(newBuildData);
+      const newComponents = buildComponents(newBuildData);
 
-      await cCtx.acknowledge()
+      await cCtx.acknowledge();
       await message.edit({
         embeds: [newEmbed],
         components: newComponents
-      })
-    })
+      });
+    });
   }
 };

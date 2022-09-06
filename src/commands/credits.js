@@ -73,6 +73,7 @@ module.exports = class CreditsCommand extends SlashCommand {
       const component = cCtx.customID;
 
       if (component === 'startagain') {
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [engineEmbed],
           components: [smSelectMenu]
@@ -80,6 +81,7 @@ module.exports = class CreditsCommand extends SlashCommand {
       }
 
       if (component === 'engineselected' || component.startsWith('anothersection')) {
+        await cCtx.acknowledge();
         const engine = component.startsWith('anothersection') ? component.split('+')[1] : cCtx.values[0];
         const page = 0;
         const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine);
@@ -119,6 +121,7 @@ module.exports = class CreditsCommand extends SlashCommand {
       }
 
       if (component.startsWith('updatepage')) {
+        await cCtx.acknowledge();
         const engine = cCtx.values[0].split('+')[0];
         const sectionIndex = cCtx.values[0].split('+')[1];
         const section = ArchiveCreditsInstance.mainObject[engine][sectionIndex];
@@ -163,7 +166,7 @@ module.exports = class CreditsCommand extends SlashCommand {
         await message.edit({
           embeds: [announcerEmbed],
           components: [buttons]
-        })
+        });
       }
     });
   }

@@ -67,24 +67,24 @@ module.exports = class ModsCommand extends SlashCommand {
       const component = cCtx.customID;
 
       if (component === 'startagain') {
-        await cCtx.acknowledge()
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [embed],
           components
-        })
+        });
       }
 
       if (component.startsWith('next') || component.startsWith('back')) {
-        const page = Number(component.split('+')[1])
+        const page = Number(component.split('+')[1]);
 
         const newEmbed = buildMainEmbed(page);
-        const newComponents = buildMainComponents(page)
+        const newComponents = buildMainComponents(page);
 
-        await cCtx.acknowledge()
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [newEmbed],
           components: newComponents
-        })
+        });
       }
 
       if (component == 'modselected') {
@@ -164,11 +164,11 @@ module.exports = class ModsCommand extends SlashCommand {
         if (file.author) modEmbed.addFields({ name: 'Author', value: file.author, inline: true });
         if (file.pack) modEmbed.addFields({ name: 'Pack', value: file.pack, inline: true });
 
-        await cCtx.acknowledge()
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [modEmbed],
           components: [buttons]
-        })
+        });
       }
     });
   }

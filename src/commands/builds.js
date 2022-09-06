@@ -114,31 +114,31 @@ module.exports = class BuildsCommand extends SlashCommand {
       const component = cCtx.customID;
 
       if (component === 'startagain') {
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [buildListsEmbed],
           components: [smSelectMenu]
         });
-        await cCtx.acknowledge();
       }
 
-      const isPageSwitch = (component.startsWith('next') || component.startsWith('back'))
-      const isBackFromLoopUp = component.startsWith('buildselecteddeep')
+      const isPageSwitch = component.startsWith('next') || component.startsWith('back');
+      const isBackFromLoopUp = component.startsWith('buildselecteddeep');
       if (component === 'buildselected' || isBackFromLoopUp || isPageSwitch) {
-        let listID = ''
+        let listID = '';
 
-        if (isPageSwitch) listID = component.split('+')[2]
-        if (isBackFromLoopUp) listID = component.split('+')[1]
-        if (!isBackFromLoopUp && !isPageSwitch) listID = cCtx.values[0]
+        if (isPageSwitch) listID = component.split('+')[2];
+        if (isBackFromLoopUp) listID = component.split('+')[1];
+        if (!isBackFromLoopUp && !isPageSwitch) listID = cCtx.values[0];
 
         // Number casting is used here otherwise when we overwrite the page property of the class it will mess up with the next page switch.
-        const page = isPageSwitch ? Number(component.split('+')[1]) : 0
+        const page = isPageSwitch ? Number(component.split('+')[1]) : 0;
         const listingForBuild = ArchivaBuildsInstance.listingNamesFromID(listID);
         const LeaderboardMessageInstance = new LeaderboardMessageFile();
 
         LeaderboardMessageInstance.supportLookUp = true;
         LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Build to Look Up';
         LeaderboardMessageInstance.separator = '+';
-        LeaderboardMessageInstance.pageSwitchArgument = listID
+        LeaderboardMessageInstance.pageSwitchArgument = listID;
 
         /**
          *
@@ -175,11 +175,11 @@ module.exports = class BuildsCommand extends SlashCommand {
 
         components.push(buttons);
 
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [pageEmbed],
           components: components
         });
-        await cCtx.acknowledge()
       }
 
       if (component.startsWith('updatepage')) {
@@ -195,7 +195,8 @@ module.exports = class BuildsCommand extends SlashCommand {
               name: 'Engine',
               value: archiveListIDToEngineName[listID],
               inline: true
-            }, {
+            },
+            {
               name: 'Date',
               value: buildObject.Date || '????-??-??',
               inline: true
@@ -248,19 +249,17 @@ module.exports = class BuildsCommand extends SlashCommand {
           }
         }
 
-        buildEmbed.addFields(
-          {
-            name: 'Available Sources',
-            value: availableSources,
-            inline: false
-          }
-        )
+        buildEmbed.addFields({
+          name: 'Available Sources',
+          value: availableSources,
+          inline: false
+        });
 
+        await cCtx.acknowledge();
         await message.edit({
           embeds: [buildEmbed],
           components: [buttons]
-        })
-        await cCtx.acknowledge()
+        });
       }
     });
   }

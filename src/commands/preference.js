@@ -68,7 +68,7 @@ module.exports = class PreferenceCommand extends SlashCommand {
       const component = cCtx.customID;
 
       if (component === 'startagain') {
-        const newEmbed = buildEmbed(LeaderboardMessageInstance.page, LeaderboardMessageInstance)
+        const newEmbed = buildEmbed(LeaderboardMessageInstance.page, LeaderboardMessageInstance);
         await cCtx.acknowledge();
         await message.edit({
           embeds: [newEmbed],
@@ -100,9 +100,7 @@ module.exports = class PreferenceCommand extends SlashCommand {
           .setDescription(documentation);
         const buttons = new ActionRowBuilder().addComponents(
           new ButtonBuilder()
-            .setURL(
-              `https://outfox.wiki/user-guide/config/preferences/#${preferenceName}`
-            )
+            .setURL(`https://outfox.wiki/user-guide/config/preferences/#${preferenceName}`)
             .setLabel('See on Page')
             .setStyle(ButtonStyle.Link),
           new ButtonBuilder().setLabel('Another Preference').setStyle(ButtonStyle.Primary).setCustomId('startagain')

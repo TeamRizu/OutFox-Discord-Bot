@@ -154,23 +154,23 @@ module.exports = class ThemesCommand extends SlashCommand {
       const component = wCtx.customID;
 
       if (component === 'themechange') {
-        await wCtx.acknowledge()
-        const engine = LeaderboardMessageInstance.pageSwitchArgument
+        await wCtx.acknowledge();
+        const engine = LeaderboardMessageInstance.pageSwitchArgument;
         const newEmbed = buildPageThemesForEngine(engine, LeaderboardMessageInstance.page, LeaderboardMessageInstance);
         const newComponents = buildComponentsThemesForEngine(LeaderboardMessageInstance);
 
         await message.edit({
           embeds: [newEmbed],
           components: newComponents
-        })
+        });
       }
 
       if (component.startsWith('back') || component.startsWith('next')) {
-        await wCtx.acknowledge()
-        const newPage = Number(component.split('+')[1])
-        const engine = component.split('+')[2]
+        await wCtx.acknowledge();
+        const newPage = Number(component.split('+')[1]);
+        const engine = component.split('+')[2];
 
-        LeaderboardMessageInstance.page = newPage
+        LeaderboardMessageInstance.page = newPage;
 
         const newEmbed = buildPageThemesForEngine(engine, LeaderboardMessageInstance.page, LeaderboardMessageInstance);
         const newComponents = buildComponentsThemesForEngine(LeaderboardMessageInstance);
@@ -178,7 +178,7 @@ module.exports = class ThemesCommand extends SlashCommand {
         await message.edit({
           embeds: [newEmbed],
           components: newComponents
-        })
+        });
       }
 
       if (component.startsWith('updatepage')) {
