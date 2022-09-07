@@ -2,7 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const stringSimilarity = require('string-similarity');
-const { SlashCommand, ComponentContext, CommandOptionType, ComponentType, TextInputStyle } = require('slash-create');
+const {
+  SlashCommand,
+  ComponentContext,
+  CommandOptionType,
+  ComponentType,
+  TextInputStyle
+} = require('slash-create');
 // const { ChartHeaderFile } = require('../utils/chartHeader.js')
 const styledata = JSON.parse(fs.readFileSync(path.join(__dirname, '../measure/styledata.json')));
 const { generateChart } = require('../measure/index.js');
@@ -100,13 +106,58 @@ module.exports = class SMReaderCommand extends SlashCommand {
           matches = ''; // Mode is not supported so blank style.
         } else {
           const supportedStyles = Object.keys(styledata[ctx.options.gamemode]);
-          matches =
-            input === '' ? defaultstyle[ctx.options.gamemode] : stringSimilarity.findBestMatch(input, supportedStyles);
+
+          if (input) {
+            const similar = stringSimilarity.findBestMatch(input, supportedStyles);
+            const sortedSimilar = similar.ratings.sort((a, b) => { return b.rating - a.rating })
+            const limitedSimilar = sortedSimilar.splice(0, 4);
+            const similarToChoiceArr = []
+
+            for (let i = 0; i < limitedSimilar.length; i++) {
+              const mode = limitedSimilar[i].target;
+              similarToChoiceArr.push({
+                name: mode,
+                value: mode
+              });
+            }
+
+            return similarToChoiceArr;
+          }
+
+          const styles = []
+
+          for (let i = 0; i < supportedStyles.length; i++) {
+            const style = supportedStyles[i]
+
+            styles.push({
+              name: style,
+              value: style
+            })
+          }
+
+          return styles.splice(0, 4)
         }
         break;
       default: // gamemode
-        matches = stringSimilarity.findBestMatch(input, Object.keys(defaultstyle));
-        break;
+        const similar = stringSimilarity.findBestMatch(input, Object.keys(defaultstyle));
+        const sortedSimilar = similar.ratings.sort((a, b) => { return b.rating - a.rating })
+        const limitedSimilar = sortedSimilar.splice(0, 4);
+
+        if (limitedSimilar) {
+          const similarToChoiceArr = [];
+
+          for (let i = 0; i < limitedSimilar.length; i++) {
+            const mode = limitedSimilar[i].target;
+            similarToChoiceArr.push({
+              name: mode,
+              value: mode
+            });
+          }
+
+          return similarToChoiceArr;
+        }
+
+        matches = input;
     }
 
     if (matches) {
@@ -261,7 +312,7 @@ module.exports = class SMReaderCommand extends SlashCommand {
           const messageObject = updatedMessageObject(await regenImage.getBufferAsync('image/png'));
           messageObject.components = [updateComponents()];
 
-          await cCtx.acknowledge()
+          await cCtx.acknowledge();
           await message.edit(messageObject);
         });
       }
