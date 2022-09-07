@@ -38,10 +38,10 @@ v1.setImage(
 const v2 = new EmbedBuilder();
 v2.setTitle('OutFox Serenity Volume 2');
 v2.setDescription(
-  `Serenity Volume II will feature music by Ace of Beat, Finite Limit, Jack5, Kurio Prokos, Lagoona, Rilliam, rN, SiLiS, and td. We will be accepting chart and song artwork submissions beginning March 27.`
+  `Released September 4, 2022, Serenity Volume II features music by Ace of Beat, Finite Limit, Jack5, Kurio Prokos, Lagoona, Rilliam, rN, SiLiS, and td. It also features the Serenity debut of ds3ddx and kickbox mode charts.`
 );
 v2.setColor('#782024');
-v2.setURL('https://projectoutfox.com/news/outfox-serenity-volume-2-more');
+v2.setURL('https://projectoutfox.com/outfox-serenity/volume-ii');
 v2.setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-2-jk-small.png');
 v2.addFields({
   name: 'OutFox Serenit Server',
@@ -85,7 +85,7 @@ module.exports = class VolumesCommand extends SlashCommand {
           },
           {
             label: `Volume 2`,
-            description: `Coming soon`,
+            description: `Released September 4, 2022`,
             value: `v2`
           }
         ])
