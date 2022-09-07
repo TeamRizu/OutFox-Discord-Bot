@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder, SelectMenuBuilder } = require('discord.js');
 const stringSimilarity = require('string-similarity');
 const {
   SlashCommand,
@@ -11,6 +11,8 @@ const {
 } = require('slash-create');
 // const { ChartHeaderFile } = require('../utils/chartHeader.js')
 const styledata = JSON.parse(fs.readFileSync(path.join(__dirname, '../measure/styledata.json')));
+const modeskins = JSON.parse(fs.readFileSync(path.join(__dirname, '../measure/modeskins.json')));
+const styleconfig = JSON.parse(fs.readFileSync(path.join(__dirname, '../measure/styledata.json')));
 const { generateChart } = require('../measure/index.js');
 const { defaultstyle } = require('../measure/defaultstyle.js');
 const tidyUpInput = (input) => {
@@ -90,8 +92,10 @@ module.exports = class SMReaderCommand extends SlashCommand {
         }
       ]
     });
+    this.mode = 'dance'
     this.reverse = false;
     this.showlines = false;
+    this.noteskin = 'default'
   }
 
   async autocomplete(ctx) {
@@ -216,9 +220,12 @@ module.exports = class SMReaderCommand extends SlashCommand {
         const curStyle = ctx.options.style;
         const reverse = ctx.options.reverse ?? false; // reverse might not be present at all
         const showMeasureLines = ctx.options.lines ?? true;
+        const config = styleconfig[curMode][curStyle]
 
         this.reverse = reverse;
         this.showlines = showMeasureLines;
+        this.mode = curMode
+        this.noteskin = config.defaultNoteskin || 'default'
 
         if (!measureData) {
           iCtx.send('Unable to process given measureData, did you type something funny?');
@@ -230,7 +237,8 @@ module.exports = class SMReaderCommand extends SlashCommand {
           showMeasureLines,
           curMode,
           style: curStyle,
-          measureData
+          measureData,
+          skin: this.noteskin
         }).catch((r) => console.error(r));
 
         if (!image) {
@@ -241,8 +249,31 @@ module.exports = class SMReaderCommand extends SlashCommand {
         const updateComponents = () => {
           const reverseNewLabel = this.reverse ? 'Disable' : 'Enable';
           const linewNewLabel = this.showLines ? 'Hide' : 'Show';
+          const buttonsRow = new ActionRowBuilder()
+          const selectRow = new ActionRowBuilder()
+          const modeNoteskins = modeskins[this.mode]
+          let isThereSkins = false
 
-          return new ActionRowBuilder().addComponents(
+          if (modeNoteskins.length > 1) {
+            isThereSkins = true
+            const menuOptions = []
+
+            for (let i = 0; i < modeNoteskins.length; i++) {
+              menuOptions.push({
+                label: modeNoteskins[i],
+                value: `${i}`
+              })
+            }
+
+            const menu = new SelectMenuBuilder()
+              .setCustomId('noteskinupdate')
+              .setPlaceholder('Choose Noteskin')
+              .addOptions(menuOptions)
+
+            selectRow.addComponents(menu)
+          }
+
+          buttonsRow.addComponents(
             new ButtonBuilder()
               .setCustomId(`reverse+toggle`)
               .setLabel(`${reverseNewLabel} Reverse`)
@@ -252,6 +283,8 @@ module.exports = class SMReaderCommand extends SlashCommand {
               .setLabel(`${linewNewLabel} Lines`)
               .setStyle(ButtonStyle.Primary)
           );
+
+          return isThereSkins ? [buttonsRow, selectRow] : [buttonsRow]
         };
 
         const updateImage = async () => {
@@ -260,7 +293,8 @@ module.exports = class SMReaderCommand extends SlashCommand {
             showMeasureLines: this.showlines,
             curMode,
             style: curStyle,
-            measureData
+            measureData,
+            skin: this.noteskin
           }).catch((r) => console.error(r));
 
           if (!updatedImage) return null;
@@ -285,7 +319,7 @@ module.exports = class SMReaderCommand extends SlashCommand {
             file: await image.getBufferAsync('image/png'),
             name: `${curMode}_${curStyle}.png`
           },
-          components: [updateComponents()]
+          components: updateComponents()
         });
 
         iCtx.registerWildcardComponent(message.id, async (cCtx) => {
@@ -301,6 +335,12 @@ module.exports = class SMReaderCommand extends SlashCommand {
               this.showlines = !this.showlines;
               break;
             }
+            case 'noteskinupdate': {
+              const noteskinIndex = Number(cCtx.values[0])
+              const noteskin = modeskins[this.mode][noteskinIndex]
+
+              this.noteskin = noteskin
+            }
           }
 
           const regenImage = await updateImage();
@@ -310,7 +350,7 @@ module.exports = class SMReaderCommand extends SlashCommand {
           }
 
           const messageObject = updatedMessageObject(await regenImage.getBufferAsync('image/png'));
-          messageObject.components = [updateComponents()];
+          messageObject.components = updateComponents();
 
           await cCtx.acknowledge();
           await message.edit(messageObject);

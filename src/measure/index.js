@@ -9,7 +9,8 @@ const main = async ({
   curMode = 'dance',
   style,
   showMeasureLines = true,
-  measureData
+  measureData,
+  skin
 }) => {
   const curStyle = style || defaultstyle.defaultstyle[curMode];
 
@@ -29,7 +30,7 @@ const main = async ({
   }
 
   // Noteskin
-  const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle, reverse);
+  const NoteSkin = new NoteSkinFile.NoteSkinClass(curMode, curStyle, reverse, skin);
 
   // Measure Width
   const measureWidth = NoteSkin.styleconfig.measureWidth || 254;

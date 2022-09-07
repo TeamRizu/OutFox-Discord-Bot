@@ -2,13 +2,13 @@ const fs = require('fs')
 const path = require('path')
 
 exports.NoteSkinClass = class NoteSkin {
-  constructor(mode, style = 'single', reverse) {
+  constructor(mode, style = 'single', reverse, skin) {
     this.mode = mode
     this.style = style
     this.reverse = reverse
     this.styledata = JSON.parse( fs.readFileSync(path.join(__dirname, './styledata.json'), { encoding: 'utf-8' }) )
     this.styleconfig = this.styledata[this.mode][style]
-    this.noteskin = this.styleconfig.defaultNoteskin || 'default'
+    this.noteskin = skin || this.styleconfig.defaultNoteskin || 'default'
     this.noteskinPath = 'noteskins' + '/' + this.mode + '/' + this.noteskin
     this.noteskinConfig = require(`./noteskins/${this.mode.includes('kb') ? 'kbx' : this.mode}/${this.noteskin}/config.js`).config
     // this.lanes = this.styleconfig.noteRotation?.length
