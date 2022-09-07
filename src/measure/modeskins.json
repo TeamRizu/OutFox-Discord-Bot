@@ -1,0 +1,16 @@
+{
+  "dance": ["default", "outfox-ITG", "outfox-note"],
+  "pump": ["default", "rhythm"],
+  "smx": ["default", "outfox-ITG", "outfox-note"],
+  "techno": ["default"],
+  "ds3ddx": ["default"],
+  "maniax": ["default"],
+  "para": ["default"],
+  "pnm": ["default"],
+  "kbx": ["default"],
+  "gh": ["default"],
+  "gdgf": ["default"],
+  "gddm": ["default"],
+  "ez2": ["default"],
+  "bm": ["default"]
+}
