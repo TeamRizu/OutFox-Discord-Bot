@@ -1,4 +1,263 @@
 {
+  "cc412b7070": {
+    "date": "20220826",
+    "name": "Project OutFox Alpha V RC14",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "184d0148d3": {
+    "date": "20220816",
+    "name": "Project OutFox Alpha V RC013",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This build introduced a new logging system."
+      }
+    ]
+  },
+  "85ca86176f": {
+    "date": "20220814",
+    "name": "Project OutFox Alpha V RC011",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "e4848efbb4": {
+    "date": "20220806",
+    "name": "Project OutFox Alpha V RC009",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "3b37687fc9": {
+    "date": "20220805",
+    "name": "Project OutFox Alpha V RC008",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This build covers RC003 to RC007"
+      },
+      {
+        "type": "notice",
+        "description": "Win32 direct input crashing still happens a bit on some race conditions"
+      },
+      {
+        "type": "notice",
+        "description": "Crash on song select options due to non-foot noteskins/noteskins with not all the support"
+      }
+    ]
+  },
+  "96e6c41be6": {
+    "date": "20220728",
+    "name": "Project OutFox ALpha V RC002",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This is the first Alpha V testbuild."
+      }
+    ]
+  },
+  "29c424b7ba": {
+    "date": "20220907",
+    "name": "Project OutFox Alpha 0.4.17.1 RC1",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "fc7e37b5c7": {
+    "date": "20220902",
+    "name": "Project OutFox Alpha 0.4.17.0 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "223b7a4a58": {
+    "date": "20220801",
+    "name": "Project OutFox Alpha 0.4.16.0 HF2",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
+  "ae77a4ece1": {
+    "date": "20220825",
+    "name": "Project OutFox Alpha 0.4.16.1 RC3",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate"
+      }
+    ]
+  },
+  "ec7f1436de": {
+    "date": "20220703",
+    "name": "Project OutFox Alpha 0.4.15.2 RC1 64bit",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This is a 64bit build."
+      }
+    ]
+  },
+  "b34528bcd4e": {
+    "date": "20220626",
+    "name": "Project OutFox Alpha 0.4.15.2 RC0 64bit",
+    "buildtype": "testbuild",
+    "exclusive": "windows",
+    "notes": [
+      {
+        "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This is a 64bit build."
+      }
+    ]
+  },
+  "deb0ec26acf": {
+    "date": "20220619",
+    "name": "Project OutFox Alpha 0.4.15.1",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix"
+      }
+    ]
+  },
+  "524ffd68d0": {
+    "date": "20220614",
+    "name": "Project OutFox Alpha 0.4.15.0",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "hotfix_notice",
+        "hotfix_hash": "deb0ec26acf"
+      }
+    ]
+  },
+  "c561d2deb0": {
+    "date": "20220611",
+    "name": "Project OutFox Alpha 0.4.15.0 RC10",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
+      }
+    ]
+  },
+  "42142633e1f": {
+    "date": "20220609",
+    "name": "Project OutFox Alpha 0.4.15.0 RC8",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "1d2a9c0e266": {
+    "date": "20220603",
+    "name": "Project OutFox Alpha 0.4.15.0 RC7",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "b073882fa4a": {
+    "date": "20220528",
+    "name": "Project OutFox Alpha 0.4.15.0 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
+  "039ab9d3b21": {
+    "date": "20220523",
+    "name": "Project OutFox Alpha 0.4.15.0 RC3",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
+      },
+      {
+        "type": "notice",
+        "description": "Autogen does not work with this build."
+      }
+    ]
+  },
   "9e9a4933fc6": {
     "date": "20220519",
     "name": "Project OutFox Alpha 0.4.15.0 RC0 FOXBLOCK",
@@ -6,7 +265,8 @@
     "exclusive": null,
     "notes": [
       {
-        "type": "release_candidate"
+        "type": "release_candidate",
+        "final_hash": "524ffd68d0"
       },
       {
         "type": "notice",

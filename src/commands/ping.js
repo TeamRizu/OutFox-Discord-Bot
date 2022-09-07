@@ -13,10 +13,10 @@ module.exports = class PingCommand extends SlashCommand {
    * @param {ComponentContext} ctx
    */
   async run(ctx) {
-    const before = Date.now()
-    await ctx.defer()
-    const now = Date.now()
-    const difference = now - before
-    await ctx.send(`${difference}ms`)
+    const before = Date.now();
+    await ctx.defer();
+    const now = Date.now();
+    const difference = now - before;
+    await ctx.send(`${difference}ms`);
   }
-}
+};

@@ -1,0 +1,502 @@
+{
+  "dance": {
+    "single": {
+      "defaultNoteskin": "outfox-note",
+      "modeSpacing": [0, 66, 126, 189],
+      "noteRotation": [270, 0, 180, 90]
+    },
+    "3panel": {
+      "defaultNoteskin": "outfox-ITG",
+      "modeSpacing": [15, 95, 180],
+      "noteRotation": [225, 0, 135],
+      "canvasWidth": 342,
+      "canvasHeight": 768
+    },
+    "double": {
+      "defaultNoteskin": "outfox-ITG",
+      "modeSpacing": [0, 66, 126, 189, 253, 319, 379, 442],
+      "noteRotation": [270, 0, 180, 90, 270, 0, 180, 90],
+      "canvasWidth": 596,
+      "measureWidth": 508
+    },
+    "couple": {
+      "defaultNoteskin": "outfox-ITG",
+      "modeSpacing": [0, 66, 126, 189, 253, 319, 379, 442],
+      "noteRotation": [270, 0, 180, 90, 270, 0, 180, 90],
+      "canvasWidth": 596,
+      "measureWidth": 508
+    },
+    "routine": {
+      "defaultNoteskin": "outfox-ITG",
+      "modeSpacing": [0, 66, 126, 189, 253, 319, 379, 442],
+      "noteRotation": [270, 0, 180, 90, 270, 0, 180, 90],
+      "canvasWidth": 596,
+      "measureWidth": 508
+    },
+    "solo": {
+      "defaultNoteskin": "outfox-ITG",
+      "modeSpacing": [0, 66, 126, 189, 253, 319],
+      "noteRotation": [270, 225, 0, 180, 135, 90],
+      "canvasWidth": 470,
+      "measureWidth": 382
+    },
+    "solodouble": {
+      "defaultNoteskin": "outfox-ITG",
+      "modeSpacing": [0, 66, 126, 189, 253, 319, 379, 442, 508, 574, 640, 704],
+      "noteRotation": [270, 225, 0, 180, 135, 90, 270, 225, 0, 180, 135, 90],
+      "canvasWidth": 856,
+      "measureWidth": 768
+    }
+  },
+  "pump": {
+    "single": {
+      "defaultNoteskin": "default",
+      "modeSpacing": [7, 72, 136, 200, 265],
+      "noteRotation": [0, 0, 0, 270, 90],
+      "liftRotation": [90, 0, 0, 270, 180],
+      "canvasWidth": 426,
+      "canvasHeight": 600,
+      "measureWidth": 336
+    },
+    "halfdouble": {
+      "defaultNoteskin": "rhythm",
+      "modeSpacing": [7, 72, 136, 200, 265, 329],
+      "noteRotation": [0, 270, 90, 0, 0, 0],
+      "liftRotation": [0, 270, 180, 90, 0, 0],
+      "canvasWidth": 490,
+      "canvasHeight": 600,
+      "measureWidth": 400
+    },
+    "double": {
+      "defaultNoteskin": "rhythm",
+      "modeSpacing": [7, 72, 136, 200, 265, 329, 393, 457, 521, 585],
+      "noteRotation": [0, 0, 0, 270, 90, 0, 0, 0, 270, 90],
+      "liftRotation": [90, 0, 0, 270, 180, 90, 0, 0, 270, 180],
+      "canvasWidth": 744,
+      "canvasHeight": 600,
+      "measureWidth": 656
+    },
+    "couple": {
+      "defaultNoteskin": "rhythm",
+      "modeSpacing": [7, 72, 136, 200, 265, 329, 393, 457, 521, 585],
+      "noteRotation": [0, 0, 0, 270, 90, 0, 0, 0, 270, 90],
+      "liftRotation": [90, 0, 0, 270, 180, 90, 0, 0, 270, 180],
+      "canvasWidth": 744,
+      "canvasHeight": 600,
+      "measureWidth": 656
+    },
+    "routine": {
+      "defaultNoteskin": "rhythm",
+      "modeSpacing": [7, 72, 136, 200, 265, 329, 393, 457, 521, 585],
+      "noteRotation": [0, 0, 0, 270, 90, 0, 0, 0, 270, 90],
+      "liftRotation": [90, 0, 0, 270, 180, 90, 0, 0, 270, 180],
+      "canvasWidth": 744,
+      "canvasHeight": 600,
+      "measureWidth": 656
+    }
+  },
+  "smx": {
+    "single": {
+      "defaultNoteskin": "outfox-note",
+      "modeSpacing": [0, 36, 87, 136, 177],
+      "noteRotation": [270, 0, 0, 180, 90],
+      "canvasWidth": 329,
+      "measureWidth": 241
+    },
+    "double6": {
+      "defaultNoteskin": "outfox-note",
+      "modeSpacing": [0, 66, 126, 189, 252, 315],
+      "noteRotation": [270, 0, 90, 270, 0, 90],
+      "canvasWidth": 467,
+      "measureWidth": 379
+    },
+    "double10": {
+      "defaultNoteskin": "outfox-note",
+      "modeSpacing": [0, 62, 125, 186, 247, 310, 372, 435, 496, 557],
+      "noteRotation": [270, 0, 0, 180, 90, 270, 0, 0, 180, 90],
+      "canvasWidth": 709,
+      "measureWidth": 621
+    }
+  },
+  "techno": {
+    "single4": {
+      "modeSpacing": [0, 66, 126, 189],
+      "noteRotation": [0, 0, 180, 180]
+    },
+    "single5": {
+      "modeSpacing": [0, 66, 126, 189, 252],
+      "noteRotation": [0, 0, 0, 270, 90],
+      "canvasWidth": 402,
+      "measureWidth": 312
+    },
+    "single8": {
+      "modeSpacing": [0, 66, 126, 189, 252, 315, 378, 441],
+      "noteRotation": [0, 0, 0, 0, 180, 270, 180, 90],
+      "canvasWidth": 582,
+      "measureWidth": 486
+    },
+    "single9": {
+      "modeSpacing": [0, 66, 126, 189, 252, 315, 378, 441, 504],
+      "noteRotation": [0, 0, 0, 0, 0, 180, 270, 180, 90],
+      "canvasWidth": 655,
+      "canvasHeight": 600,
+      "measureWidth": 567
+    },
+    "double4": {
+      "modeSpacing": [0, 66, 126, 189, 253, 319, 379, 442],
+      "noteRotation": [0, 0, 180, 180, 0, 0, 180, 180],
+      "canvasWidth": 596,
+      "measureWidth": 508
+    },
+    "double5": {
+      "modeSpacing": [0, 66, 126, 189, 252, 315, 378, 441, 504, 567],
+      "noteRotation": [0, 0, 0, 180, 90, 0, 0, 0, 180, 180],
+      "canvasWidth": 720,
+      "canvasHeight": 600,
+      "measureWidth": 630
+    },
+    "double8": {
+      "modeSpacing": [0, 66, 126, 189, 252, 315, 378, 441, 504, 567, 630, 693, 756, 819, 882, 945],
+      "noteRotation": [0, 0, 0, 0, 180, 270, 180, 90, 0, 0, 0, 0, 180, 270, 180, 90],
+      "canvasWidth": 1096,
+      "canvasHeight": 600,
+      "measureWidth": 1008
+    },
+    "double9": {
+      "modeSpacing": [0, 66, 126, 189, 252, 315, 378, 441, 504, 567, 630, 693, 756, 819, 882, 945, 1008, 1071],
+      "noteRotation": [0, 0, 0, 0, 0, 180, 270, 180, 90, 0, 0, 0, 0, 0, 180, 270, 180, 90],
+      "canvasWidth": 1222,
+      "canvasHeight": 600,
+      "measureWidth": 1134
+    }
+  },
+  "bm": {
+    "single5": {
+      "modeSpacing": [4, 41, 70, 107, 136, 173]
+    },
+    "double5": {
+      "modeSpacing": [4, 41, 70, 107, 136, 173, 234, 271, 300, 337, 366, 403],
+      "canvasWidth": 554,
+      "measureWidth": 466
+    },
+    "single7": {
+      "modeSpacing": [4, 65, 102, 131, 168, 197, 234],
+      "canvasWidth": 354,
+      "measureWidth": 266
+    },
+    "double7": {
+      "modeSpacing": [4, 65, 102, 131, 168, 197, 234, 263, 364, 401, 430, 467, 496, 533, 562, 599],
+      "canvasWidth": 751,
+      "measureWidth": 663
+    }
+  },
+  "pnm": {
+    "three": {
+      "modeSpacing": [4, 36, 68],
+      "measureWidth": 100,
+      "canvasWidth": 188
+    },
+    "four": {
+      "modeSpacing": [4, 36, 68, 100],
+      "measureWidth": 132,
+      "canvasWidth": 220
+    },
+    "five": {
+      "modeSpacing": [4, 36, 68, 100, 132],
+      "measureWidth": 164,
+      "canvasWidth": 252
+    },
+    "seven": {
+      "modeSpacing": [4, 36, 68, 100, 132, 164, 196],
+      "measureWidth": 224,
+      "canvasWidth": 316
+    },
+    "nine": {
+      "modeSpacing": [4, 36, 68, 100, 132, 164, 196, 228, 260],
+      "measureWidth": 288,
+      "canvasWidth": 380
+    },
+    "nine-double": {
+      "modeSpacing": [4, 36, 68, 100, 132, 164, 196, 228, 260, 292, 324, 356, 388, 420, 452, 484, 516, 548],
+      "measureWidth": 580,
+      "canvasWidth": 668
+    }
+  },
+  "ez2": {
+    "single": {
+      "modeSpacing": [0, 46, 94, 142, 187],
+      "noteRotation": [0, 0, 0, 0, 270],
+      "measureWidth": 250,
+      "canvasWidth": 338
+    },
+    "real": {
+      "modeSpacing": [0, 46, 94, 142, 187, 232, 277],
+      "noteRotation": [0, 0, 0, 0, 0, 0, 270],
+      "measureWidth": 340,
+      "canvasWidth": 428
+    },
+    "double": {
+      "modeSpacing": [0, 46, 94, 142, 187, 232, 277, 322, 367, 412],
+      "noteRotation": [0, 0, 0, 0, 270, 0, 0, 0, 0, 270],
+      "measureWidth": 475,
+      "canvasWidth": 563
+    }
+  },
+  "gddm": {
+    "real": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 384, 448, 512, 576],
+      "canvasWidth": 728,
+      "measureWidth": 640
+    },
+    "new": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 384, 448, 512],
+      "canvasWidth": 664,
+      "measureWidth": 576
+    },
+    "old": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320],
+      "canvasWidth": 472,
+      "measureWidth": 384
+    }
+  },
+  "gdgf": {
+    "five": {
+      "modeSpacing": [0, 64, 128, 192, 256, 0, 320],
+      "canvasWidth": 468,
+      "measureWidth": 380
+    },
+    "bass-five": {
+      "modeSpacing": [0, 64, 128, 192, 256, 0, 320],
+      "canvasWidth": 468,
+      "measureWidth": 380
+    },
+    "six": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 0, 384],
+      "canvasWidth": 532,
+      "measureWidth": 444
+    },
+    "bass-six": {
+      "modeSpacing": [0, 64, 128, 192, 256, 320, 0, 384],
+      "canvasWidth": 532,
+      "measureWidth": 444
+    },
+    "three": {
+      "modeSpacing": [0, 64, 128, 0, 192],
+      "canvasWidth": 340,
+      "measureWidth": 252
+    },
+    "bass-three": {
+      "modeSpacing": [0, 64, 128, 0, 192],
+      "canvasWidth": 340,
+      "measureWidth": 252
+    }
+  },
+  "gh": {
+    "solo": {
+      "modeSpacing": [0, 66, 126, 189, 252, 0],
+      "canvasWidth": 404,
+      "measureWidth": 316
+    },
+    "bass": {
+      "modeSpacing": [0, 66, 126, 189, 252, 0],
+      "canvasWidth": 404,
+      "measureWidth": 316
+    },
+    "rhythm": {
+      "modeSpacing": [0, 66, 126, 189, 252, 0],
+      "canvasWidth": 404,
+      "measureWidth": 316
+    }
+  },
+  "para": {
+    "single": {
+      "modeSpacing": [0, 52, 105, 158, 210],
+      "noteRotation": [270, 225, 180, 135, 90],
+      "measureWidth": 274,
+      "canvasWidth": 362
+    },
+    "eight": {
+      "modeSpacing": [0, 52, 105, 158, 210,   262, 314, 366],
+      "noteRotation": [270, 225, 180, 135, 90,   320, 0, 45],
+      "measureWidth": 422,
+      "canvasWidth": 512
+    },
+    "double": {
+      "modeSpacing": [0, 52, 105, 158, 210,      263, 315, 368, 421, 473],
+      "noteRotation": [270, 225, 180, 135, 90,   270, 225, 180, 135, 90],
+      "measureWidth": 537,
+      "canvasWidth": 625
+    }
+  },
+  "kb1": {
+    "single": {
+      "modeSpacing": [0],
+      "measureWidth": 64,
+      "canvasWidth": 152
+    }
+  },
+  "kb2": {
+    "single": {
+      "modeSpacing": [0, 65],
+      "measureWidth": 134,
+      "canvasWidth": 222
+    }
+  },
+  "kb3": {
+    "single": {
+      "modeSpacing": [0, 65, 130],
+      "measureWidth": 194,
+      "canvasWidth": 282
+    }
+  },
+  "kb4": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195],
+      "measureWidth": 259,
+      "canvasWidth": 347
+    }
+  },
+  "kb5": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260],
+      "measureWidth": 324,
+      "canvasWidth": 412
+    }
+  },
+  "kb6": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325],
+      "measureWidth": 389,
+      "canvasWidth": 477
+    }
+  },
+  "kb7": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390],
+      "measureWidth": 454,
+      "canvasWidth": 542
+    }
+  },
+  "kb8": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455],
+      "measureWidth": 519,
+      "canvasWidth": 607
+    }
+  },
+  "kb9": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520],
+      "measureWidth": 584,
+      "canvasWidth": 672
+    }
+  },
+  "kb10": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585],
+      "measureWidth": 649,
+      "canvasWidth": 737
+    }
+  },
+  "kb11": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650],
+      "measureWidth": 714,
+      "canvasWidth": 802
+    }
+  },
+  "kb12": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715],
+      "measureWidth": 779,
+      "canvasWidth": 867
+    }
+  },
+  "kb13": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780],
+      "measureWidth": 844,
+      "canvasWidth": 932
+    }
+  },
+  "kb14": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845],
+      "measureWidth": 909,
+      "canvasWidth": 997
+    }
+  },
+  "kb15": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910],
+      "measureWidth": 974,
+      "canvasWidth": 1062
+    }
+  },
+  "kb16": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975],
+      "measureWidth": 1039,
+      "canvasWidth": 1127
+    }
+  },
+  "kb17": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975, 1040],
+      "measureWidth": 1104,
+      "canvasWidth": 1192
+    }
+  },
+  "kb18": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975, 1040, 1105],
+      "measureWidth": 1169,
+      "canvasWidth": 1257
+    }
+  },
+  "kb19": {
+    "single": {
+      "modeSpacing": [0, 65, 130, 195, 260, 325, 390, 455, 520, 585, 650, 715, 780, 845, 910, 975, 1040, 1105, 1170],
+      "measureWidth": 1234,
+      "canvasWidth": 1322
+    }
+  },
+  "ds3ddx": {
+    "single": {
+      "modeSpacing": [0, 44, 95, 147, 146, 198, 249, 292],
+      "noteRotation": [0, 0, 0, 180, 0, 270, 90, 180],
+      "measureWidth": 355,
+      "canvasWidth": 443
+    },
+    "double": {
+      "modeSpacing":  [0, 44, 95, 147, 146, 198, 249, 292,   335, 379, 430, 482, 481, 533, 584, 627],
+      "noteRotation": [0, 0,  0,  180,   0, 270, 90,  180,   0,   0,   0,   180,   0, 270, 90,  180],
+      "measureWidth": 690,
+      "canvasWidth": 778
+    },
+    "single5": {
+      "modeSpacing": [0, 44, 95, 147, 146, 145, 198, 249, 292],
+      "noteRotation": [0, 0, 0, 180, 0, 0, 270, 90, 180],
+      "measureWidth": 355,
+      "canvasWidth": 443
+    },
+    "double5": {
+      "modeSpacing":  [0, 44, 95, 147, 146, 145, 198, 249, 292,   335, 379, 430, 482, 481, 480, 533, 584, 627],
+      "noteRotation": [0, 0,  0,  180,   0,   0, 270, 90,  180,   0,   0,   0,   180,   0,   0, 270, 90,  180],
+      "measureWidth": 690,
+      "canvasWidth": 778
+    }
+  },
+  "maniax": {
+    "single": {
+      "modeSpacing": [0, 68, 136, 204],
+      "measureWidth": 268,
+      "canvasWidth": 356
+    },
+    "double": {
+      "modeSpacing": [0, 68, 136, 204,   272, 340, 408, 476],
+      "measureWidth": 540,
+      "canvasWidth": 628
+    }
+  }
+}

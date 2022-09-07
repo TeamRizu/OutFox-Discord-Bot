@@ -4,7 +4,7 @@ const path = require('path')
 exports.HashBuildFile = class HashBuildClass {
   constructor() {
     /**
-     * @type {Object<string, import('../types/types').HashBuild>}
+     * @type {Object<string, import('../types/tsTypes/types').HashBuild>}
      */
     this.mainObject = JSON.parse( fs.readFileSync(path.join(__dirname, '../data/hash.json')) );
   }
@@ -12,7 +12,7 @@ exports.HashBuildFile = class HashBuildClass {
   /**
    *
    * @param {string} hash
-   * @returns {import('../types/types').HashBuild}
+   * @returns {import('../types/tsTypes/types').HashBuild}
    */
   buildByHash(hash) {
     if (!Object.keys(this.mainObject).includes(hash)) {

@@ -1,116 +1,164 @@
-const stringSimilarity = require("string-similarity");
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommand, CommandOptionType } = require('slash-create');
-const { TermsFile } = require('../utils/terms.js')
-const TermsClass = new TermsFile()
+const stringSimilarity = require('string-similarity');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommand, CommandOptionType, CommandContext, AutocompleteContext } = require('slash-create');
+const { TermsFile } = require('../utils/terms.js');
+const TermsClass = new TermsFile();
 
 module.exports = class TermCommand extends SlashCommand {
   constructor(creator) {
     super(creator, {
       name: 'term',
       description: 'What does this term mean?',
-      options: [{
-        type: CommandOptionType.STRING,
-        name: 'name',
-        description: 'Term name',
-        required: true,
-        autocomplete: true
-      }]
+      options: [
+        {
+          type: CommandOptionType.STRING,
+          name: 'name',
+          description: 'Term name',
+          required: true,
+          autocomplete: true
+        }
+      ]
     });
-    this.commandVersion = '0.0.1'
+    this.commandVersion = '0.0.2';
     this.filePath = __filename;
   }
 
+  /**
+   *
+   * @param {AutocompleteContext} ctx
+   * @returns
+   */
   async autocomplete(ctx) {
-    const text = ctx.options[ctx.focused]
-    const matches = stringSimilarity.findBestMatch(text, TermsClass.terms)
+    const text = ctx.options[ctx.focused];
+    const matches = stringSimilarity.findBestMatch(text, TermsClass.terms);
 
-    return [{name: matches.bestMatch.target || text, value: matches.bestMatch.target || text}]
+    return [{ name: matches.bestMatch.target || text, value: matches.bestMatch.target || text }];
   }
 
-  async run(ctx, { interaction, commandArguments } = {}) {
+  /**
+   *
+   * @param {CommandContext} ctx
+   */
+  async run(ctx) {
     /**
      * @type {string}
      */
-    const name = commandArguments ? commandArguments.primalArgument.toLowerCase() : ctx.options.name.toLowerCase()
+    const name = ctx.options.name.toLowerCase();
 
-    if (!TermsClass.terms.includes(name)) return 'Unknown term.'
+    if (!TermsClass.terms.includes(name)) return 'Unknown term.';
 
-    const termData = TermsClass.termObjectByName(name)
+    const termData = TermsClass.termObjectByName(name);
 
-    if (!termData) return 'Failed to get term data.'
+    if (!termData) return 'Failed to get term data.';
 
-    const buttons = new MessageActionRow()
-    let addedButtons = false
+    const buildAliases = (term) => {
+      let notes = '';
 
-    const buildAliases = () => {
-      let notes = ''
+      for (let i = 0; i < term.aliases.length; i++) {
+        const currentAlias = term.aliases[i];
+        const properAlias = term.properAlias[currentAlias];
 
-      for (let i = 0; i < termData.aliases.length; i++) {
-        const currentAlias = termData.aliases[i]
-        const properAlias = termData.properAlias[currentAlias]
-
-        if (termData.alisesExplanation && termData.alisesExplanation[currentAlias]) {
-          notes += `- ${properAlias}: ${termData.alisesExplanation[currentAlias]}\n`
-          continue
+        if (term.alisesExplanation && term.alisesExplanation[currentAlias]) {
+          // FIXME: This might not be working?
+          notes += `- ${properAlias}: ${term.alisesExplanation[currentAlias]}\n`;
+          continue;
         }
 
-        notes += `- ${properAlias}\n`
+        notes += `- ${properAlias}\n`;
       }
 
-      return notes
-    }
+      return notes;
+    };
 
-    const embed = new MessageEmbed()
-      .setTitle(termData.properName)
-      .setDescription(termData.explanation)
+    const buildEmbed = (term) => {
+      const embed = new EmbedBuilder().setTitle(term.properName).setDescription(term.explanation);
 
-    if (termData.decorations) {
-      if (termData.decorations.thumbnail) embed.setThumbnail(termData.decorations.thumbnail)
-      if (termData.decorations.image) embed.setImage(termData.decorations.image)
-      if (termData.decorations.color) embed.setColor(termData.decorations.color)
-    }
+      if (term.decorations) {
+        if (term.decorations.thumbnail) embed.setThumbnail(term.decorations.thumbnail);
+        if (term.decorations.image) embed.setImage(term.decorations.image);
+        if (term.decorations.color) embed.setColor(term.decorations.color);
+      }
 
-    if (termData.aliases) {
-      embed.addField('Also known as', buildAliases())
-    }
+      if (term.aliases) {
+        embed.addFields({ name: 'Also known as', value: buildAliases(term) });
+      }
 
-    if (termData.references) {
-      for (let i = 0; i < termData.references.length; i++) {
-        const currentReference = termData.references[i]
-        const button = new MessageButton()
+      return embed;
+    };
 
-        switch (currentReference.type) {
-          case 'url':
-            button.setStyle('LINK')
-            button.setURL(currentReference.url)
-            button.setLabel(currentReference.label)
-          break
-          case 'term':
-            const referenceTerm = TermsClass.termObjectByName(currentReference.term)
+    const buildComponents = (term) => {
+      let addedButtons = false;
+      const buttons = new ActionRowBuilder();
 
-            button.setStyle('PRIMARY')
-            button.setLabel(referenceTerm.label || `See ${referenceTerm.properName}`)
-            button.setCustomId(`11-${this.commandVersion}-run-${currentReference.term}`)
-          break
+      if (termData.references) {
+        for (let i = 0; i < term.references.length; i++) {
+          const currentReference = term.references[i];
+          const button = new ButtonBuilder();
+
+          switch (currentReference.type) {
+            case 'url':
+              button.setStyle(ButtonStyle.Link);
+              button.setURL(currentReference.url);
+              button.setLabel(currentReference.label);
+              break;
+            case 'term':
+              const referenceTerm = TermsClass.termObjectByName(currentReference.term);
+
+              button.setStyle(ButtonStyle.Primary);
+              button.setLabel(referenceTerm.label || `See ${referenceTerm.properName}`);
+              button.setCustomId(`term+${currentReference.term}`);
+              break;
+          }
+
+          buttons.addComponents(button);
+        }
+        addedButtons = true;
+      }
+
+      return addedButtons ? [buttons] : [];
+    };
+
+    await ctx.defer();
+    const embed = buildEmbed(termData);
+    const components = buildComponents(termData);
+
+    const message = await ctx.send({
+      embeds: [embed],
+      components
+    });
+
+    ctx.registerWildcardComponent(message.id, async (cCtx) => {
+      const component = cCtx.customID;
+
+      if (component.startsWith('term')) {
+        const termName = component.split('+')[1];
+
+        await cCtx.acknowledge();
+
+        if (!TermsClass.terms.includes(termName)) {
+          message.edit({
+            content: 'Something is wrong with our data, please report to OutFox Team'
+          });
+          return;
         }
 
-        buttons.addComponents(button)
-      }
-      addedButtons = true
-    }
+        const newTermData = TermsClass.termObjectByName(termName);
 
-    const components = addedButtons ? [buttons] : []
-    if (interaction) {
-      ctx.editParent({
-        embeds: [embed],
-        components
-      })
-    } else {
-      ctx.send({
-        embeds: [embed],
-        components
-      })
-    }
+        if (!newTermData) {
+          message.edit({
+            content: 'Something is wrong with our data, please report to OutFox Team'
+          });
+          return;
+        }
+
+        const newEmbed = buildEmbed(newTermData);
+        const newComponents = buildComponents(newTermData);
+
+        await message.edit({
+          embeds: [newEmbed],
+          components: newComponents
+        });
+      }
+    });
   }
-}
+};

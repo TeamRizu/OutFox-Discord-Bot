@@ -1,8 +1,8 @@
-const { SlashCommand, ComponentContext } = require('slash-create');
+const { SlashCommand, ComponentContext, Message } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonStyle, SelectMenuBuilder, ButtonBuilder } = require('discord.js');
 const { ArchiveCreditsFile } = require('../utils/archivalCredits.js');
-const { archiveGenericEmbedFields, creditsEngineID, creditsEngineIDToEngineTag } = require('../utils/constants.js')
+const { creditsEngineIDToEngineTag } = require('../utils/constants.js');
 const ArchiveCreditsInstance = new ArchiveCreditsFile();
 
 module.exports = class CreditsCommand extends SlashCommand {
@@ -11,7 +11,7 @@ module.exports = class CreditsCommand extends SlashCommand {
       name: 'credits',
       description: 'Get a list of credits with info and more.'
     });
-    this.commandVersion = '0.0.1';
+    this.commandVersion = '0.0.2';
   }
 
   /**
@@ -20,54 +20,9 @@ module.exports = class CreditsCommand extends SlashCommand {
    */
   async run(ctx) {
     await ArchiveCreditsInstance.setup();
-    await this.update({
-      interaction: {
-        ctx,
-        values: []
-      },
-      commandArguments: {
-        primalArgument: 0,
-        arguments: [0],
-        version: this.commandVersion,
-        firstSend: true
-      }
-    });
-  }
+    await ctx.defer();
 
-  async update({ interaction, commandArguments }) {
-    if (!ArchiveCreditsInstance.mainObject) {
-      return;
-    }
-
-    if (commandArguments.primalArgument === 'engineSelected') {
-      await this.leaderboard({
-        interaction,
-        commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
-          firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
-        }
-      });
-      return;
-    }
-
-    if (creditsEngineID.includes(commandArguments.primalArgument)) {
-      await this.lookUp({
-        interaction,
-        commandArguments: {
-          primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
-          firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
-        }
-      });
-      return;
-    }
-
-    const engineEmbed = new MessageEmbed()
+    const engineEmbed = new EmbedBuilder()
       .setTitle('StepMania Archive Credits')
       .setDescription(
         `
@@ -89,163 +44,130 @@ module.exports = class CreditsCommand extends SlashCommand {
       .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
       .setColor('#30c3c4');
 
-    const engineOptions = []
+    const engineOptions = [];
 
-    const engines = ArchiveCreditsInstance.engines
+    const engines = ArchiveCreditsInstance.engines;
     for (let i = 0; i < engines.length; i++) {
-      const currentEngine = engines[i]
-      const tempObj = {}
+      const currentEngine = engines[i];
+      const tempObj = {};
 
-      tempObj.label = currentEngine
-      tempObj.value = `7-${this.commandVersion}-leaderboard-${currentEngine}-0`
+      tempObj.label = currentEngine;
+      tempObj.value = currentEngine;
 
-      engineOptions.push(tempObj)
+      engineOptions.push(tempObj);
     }
 
-    const smSelectMenu = new MessageActionRow().addComponents(
-      new MessageSelectMenu()
-        .setCustomId(`7-${this.commandVersion}-update-engineSelected`)
-        .setPlaceholder('Select Engine')
-        .addOptions(engineOptions)
+    const smSelectMenu = new ActionRowBuilder().addComponents(
+      new SelectMenuBuilder().setCustomId('engineselected').setPlaceholder('Select Engine').addOptions(engineOptions)
     );
 
-    const msgData = {
-      embeds: [
-        {
-          ...engineEmbed,
-          ...archiveGenericEmbedFields
-        }
-      ],
+    /**
+     * @type {Message}
+     */
+    const message = await ctx.send({
+      embeds: [engineEmbed],
       components: [smSelectMenu]
-    };
+    });
 
-    if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
-    } else {
-      interaction.ctx.editParent(msgData);
-    }
-  }
+    ctx.registerWildcardComponent(message.id, async (cCtx) => {
+      const component = cCtx.customID;
 
-  async leaderboard({ interaction, commandArguments }) {
-    if (!ArchiveCreditsInstance.mainObject) {
-      return;
-    }
+      if (component === 'startagain') {
+        await cCtx.acknowledge();
+        await message.edit({
+          embeds: [engineEmbed],
+          components: [smSelectMenu]
+        });
+      }
 
-    /**
-     * @type {import('../types/types.js').CreditedEngine}
-     */
-    const engine = commandArguments.primalArgument
-    const page = Number(commandArguments.arguments[1]);
-    const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine)
-    const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
+      if (component === 'engineselected' || component.startsWith('anothersection')) {
+        await cCtx.acknowledge();
+        const engine = component.startsWith('anothersection') ? component.split('+')[1] : cCtx.values[0];
+        const page = 0;
+        const titlesByEngine = ArchiveCreditsInstance.creditsTitleByEngine(engine);
+        const LeaderboardMessageInstance = new LeaderboardMessageFile();
 
-    LeaderboardMessageInstance.supportLookUp = true;
-    LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Section to Look Up';
+        LeaderboardMessageInstance.supportLookUp = true;
+        LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Section to Look Up';
+        LeaderboardMessageInstance.separator = '+';
 
-    for (let i = 0; i < titlesByEngine.length; i++) {
-      LeaderboardMessageInstance.addElement(titlesByEngine[i]);
-    }
-
-    const pageEmbed = new MessageEmbed()
-    .setTitle('Select Section')
-    .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
-    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
-
-    const buttons = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setLabel('Another Engine')
-        .setStyle('PRIMARY')
-        .setCustomId(`7-${this.commandVersion}-update-0`)
-    );
-
-    LeaderboardMessageInstance.page = page;
-
-    const components = LeaderboardMessageInstance.pageComponents
-
-    components.push(buttons)
-
-    const msgData = {
-      embeds: [
-        {
-          ...pageEmbed,
-          ...archiveGenericEmbedFields
+        for (let i = 0; i < titlesByEngine.length; i++) {
+          LeaderboardMessageInstance.addElement({
+            description: titlesByEngine[i],
+            value: `${engine}+${i}`
+          });
         }
-      ],
-      components: components
-    };
 
-    if (commandArguments.firstSend) {
-      await interaction.ctx.send(msgData);
-    } else {
-      await interaction.ctx.editParent(msgData);
-    }
-  }
+        const pageEmbed = new EmbedBuilder()
+          .setTitle('Select Section')
+          .setURL('https://josevarela.xyz/SMArchive/Builds/Credits.html')
+          .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+          .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
-  async lookUp({ interaction, commandArguments }) {
-    if (!ArchiveCreditsInstance.mainObject) {
-      return;
-    }
+        const buttons = new ActionRowBuilder().addComponents(
+          new ButtonBuilder().setLabel('Another Engine').setStyle(ButtonStyle.Primary).setCustomId('startagain')
+        );
 
-    const interactionSplit = interaction.values[0].split('-');
-    const page = Number(interactionSplit[3]);
-    /**
-     * @type {import('../types/types.js').CreditedEngine}
-     */
-    const engine = commandArguments.primalArgument
-    const section = ArchiveCreditsInstance.mainObject[engine][page]
-    let sectionMembers = ''
+        LeaderboardMessageInstance.page = page;
 
-    for (let i = 0; i < section.members.length; i++) {
-      let currentMember = section.members[i]
+        const components = LeaderboardMessageInstance.pageComponents;
 
-      if (currentMember.includes('strong>')) {
-        currentMember = currentMember.replace('<strong>', '**')
-        currentMember = currentMember.replace('</strong>', '**')
+        components.push(buttons);
+
+        await message.edit({
+          embeds: [pageEmbed],
+          components
+        });
       }
 
-      if (currentMember.includes('i>')) {
-        currentMember = currentMember.replace('<i>', '_')
-        currentMember = currentMember.replace('</i>', '_')
-      }
+      if (component.startsWith('updatepage')) {
+        await cCtx.acknowledge();
+        const engine = cCtx.values[0].split('+')[0];
+        const sectionIndex = cCtx.values[0].split('+')[1];
+        const section = ArchiveCreditsInstance.mainObject[engine][sectionIndex];
+        let sectionMembers = '';
 
-      if ('small>') {
-        currentMember = currentMember.replace('<small>', '')
-        currentMember = currentMember.replace('</small>', '')
-      }
+        for (let i = 0; i < section.members.length; i++) {
+          let currentMember = section.members[i];
 
-      sectionMembers = sectionMembers + currentMember + '\n'
-    }
-    const announcerEmbed = new MessageEmbed()
-      .setTitle(`${section.title}`)
-      .setURL(`https://josevarela.xyz/SMArchive/Builds/Credits.html#${creditsEngineIDToEngineTag[engine]}`)
-      .setDescription(sectionMembers);
+          if (currentMember.includes('strong>')) {
+            currentMember = currentMember.replace('<strong>', '**');
+            currentMember = currentMember.replace('</strong>', '**');
+          }
 
-    const buttons = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setURL(`https://josevarela.xyz/SMArchive/Builds/Credits.html#${creditsEngineIDToEngineTag[engine]}`)
-        .setLabel('Read on Page')
-        .setStyle('LINK'),
-      new MessageButton()
-        .setLabel('Another section')
-        .setStyle('PRIMARY')
-        .setCustomId(`7-${this.commandVersion}-leaderboard-${engine}-0`)
-    );
+          if (currentMember.includes('i>')) {
+            currentMember = currentMember.replace('<i>', '_');
+            currentMember = currentMember.replace('</i>', '_');
+          }
 
-    const msgData = {
-      embeds: [
-        {
-          ...announcerEmbed,
-          ...archiveGenericEmbedFields
+          if ('small>') {
+            currentMember = currentMember.replace('<small>', '');
+            currentMember = currentMember.replace('</small>', '');
+          }
+
+          sectionMembers = sectionMembers + currentMember + '\n';
         }
-      ],
-      components: [buttons]
-    };
+        const announcerEmbed = new EmbedBuilder()
+          .setTitle(`${section.title}`)
+          .setURL(`https://josevarela.xyz/SMArchive/Builds/Credits.html#${creditsEngineIDToEngineTag[engine]}`)
+          .setDescription(sectionMembers);
 
-    if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
-    } else {
-      interaction.ctx.editParent(msgData);
-    }
+        const buttons = new ActionRowBuilder().addComponents(
+          new ButtonBuilder()
+            .setURL(`https://josevarela.xyz/SMArchive/Builds/Credits.html#${creditsEngineIDToEngineTag[engine]}`)
+            .setLabel('Read on Page')
+            .setStyle(ButtonStyle.Link),
+          new ButtonBuilder()
+            .setLabel('Another Section')
+            .setStyle(ButtonStyle.Primary)
+            .setCustomId(`anothersection+${engine}`)
+        );
+
+        await message.edit({
+          embeds: [announcerEmbed],
+          components: [buttons]
+        });
+      }
+    });
   }
 };

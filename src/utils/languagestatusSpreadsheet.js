@@ -59,7 +59,7 @@ exports.LanguagestatusFile = class LanguagestatusInstance {
 
   /**
    *
-   * @param {OutFoxLanguages} language
+   * @param {import('../types/tsTypes/types').OutFoxLanguages} language
    * @returns {string[]}
    */
   statusFromLanguage(language) {

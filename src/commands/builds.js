@@ -1,5 +1,5 @@
-const { SlashCommand, ComponentContext } = require('slash-create');
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const { SlashCommand, ComponentContext, Message } = require('slash-create');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } = require('discord.js');
 const { ArchiveBuildsFile } = require('../utils/archivalBuilds.js');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
 const {
@@ -7,12 +7,11 @@ const {
   archiveListNames,
   archiveListIDToNames,
   archiveListIDToEngineName,
-  archiveGenericEmbedFields,
   archiveBuildEngineIconData,
   buildNameToEmoteKey,
   archiveBuildEngineColor,
   archiveIconLinkFormat
-} = require('../utils/constants.js')
+} = require('../utils/constants.js');
 const ArchivaBuildsInstance = new ArchiveBuildsFile();
 
 module.exports = class BuildsCommand extends SlashCommand {
@@ -21,7 +20,7 @@ module.exports = class BuildsCommand extends SlashCommand {
       name: 'builds',
       description: 'Get a list of builds with info and more.'
     });
-    this.commandVersion = '0.0.1';
+    this.commandVersion = '0.0.2';
   }
 
   /**
@@ -30,77 +29,31 @@ module.exports = class BuildsCommand extends SlashCommand {
    */
   async run(ctx) {
     await ArchivaBuildsInstance.setup();
-    await this.update({
-      interaction: {
-        ctx,
-        values: []
-      },
-      commandArguments: {
-        primalArgument: 0,
-        arguments: [0],
-        version: this.commandVersion,
-        firstSend: true,
-        commandID: '9'
-      }
-    });
-  }
-
-  async update({ interaction, commandArguments }) {
-    if (!ArchivaBuildsInstance.mainObject) {
-      return;
-    }
-
-    if (commandArguments.primalArgument === 'buildSelected') {
-      await this.leaderboard({
-        interaction,
-        commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
-          firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
-        }
-      });
-      return;
-    }
-
-    if (archiveListIDs.includes(commandArguments.primalArgument)) {
-      await this.lookUp({
-        interaction,
-        commandArguments: {
-          primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
-          firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
-        }
-      });
-      return;
-    }
+    await ctx.defer();
 
     /**
      *
-     * @param {import('../types/types.js').BuildListID} listID
+     * @param {string} listID
      * @returns {string}
      */
     const archivebuildCountString = (listID) => {
-      const buildListCount = ArchivaBuildsInstance.buildListObjectFromID(listID).Listing.length
+      const buildListCount = ArchivaBuildsInstance.buildListObjectFromID(listID).Listing.length;
 
-      return `${archiveListIDToNames[listID]}: **${buildListCount} ${1 >= buildListCount ? 'Build' : 'Builds'}**`
-    }
+      return `${archiveListIDToNames[listID]}: **${buildListCount} ${1 >= buildListCount ? 'Build' : 'Builds'}**`;
+    };
 
     /**
      *
-     * @param {import('../types/types.js').BuildListID} listID
+     * @param {string} listID
      * @returns {string}
      */
     const buildEmote = (listID) => {
-      const { name, id } = archiveBuildEngineIconData[listID]
+      const { name, id } = archiveBuildEngineIconData[listID];
 
-      return `<:${name}:${id}>`
-    }
+      return `<:${name}:${id}>`;
+    };
 
-    const buildListsEmbed = new MessageEmbed()
+    const buildListsEmbed = new EmbedBuilder()
       .setTitle('StepMania Archive Builds')
       .setDescription(
         `
@@ -122,186 +75,192 @@ module.exports = class BuildsCommand extends SlashCommand {
         ${buildEmote('SM5') + ' - ' + archivebuildCountString('SM5')}
         ${buildEmote('ETT') + ' - ' + archivebuildCountString('ETT')}
         ${buildEmote('OUTFOX') + ' - ' + archivebuildCountString('OUTFOX')}
+        ${buildEmote('ITGM') + ' - ' + archivebuildCountString('ITGM')}
         `
       )
       .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
       .setURL('https://josevarela.xyz/SMArchive/Builds/index.html')
       .setColor('#30c3c4');
 
-    const listOptions = []
+    const listOptions = [];
 
     for (let i = 0; i < archiveListIDs.length; i++) {
-      const currentEngine = archiveListIDs[i]
-      const tempObj = {}
+      const currentEngine = archiveListIDs[i];
+      const tempObj = {};
 
-      tempObj.label = archiveListNames[i]
-      tempObj.value = `9-${this.commandVersion}-leaderboard-${currentEngine}-0`
-      tempObj.emoji = archiveBuildEngineIconData[currentEngine]
+      tempObj.label = archiveListNames[i];
+      tempObj.value = currentEngine;
+      tempObj.emoji = archiveBuildEngineIconData[currentEngine];
 
-      listOptions.push(tempObj)
+      listOptions.push(tempObj);
     }
 
-    const smSelectMenu = new MessageActionRow().addComponents(
-      new MessageSelectMenu()
-        .setCustomId(`9-${this.commandVersion}-update-buildSelected`)
-        .setPlaceholder('Select Build List')
-        .addOptions(listOptions)
+    const smSelectMenu = new ActionRowBuilder().addComponents(
+      new SelectMenuBuilder().setCustomId(`buildselected`).setPlaceholder('Select Build List').addOptions(listOptions)
     );
-
-    const msgData = {
-      embeds: [
-        {
-          ...buildListsEmbed,
-          ...archiveGenericEmbedFields
-        }
-      ],
-      components: [smSelectMenu]
-    };
-
-    if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
-    } else {
-      interaction.ctx.editParent(msgData);
-    }
-  }
-
-  async leaderboard({ interaction, commandArguments }) {
-
-    if (!ArchivaBuildsInstance.mainObject) {
-      return;
-    }
 
     /**
-     * @type {import('../types/types.js').BuildListID}
+     * @type {Message}
      */
-    const listID = commandArguments.primalArgument;
-    const page = Number(commandArguments.arguments[1]);
-    const listingForBuild = ArchivaBuildsInstance.listingNamesFromID(listID);
-    const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
+    const message = await ctx.send({
+      embeds: [buildListsEmbed],
+      components: [smSelectMenu]
+    });
 
-    LeaderboardMessageInstance.supportLookUp = true;
-    LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Build to Look Up';
-    LeaderboardMessageInstance.formatElement = (e, i) => {
-      return `<:${e.emoji.name}:${e.emoji.id}> ${e.description}`
-    }
+    ctx.registerWildcardComponent(message.id, async (cCtx) => {
+      /**
+       * @type {'startagain' | 'buildselected' | 'buildselecteddeep+0' | 'next+0+listID' | 'back+0+listID'}
+       */
+      const component = cCtx.customID;
 
-    for (let i = 0; i < listingForBuild.length; i++) {
-      LeaderboardMessageInstance.addElement({
-        description: listingForBuild[i],
-        emoji: archiveBuildEngineIconData[buildNameToEmoteKey(listID, listingForBuild[i])]
-      });
-    }
-
-    const pageEmbed = new MessageEmbed()
-    .setTitle('Select Build')
-    .setColor(archiveBuildEngineColor[listID])
-    .setURL(`https://josevarela.xyz/SMArchive/Builds/index.html#${listID}`)
-    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
-
-    const buttons = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setLabel('Another Build List')
-        .setStyle('PRIMARY')
-        .setCustomId(`9-${this.commandVersion}-update-0`)
-    );
-
-    LeaderboardMessageInstance.page = page;
-
-    const components = LeaderboardMessageInstance.pageComponents
-
-    components.push(buttons)
-
-    const msgData = {
-      embeds: [
-        {
-          ...pageEmbed,
-          ...archiveGenericEmbedFields
-        }
-      ],
-      components: components
-    };
-
-    if (commandArguments.firstSend) {
-      await interaction.ctx.send(msgData);
-    } else {
-      await interaction.ctx.editParent(msgData);
-    }
-  }
-
-  async lookUp({ interaction, commandArguments }) {
-
-    if (!ArchivaBuildsInstance.mainObject) {
-      return;
-    }
-
-    const interactionSplit = interaction.values[0].split('-');
-    const page = Number(interactionSplit[3]);
-    const listName = commandArguments.primalArgument;
-    const listObject = ArchivaBuildsInstance.buildListObjectFromID(listName)
-    const buildObject = listObject.Listing[page]
-    const buildEmbed = new MessageEmbed()
-      .setTitle(`Summary of ${buildObject.Name}`)
-      .addField('Engine', archiveListIDToEngineName[listName], true)
-      .addField('Date', buildObject.Date || '????-??-??', true)
-      .setDescription(listObject.Description || 'No description.')
-      .setColor(archiveBuildEngineColor[buildNameToEmoteKey(listName, buildObject.Name)])
-      .setThumbnail(`https://josevarela.xyz/SMArchive/Builds/VersionIcon/${buildNameToEmoteKey(listName, buildObject.Name)}${archiveIconLinkFormat(buildObject.Name)}`)
-
-    const buttons = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setURL(`https://josevarela.xyz/SMArchive/Builds/index.html#${listName}`)
-        .setLabel('List Page')
-        .setStyle('LINK'),
-      new MessageButton()
-        .setLabel('Another Build')
-        .setCustomId(`9-${this.commandVersion}-leaderboard-${listName}-0`)
-        .setStyle('PRIMARY')
-    );
-
-    if (buildObject.ID) {
-      buttons.addComponents(
-        new MessageButton()
-          .setURL(`https://josevarela.xyz/SMArchive/Builds/BuildChangeLogs.html?Version=${buildObject.ID}`)
-          .setLabel('Build Changelog')
-          .setStyle('LINK')
-      )
-    }
-
-    const { Windows, Mac, Linux, Src } = buildObject
-    const sources = [Windows, Mac, Linux, Src]
-    const sourcesStr = ['Windows', 'Mac', 'Linux', 'Source Code']
-    let availableSources = ''
-
-    if (sources.every(e => !e)) {
-      availableSources = 'No soures available for this build.'
-    } else {
-      for (let i = 0; i < sources.length; i++) {
-        if (sources[i]) {
-          availableSources += `${sourcesStr[i]} - ✅\n`
-          continue
-        }
-
-        availableSources += `${sourcesStr[i]} - ❌\n`
+      if (component === 'startagain') {
+        await cCtx.acknowledge();
+        await message.edit({
+          embeds: [buildListsEmbed],
+          components: [smSelectMenu]
+        });
       }
-    }
 
-    buildEmbed.addField('Available Sources', availableSources, false)
+      const isPageSwitch = component.startsWith('next') || component.startsWith('back');
+      const isBackFromLoopUp = component.startsWith('buildselecteddeep');
+      if (component === 'buildselected' || isBackFromLoopUp || isPageSwitch) {
+        let listID = '';
 
-    const msgData = {
-      embeds: [
-        {
-          ...buildEmbed,
-          ...archiveGenericEmbedFields
+        if (isPageSwitch) listID = component.split('+')[2];
+        if (isBackFromLoopUp) listID = component.split('+')[1];
+        if (!isBackFromLoopUp && !isPageSwitch) listID = cCtx.values[0];
+
+        // Number casting is used here otherwise when we overwrite the page property of the class it will mess up with the next page switch.
+        const page = isPageSwitch ? Number(component.split('+')[1]) : 0;
+        const listingForBuild = ArchivaBuildsInstance.listingNamesFromID(listID);
+        const LeaderboardMessageInstance = new LeaderboardMessageFile();
+
+        LeaderboardMessageInstance.supportLookUp = true;
+        LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Build to Look Up';
+        LeaderboardMessageInstance.separator = '+';
+        LeaderboardMessageInstance.pageSwitchArgument = listID;
+
+        /**
+         *
+         * @param {import('../types/tsTypes/common.js').LeaderboardElementObject} e
+         * @param {number} i
+         * @returns {string}
+         */
+        LeaderboardMessageInstance.formatElement = (e, i) => {
+          return `<:${e.emoji.name}:${e.emoji.id}> ${e.description}`;
+        };
+
+        for (let i = 0; i < listingForBuild.length; i++) {
+          LeaderboardMessageInstance.addElement({
+            value: `${listingForBuild[i]}+${i}+${listID}`,
+            description: listingForBuild[i],
+            emoji: archiveBuildEngineIconData[buildNameToEmoteKey(listID, listingForBuild[i])]
+          });
         }
-      ],
-      components: [buttons]
-    };
 
-    if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
-    } else {
-      interaction.ctx.editParent(msgData);
-    }
+        const pageEmbed = new EmbedBuilder()
+          .setTitle('Select Build')
+          .setColor(archiveBuildEngineColor[listID])
+          .setURL(`https://josevarela.xyz/SMArchive/Builds/index.html#${listID}`)
+          .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+          .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+
+        const buttons = new ActionRowBuilder().addComponents(
+          new ButtonBuilder().setLabel('Another Build List').setStyle(ButtonStyle.Primary).setCustomId(`startagain`)
+        );
+
+        LeaderboardMessageInstance.page = page;
+
+        const components = LeaderboardMessageInstance.pageComponents;
+
+        components.push(buttons);
+
+        await cCtx.acknowledge();
+        await message.edit({
+          embeds: [pageEmbed],
+          components: components
+        });
+      }
+
+      if (component.startsWith('updatepage')) {
+        const listName = cCtx.values[0].split('+')[0];
+        const page = cCtx.values[0].split('+')[1];
+        const listID = cCtx.values[0].split('+')[2];
+        const listObject = ArchivaBuildsInstance.buildListObjectFromID(listID);
+        const buildObject = listObject.Listing[page];
+        const buildEmbed = new EmbedBuilder()
+          .setTitle(`Summary of ${buildObject.Name}`)
+          .addFields(
+            {
+              name: 'Engine',
+              value: archiveListIDToEngineName[listID],
+              inline: true
+            },
+            {
+              name: 'Date',
+              value: buildObject.Date || '????-??-??',
+              inline: true
+            }
+          )
+          .setDescription(listObject.Description || 'No description.')
+          .setColor(archiveBuildEngineColor[buildNameToEmoteKey(listID, buildObject.Name)])
+          .setThumbnail(
+            `https://josevarela.xyz/SMArchive/Builds/VersionIcon/${buildNameToEmoteKey(
+              listID,
+              buildObject.Name
+            )}${archiveIconLinkFormat(buildObject.Name)}`
+          );
+
+        const buttons = new ActionRowBuilder().addComponents(
+          new ButtonBuilder()
+            .setURL(`https://josevarela.xyz/SMArchive/Builds/index.html#${listID}`)
+            .setLabel('List Page')
+            .setStyle(ButtonStyle.Link),
+          new ButtonBuilder()
+            .setLabel('Another Build')
+            .setCustomId(`buildselecteddeep+${listID}`)
+            .setStyle(ButtonStyle.Primary)
+        );
+
+        if (buildObject.ID) {
+          buttons.addComponents(
+            new ButtonBuilder()
+              .setURL(`https://josevarela.xyz/SMArchive/Builds/BuildChangeLogs.html?Version=${buildObject.ID}`)
+              .setLabel('Build Changelog')
+              .setStyle(ButtonStyle.Link)
+          );
+        }
+
+        const { Windows, Mac, Linux, Src } = buildObject;
+        const sources = [Windows, Mac, Linux, Src];
+        const sourcesStr = ['Windows', 'Mac', 'Linux', 'Source Code'];
+        let availableSources = '';
+
+        if (sources.every((e) => !e)) {
+          availableSources = 'No sources available for this build.';
+        } else {
+          for (let i = 0; i < sources.length; i++) {
+            if (sources[i]) {
+              availableSources += `${sourcesStr[i]} - ✅\n`;
+              continue;
+            }
+
+            availableSources += `${sourcesStr[i]} - ❌\n`;
+          }
+        }
+
+        buildEmbed.addFields({
+          name: 'Available Sources',
+          value: availableSources,
+          inline: false
+        });
+
+        await cCtx.acknowledge();
+        await message.edit({
+          embeds: [buildEmbed],
+          components: [buttons]
+        });
+      }
+    });
   }
 };

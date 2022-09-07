@@ -7,41 +7,44 @@ exports.ArchiveCreditsFile = class ArchiveCreditsInstance {
      */
     this.sourceURL = 'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Builds/Credits/data.json';
     /**
-     * @type {Object<string, Array<import('../types/types').CreditSection>>}
+     * @type {import('../types/tsTypes/types').ArchiveCredits}
      */
     this.mainObject = null;
   }
 
   async setup() {
+    /**
+     * @type {import('../types/tsTypes/types').ArchiveCredits}
+     */
     const body = await request(this.sourceURL);
 
     this.mainObject = JSON.parse(body);
   }
 
   /**
-   * @returns {import('../types/types').CreditedEngine[]}
+   * @returns {Array<string>}
    */
   get engines() {
-    return Object.keys(this.mainObject).filter(e => e !== 'Mung3');
+    return Object.keys(this.mainObject).filter((e) => e !== 'Mung3');
   }
 
   /**
    *
-   * @param {import('../types/types').CreditedEngine} engine
+   * @param {string} engine
    * @returns {string[]}
    */
   creditsTitleByEngine(engine) {
     if (!this.engines.includes(engine)) {
-      return []
+      return [];
     }
 
-    const credits = this.mainObject[engine]
-    const finalArr = []
+    const credits = this.mainObject[engine];
+    const finalArr = [];
 
     for (let i = 0; i < credits.length; i++) {
-      finalArr.push(credits[i].title)
+      finalArr.push(credits[i].title);
     }
 
-    return finalArr
+    return finalArr;
   }
 };

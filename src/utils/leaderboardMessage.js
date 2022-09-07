@@ -1,13 +1,17 @@
-const SlashCreate = require('slash-create');
-const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const { range } = require('./constants.js')
+const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, ButtonStyle } = require('discord.js');
+const { range } = require('./constants.js');
 exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
-  constructor({ interaction, commandArguments }) {
+  constructor() {
     /**
      * A array of individual elements that makes the pages.
      * @type {Array<string> | Array<object>}
      */
     this.elements = [];
+    /**
+     * The separator used between components components customID
+     * @type {string}
+     */
+    this.separator = '-'
     /**
      * Which page we're currently in.
      * @type {number}
@@ -44,28 +48,13 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
      */
     this.menuSelectPlaceholder = 'Look up element';
     /**
-     * @type {SlashCreate.ComponentContext}
-     */
-    this.ctx = interaction.ctx;
-    /**
+     * This argument will be added at the end of a page switch button customID
      * @type {string}
      */
-    this.commandID = commandArguments?.commandID || null;
-    /**
-     * @type {string | number}
-     */
-    this.commandVersion = commandArguments?.version || null;
-    /**
-     * @type {string}
-     */
-    this.primalArgument = commandArguments?.primalArgument || null;
-    /**
-     * @type {string[]}
-     */
-    this.arguments = commandArguments?.arguments || null;
+    this.pageSwitchArgument = ''
     /**
      *
-     * @param {string | import('../types/types.js').LeaderboardElementObject} e - The element string or object
+     * @param {string | import('../types/tsTypes/types').LeaderboardElementObject} e - The element string or object
      * @param {number} i - The element Index
      * @returns {string}
      */
@@ -80,7 +69,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
   /**
    *
-   * @param {string | import('../types/types.js').LeaderboardElementObject} element
+   * @param {string | import('../types/tsTypes/types').LeaderboardElementObject} element
    * @returns {boolean}
    */
   addElement(element) {
@@ -109,7 +98,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   }
 
   /**
-   * @returns {import('../types/types.js').LeaderboardPagesObject}
+   * @returns {import('../types/tsTypes/types').LeaderboardPagesObject}
    */
   get pages() {
     const pageList = [];
@@ -162,35 +151,32 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
   }
 
   /**
-   * @returns {MessageActionRow[]}
+   * @returns {ActionRowBuilder[]}
    */
   get pageComponents() {
-    if (!this.commandID) {
-      return [];
-    }
 
     if (this.lookingUp) {
-      const stopLookingButton = new MessageButton()
+      const stopLookingButton = new ButtonBuilder()
         .setLabel('Go Back')
-        .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${this.arguments[1]}`)
-        .setStyle('PRIMARY');
+        .setCustomId('stoplookup' + this.separator + this.page)
+        .setStyle(ButtonStyle.Primary);
 
-      return [new MessageActionRow().addComponents(stopLookingButton)];
+      return [new ActionRowBuilder().addComponents(stopLookingButton)];
     }
 
     const pageCount = this.pages.pageList.length;
     const leastPageNum = 0 > this.page - 1 ? 0 : this.page - 1;
     const maxPageNum = this.page + 1 > pageCount - 1 ? pageCount - 1 : this.page + 1;
 
-    const backButton = new MessageButton()
+    const backButton = new ButtonBuilder()
       .setLabel('Back')
-      .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${leastPageNum}`)
-      .setStyle('PRIMARY');
+      .setCustomId('back' + this.separator + leastPageNum + (this.pageSwitchArgument ? `${this.separator + this.pageSwitchArgument}` : ''))
+      .setStyle(ButtonStyle.Primary);
 
-    const nextButton = new MessageButton()
+    const nextButton = new ButtonBuilder()
       .setLabel('Next')
-      .setCustomId(`${this.commandID}-${this.commandVersion}-leaderboard-${this.primalArgument}-${maxPageNum}`)
-      .setStyle('PRIMARY');
+      .setCustomId('next' + this.separator + maxPageNum + (this.pageSwitchArgument ? `${this.separator + this.pageSwitchArgument}` : ''))
+      .setStyle(ButtonStyle.Primary);
 
     if (this.page === maxPageNum) {
       nextButton.setDisabled(true);
@@ -206,7 +192,7 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
 
     const components = [];
     if (leastPageNum !== maxPageNum) {
-      const buttonsComponents = new MessageActionRow().addComponents(backButton, nextButton);
+      const buttonsComponents = new ActionRowBuilder().addComponents(backButton, nextButton);
       components.push(buttonsComponents);
     }
 
@@ -214,39 +200,44 @@ exports.LeaderboardMessageFile = class LeaderboardMessageInstance {
       const { individualElements } = this.pages;
       const currentPageElements = individualElements[this.page];
       const maxIndex = this.elementsPerPage * (this.page + 1);
-      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage
+      let minIndex = this.elementsPerPage * (this.page + 1) - this.elementsPerPage;
       if (this.page >= 1) {
-        minIndex = minIndex - this.page
+        minIndex = minIndex - this.page;
       }
 
       const selectElement = [];
-      for (let i = 0; i < currentPageElements.length; i++) {
 
-        if (typeof currentPageElements === 'object') {
+      for (let i = 0; i < currentPageElements.length; i++) {
+        // This was currentPageElements, I'm not sure why, currentPageElements would always be object, so this condition would always run.
+        // I changed it to lookup the type of the element which is what it should always have been, I'm not sure if this will break something, I hope not.
+        if (typeof currentPageElements[i] === 'object') {
+          /**
+           * @type {import('../types/tsTypes/common.js').LeaderboardElementObject}
+           */
+          const elementObject = individualElements[this.page][i]
           selectElement.push({
-            value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
-            label: individualElements[this.page][i].description,
-            emoji: individualElements[this.page][i].emoji
+            value: elementObject.value || 'lookup' + this.separator + range(maxIndex, minIndex)[i] + this.separator + this.page,
+            label: elementObject.description,
+            emoji: elementObject.emoji
           });
-          continue
+          continue;
         }
 
         selectElement.push({
-          value: `${this.commandID}-${this.commandVersion}-lookUp-${range(maxIndex, minIndex)[i]}-${this.arguments[1]}`,
+          value: 'lookup' + this.separator + range(maxIndex, minIndex)[i] + this.separator + this.page,
           label: individualElements[this.page][i]
         });
       }
 
-      const elementSelector = new MessageSelectMenu()
-        .setCustomId(`${this.commandID}-${this.commandVersion}-update-${this.primalArgument}-${this.arguments[1]}`)
+      const elementSelector = new SelectMenuBuilder()
+        .setCustomId('updatepage' + this.separator + this.page)
         .setPlaceholder(this.menuSelectPlaceholder)
         .addOptions(selectElement);
 
-      const selectComponent = new MessageActionRow().addComponents(elementSelector);
+      const selectComponent = new ActionRowBuilder().addComponents(elementSelector);
       components.push(selectComponent);
     }
 
     return components;
   }
-
 };

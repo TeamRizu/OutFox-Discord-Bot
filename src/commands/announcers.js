@@ -1,11 +1,7 @@
-const { SlashCommand } = require('slash-create');
+const { SlashCommand, Message, ComponentContext } = require('slash-create');
 const { LeaderboardMessageFile } = require('../utils/leaderboardMessage.js');
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SelectMenuBuilder } = require('discord.js');
 const { ArchiveAnnouncersFile } = require('../utils/archivalAnnouncers.js');
-const {
-  archiveGenericEmbedFields,
-  announcersCreators
-} = require('../utils/constants.js')
 const ArchiveAnnouncersInstance = new ArchiveAnnouncersFile();
 
 module.exports = class AnnouncersCommand extends SlashCommand {
@@ -14,7 +10,7 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       name: 'announcers',
       description: 'Get a list of announcers with info and more.'
     });
-    this.commandVersion = '0.0.1';
+    this.commandVersion = '0.0.2';
   }
 
   /**
@@ -23,65 +19,19 @@ module.exports = class AnnouncersCommand extends SlashCommand {
    */
   async run(ctx) {
     await ArchiveAnnouncersInstance.setup();
-    await this.update({
-      interaction: {
-        ctx,
-        values: []
-      },
-      commandArguments: {
-        primalArgument: 0,
-        arguments: [0],
-        version: this.commandVersion,
-        firstSend: true
-      }
-    });
-  }
-
-  async update({ interaction, commandArguments }) {
-    if (!ArchiveAnnouncersInstance.mainObject) {
-      return;
-    }
-
-    if (commandArguments.primalArgument === 'authorSelected') {
-      await this.leaderboard({
-        interaction,
-        commandArguments: {
-          primalArgument: interaction.values[0].split('-')[3],
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
-          firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
-        }
-      });
-      return;
-    }
-
-    if (announcersCreators.includes(commandArguments.primalArgument)) {
-      await this.lookUp({
-        interaction,
-        commandArguments: {
-          primalArgument: commandArguments.primalArgument,
-          arguments: interaction.values[0].split('-').slice(3),
-          version: interaction.values[0].split('-')[1],
-          firstSend: false,
-          commandID: interaction.values[0].split('-')[0]
-        }
-      });
-      return;
-    }
 
     /**
      *
-     * @param {AnnouncerCreator} author
+     * @param {string} author
      * @returns {string}
      */
     const announcersCountString = (author) => {
-      const announcersCount = ArchiveAnnouncersInstance.announcersFromAuthors[author].length
+      const announcersCount = ArchiveAnnouncersInstance.announcersFromAuthors[author].length;
 
-      return `${author}: **${announcersCount} ${1 >= announcersCount ? 'Announcer' : 'Announcers'}**`
-    }
+      return `${author}: **${announcersCount} ${1 >= announcersCount ? 'Announcer' : 'Announcers'}**`;
+    };
 
-    const announcersEmbed = new MessageEmbed()
+    const announcersEmbed = new EmbedBuilder()
       .setTitle('StepMania Archive Announcers')
       .setDescription(
         `
@@ -98,148 +48,123 @@ module.exports = class AnnouncersCommand extends SlashCommand {
       )
       .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
       .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
+      .setFooter({
+        text: 'StepMania Archive made by Jose_Varela',
+        iconURL: 'https://josevarela.xyz/SMArchive/Builds/VersionIcon/SM40.png'
+      })
       .setColor('#30c3c4');
 
-    const authorOptions = []
+    const authorOptions = [];
+    const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors);
 
-    const announcersAuthors = Object.keys(ArchiveAnnouncersInstance.announcersFromAuthors)
     for (let i = 0; i < announcersAuthors.length; i++) {
       /**
-       * @type {AnnouncerCreator}
+       * @type {string}
        */
-      const currentAuthor = announcersAuthors[i]
-      const tempObj = {}
+      const currentAuthor = announcersAuthors[i];
+      const tempObj = {};
 
-      tempObj.label = currentAuthor
-      tempObj.value = `6-${this.commandVersion}-leaderboard-${currentAuthor.replace('-', 'U+002F')}-0`
+      tempObj.label = currentAuthor;
+      tempObj.value = `${currentAuthor}+0`;
 
-      authorOptions.push(tempObj)
+      authorOptions.push(tempObj);
     }
 
-    const smSelectMenu = new MessageActionRow().addComponents(
-      new MessageSelectMenu()
-        .setCustomId(`6-${this.commandVersion}-update-authorSelected`)
-        .setPlaceholder('Select Author')
-        .addOptions(authorOptions)
+    const smSelectMenu = new ActionRowBuilder().addComponents(
+      new SelectMenuBuilder().setCustomId(`authorselected`).setPlaceholder('Select Author').addOptions(authorOptions)
     );
 
+    await ctx.defer();
+
     const msgData = {
-      embeds: [
-        {
-          ...announcersEmbed,
-          ...archiveGenericEmbedFields
-        }
-      ],
+      embeds: [announcersEmbed],
       components: [smSelectMenu]
     };
 
-    if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
-    } else {
-      interaction.ctx.editParent(msgData);
-    }
-  }
-
-  async leaderboard({ interaction, commandArguments }) {
-    if (!ArchiveAnnouncersInstance.mainObject) {
-      return;
-    }
-
     /**
-     * @type {AnnouncerCreator}
+     * @type {Message}
      */
-    const author = commandArguments.primalArgument.replace('U+002F', '-');
-    const page = Number(commandArguments.arguments[1]);
-    const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author)
-    const LeaderboardMessageInstance = new LeaderboardMessageFile({ interaction, commandArguments });
+    const message = await ctx.send(msgData);
 
-    LeaderboardMessageInstance.supportLookUp = true;
-    LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Announcer to Look Up';
+    ctx.registerWildcardComponent(message.id, async (cCtx) => {
+      const component = cCtx.customID; // cCtx.values[0];
 
-    for (let i = 0; i < announcersForAuthor.length; i++) {
-      LeaderboardMessageInstance.addElement(announcersForAuthor[i].name);
-    }
+      if (component === 'startagain') {
+        await cCtx.acknowledge()
+        await message.edit(msgData);
+      }
 
-    const pageEmbed = new MessageEmbed()
-    .setTitle('Select Announcer')
-    .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
-    .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
+      if (component.includes('updatepage')) {
+        // const page = cCtx.values[0].split('+')[0]
+        await cCtx.acknowledge()
+        const announcerName = cCtx.values[0].split('+')[1];
+        const author = cCtx.values[0].split('+')[2];
 
-    const buttons = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setLabel('Another Announcer')
-        .setStyle('PRIMARY')
-        .setCustomId(`6-${this.commandVersion}-update-0`)
-    );
+        const announcerEmbed = new EmbedBuilder()
+          .setTitle(announcerName)
+          .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`);
 
-    LeaderboardMessageInstance.page = page;
+        const buttons = new ActionRowBuilder().addComponents(
+          new ButtonBuilder()
+            .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`)
+            .setLabel('Find on Page')
+            .setStyle(ButtonStyle.Link),
+          new ButtonBuilder().setLabel('Another Announcer').setStyle(ButtonStyle.Primary).setCustomId('startagain')
+        );
 
-    const components = LeaderboardMessageInstance.pageComponents
+        if (author !== 'Unlisted')
+          announcerEmbed.addFields({
+            name: 'Author',
+            value: author,
+            inline: true
+          });
 
-    components.push(buttons)
+        await message.edit({
+          embeds: [announcerEmbed],
+          components: [buttons]
+        });
+      }
 
-    const msgData = {
-      embeds: [
-        {
-          ...pageEmbed,
-          ...archiveGenericEmbedFields
+      if (component === 'authorselected') {
+        await ctx.acknowledge()
+        const author = cCtx.values[0].split('+')[0];
+        const page = cCtx.values[0].split('+')[1];
+        const announcersForAuthor = ArchiveAnnouncersInstance.announcersByAuthor(author);
+        const LeaderboardMessageInstance = new LeaderboardMessageFile();
+        // TODO: Look at giving author and page to LeaderboardMessage, we prob need to give _some_ context to components besides page.
+
+        LeaderboardMessageInstance.supportLookUp = true;
+        LeaderboardMessageInstance.menuSelectPlaceholder = 'Select Announcer to Look Up';
+        LeaderboardMessageInstance.separator = '+';
+
+        for (let i = 0; i < announcersForAuthor.length; i++) {
+          LeaderboardMessageInstance.addElement({
+            description: announcersForAuthor[i].name,
+            value: `${page}+${announcersForAuthor[i].name}+${author}`
+          });
         }
-      ],
-      components: components
-    };
 
-    if (commandArguments.firstSend) {
-      await interaction.ctx.send(msgData);
-    } else {
-      await interaction.ctx.editParent(msgData);
-    }
-  }
+        const pageEmbed = new EmbedBuilder()
+          .setTitle('Select Announcer')
+          .setURL('https://josevarela.xyz/SMArchive/Announcers/index.html')
+          .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
+          .setDescription(LeaderboardMessageInstance.pages.pageList[page]);
 
-  async lookUp({ interaction, commandArguments }) {
-    if (!ArchiveAnnouncersInstance.mainObject) {
-      return;
-    }
+        const buttons = new ActionRowBuilder().addComponents(
+          new ButtonBuilder().setLabel('Another Announcer').setStyle(ButtonStyle.Primary).setCustomId(`startagain`)
+        );
 
-    const interactionSplit = interaction.values[0].split('-');
-    const page = Number(interactionSplit[3]);
-    /**
-     * @type {AnnouncerCreator}
-     */
-    const author = commandArguments.primalArgument.replace('U+002F', '-')
-    const announcer = ArchiveAnnouncersInstance.announcersByAuthor(author)[page]
+        LeaderboardMessageInstance.page = page;
 
-    const announcerEmbed = new MessageEmbed()
-      .setTitle(`${announcer.name}`)
-      .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`);
+        const components = LeaderboardMessageInstance.pageComponents;
 
-    const buttons = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setURL(`https://josevarela.xyz/SMArchive/Announcers/index.html`)
-        .setLabel('Find on Page')
-        .setStyle('LINK'),
-      new MessageButton()
-        .setLabel('Another Announcer')
-        .setStyle('PRIMARY')
-        .setCustomId(`6-${this.commandVersion}-leaderboard-${author.replace('-', 'U+002F')}-0`)
-    );
+        components.push(buttons);
 
-    if (author !== 'Unlisted') announcerEmbed.addField('Author', author, true);
-
-    const msgData = {
-      embeds: [
-        {
-          ...announcerEmbed,
-          ...archiveGenericEmbedFields
-        }
-      ],
-      components: [buttons]
-    };
-
-    if (commandArguments.firstSend) {
-      interaction.ctx.send(msgData);
-    } else {
-      interaction.ctx.editParent(msgData);
-    }
+        await message.edit({
+          embeds: [pageEmbed],
+          components
+        });
+      }
+    });
   }
 };
