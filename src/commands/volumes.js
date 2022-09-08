@@ -44,7 +44,7 @@ v2.setColor('#782024');
 v2.setURL('https://projectoutfox.com/outfox-serenity/volume-ii');
 v2.setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-2-jk-small.png');
 v2.addFields({
-  name: 'OutFox Serenit Server',
+  name: 'OutFox Serenity Server',
   value: '[https://discord.gg/mNcFU67mK7](https://discord.gg/mNcFU67mK7)'
 });
 v2.setImage('https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/v2/OutFox%20Serenity%20Volume%202/banner.png');
@@ -61,10 +61,7 @@ module.exports = class VolumesCommand extends SlashCommand {
       name: 'volumes',
       description: 'Get information for Serenity Volumes.'
     });
-    this.commandVersion = '0.0.2';
-    this.onError = (err) => {
-      throw err;
-    };
+    this.commandVersion = '0.0.3';
   }
 
   /**
