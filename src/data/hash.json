@@ -93,6 +93,10 @@
     "notes": [
       {
         "type": "release_candidate"
+      },
+      {
+        "type": "notice",
+        "description": "This hash also represents 0.4.17.1 RC2"
       }
     ]
   },
