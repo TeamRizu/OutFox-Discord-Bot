@@ -368,33 +368,59 @@ const main = async ({
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
               const bodyMeasure = await NoteSkin.collectMeasure(`${bodyName}Body`, timing, endChar, noteType, curLane);
 
-              switch (curMode) {
+              switch (curModeOFStyle(curMode)) {
                 case 'ds3ddx':
-                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : bodyY + 56 - noteY);
+                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : noteY - 10);
                   break;
+                case 'pnm':
+                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : noteY - 20);
+                  break
+                case 'kbx':
+                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : noteY - 32);
+                  break;
+                case 'gdgf':
+                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : noteY - 24);
+                  break;
+                case 'gddm':
+                  console.log(`
+                  bodyY: ${bodyY}
+                  noteY: ${noteY}
+                  `)
+                  body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : noteY - 24);
+                  break;
+                case 'bm':
+                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : noteY - 26);
+                  break
                 default:
-                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+                  body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : noteY);
               }
 
               switch (curMode) {
                 case 'pnm':
-                  background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 24);
+                  background.blit(body, bodyX, reverse ? noteY + 6 : bodyY - 24);
                   break;
                 case 'kbx':
                   background.blit(body, bodyX, reverse ? bodyY - 92 : bodyY - 16);
                   break;
                 case 'gdgf':
                 case 'bm':
-                  background.blit(body, bodyX, reverse ? bodyY - 96 : bodyY - 32);
+                  background.blit(body, bodyX, reverse ? noteY + 6 : bodyY - 32);
                   break;
                 case 'gh':
                   background.blit(body, bodyX + (curLane === 5 ? 80 : 19), reverse ? bodyY - (curLane === 5 ? 32 : 64) : bodyY - (curLane === 5 ? 35 : 0));
                   break;
                 case 'ds3ddx':
-                  background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY + 10);
+                  background.blit(body, bodyX, reverse ? noteY + 32 : bodyY + 10);
+                  break;
+                case 'gddm':
+                  console.log(`
+                  bodyY: ${bodyY}
+                  noteY: ${noteY}
+                  `)
+                  background.blit(body, bodyX, reverse ? noteY : bodyY - 32);
                   break;
                 default:
-                  background.blit(body, bodyX, reverse ? bodyY - 64 : bodyY - 0);
+                  background.blit(body, bodyX, reverse ? noteY + 32 : bodyY - 0);
               }
 
               const measureBottom = await NoteSkin.collectMeasure(
@@ -489,6 +515,14 @@ const main = async ({
                       ghFixedBodyY
                     );
                     break;
+                  case 'gddm':
+                    let gddmNoteY = bodyY - measureNote.height / 2
+                    background.blit(
+                      note,
+                      bodyX,
+                      gddmNoteY - 32
+                    );
+                    break
                   default:
                     let cursedNoteY = bodyY - measureNote.height / 2
                     background.blit(
