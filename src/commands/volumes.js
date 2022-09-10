@@ -28,7 +28,7 @@ v1.setColor('#24756d');
 v1.setURL('https://projectoutfox.com/outfox-serenity/volume-i');
 v1.setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-update-jk.png');
 v1.addFields({
-  name: 'OutFox Serenit Server',
+  name: 'OutFox Serenity Server',
   value: '[https://discord.gg/mNcFU67mK7](https://discord.gg/mNcFU67mK7)'
 });
 v1.setImage(
