@@ -382,10 +382,6 @@ const main = async ({
                   body.resize(bodyMeasure.width - 64, reverse ? bodyY - noteY - 32 : noteY - 24);
                   break;
                 case 'gddm':
-                  console.log(`
-                  bodyY: ${bodyY}
-                  noteY: ${noteY}
-                  `)
                   body.resize(bodyMeasure.width, reverse ? bodyY - noteY - 32 : noteY - 24);
                   break;
                 case 'bm':
@@ -413,10 +409,6 @@ const main = async ({
                   background.blit(body, bodyX, reverse ? noteY + 32 : bodyY + 10);
                   break;
                 case 'gddm':
-                  console.log(`
-                  bodyY: ${bodyY}
-                  noteY: ${noteY}
-                  `)
                   background.blit(body, bodyX, reverse ? noteY : bodyY - 32);
                   break;
                 default:
