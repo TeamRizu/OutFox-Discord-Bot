@@ -2,12 +2,10 @@ require('dotenv').config();
 const { SlashCreator, FastifyServer } = require('slash-create');
 const path = require('path');
 const CatLoggr = require('cat-loggr');
-//const NodeCache = require('node-cache');
 const { DatabaseFile } = require('./utils/databaseSpreadsheet.js');
 
 const start = async () => {
   const logger = new CatLoggr().setLevel(process.env.COMMANDS_DEBUG === 'true' ? 'debug' : 'info');
-  // const interactionCache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
   const DatabaseSpreadsheetInstance = new DatabaseFile(process.env.SHEET_ID);
   const ModsSpreadsheetInstance = new DatabaseFile(process.env.MODS_ID);
 
@@ -27,22 +25,6 @@ const start = async () => {
     serverPort: parseInt(process.env.PORT, 10) || 8020,
     serverHost: '0.0.0.0'
   });
-
-  /*
-  const commands = [
-    'volumes',
-    'leaderboard',
-    'mods',
-    'ping',
-    'languagestatus',
-    'themes',
-    'announcers',
-    'credits',
-    'preference',
-    'builds',
-    'mybuild',
-    'term'
-  ];*/
 
   creator.on('debug', (message) => logger.log(message));
   creator.on('warn', (message) => logger.warn(message));
