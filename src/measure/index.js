@@ -137,6 +137,11 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
     '192nd': 1
   };
 
+  /**
+   * Gets the value from noteSpacing without having to add 'nd' or 'th'
+   * @param {number} timing
+   * @returns {number}
+   */
   const getNoteSpacingByNumberTiming = (timing) => {
     const timingString = [64, 192].includes(timing) ? `${timing}nd` : `${timing}th`;
 
@@ -229,6 +234,12 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
     );
   };
 
+  /**
+   * Returns how long per px a hold should be.
+   * @param {number} timingStart - The timing of the measure.
+   * @param {number} depth - The depth diference between the head and the bottom note.
+   * @returns {number}
+   */
   const calculateHoldY = (timingStart, depth) => {
     const timingSpacing = getNoteSpacingByNumberTiming(timingStart);
 
@@ -293,6 +304,7 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
               if (reverse) {
                 holdTop.flip(false, true);
               }
+
               switch (curMode) {
                 case 'ds3ddx':
                   background.blit(holdTop, noteX, reverse ? noteY + 20 : noteY - 20);
@@ -394,12 +406,6 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
 
               const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
               const bodyMeasure = await NoteSkin.collectMeasure(`${bodyName}Body`, timing, endChar, noteType, curLane);
-              console.log(`
-              lastTiming: ${lastTiming}
-              lastDepth: ${lastDepth}
-              timing: ${curMeasure.length}
-              depth: ${depth}
-              `);
               const holdY = calculateHoldY(curMeasure.length, depth - lastDepth);
               const measureBottom = await NoteSkin.collectMeasure(
                 `${bodyName}Bottom`,
@@ -576,7 +582,7 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
 
                 if (!lastNoteByLane[curLane]) continue;
 
-                const [type, bodyX, bodyY, timingLane] = lastNoteByLane[curLane];
+                const [type, bodyX, bodyY, timingLane, lastDepth, lastTIming] = lastNoteByLane[curLane];
 
                 const body = await NoteSkin.collectAsset(
                   `${type}Body`,
@@ -586,10 +592,11 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
                   curLane
                 );
 
+                const holdY = calculateHoldY(curMeasure.length, depth - lastDepth);
                 const measureNote = await NoteSkin.collectMeasure('tapNote', timing, endChar, noteType, curLane);
                 const measureBody = await NoteSkin.collectMeasure(`${type}Body`, timing, endChar, noteType, curLane);
 
-                body.resize(measureBody.width - 64, reverse ? bodyY - noteY - 32 : bodyY + 96 - noteY);
+                body.resize(measureBody.width - 64, holdY);
 
                 switch (curMode) {
                   case 'bm':
@@ -721,7 +728,7 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
   }
 
   // Write the result.
-  background.write(path.join(__dirname, './result.jpg'));
+  // background.write(path.join(__dirname, './result.jpg'));
 
   return background;
 };
