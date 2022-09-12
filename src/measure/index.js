@@ -148,6 +148,30 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
     return noteSpacing[timingString];
   };
 
+  const closest = (arr, goal) => {
+    const found = arr.reduce((prev, curr) => {
+      return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+    });
+
+    return found
+  }
+
+  const getAllIndexes = (arr, val) => {
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
+  }
+
+  const base = (baseN, numberToBase) => {
+    for (let i = 1;; i++) {
+      if ((numberToBase - (baseN * i)) > baseN) continue
+
+      return numberToBase - (baseN * i)
+    }
+  }
+
   // Last Seen "Head Defining" note per lane.
   const lastNoteByLane = [];
 
@@ -217,20 +241,33 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
       return [0, 256][measure];
     };
 
+    const depth4th = noteSpacing[timing + endChar] * (line / timings[curMeasure.length].length)
+
+    const measureTiming = curMeasure.length
+    const measureTimings = timings[measureTiming]
+    const allIndexOfTiming = getAllIndexes(measureTimings, timing)
+    const iTimingInMeasureTimings = closest(allIndexOfTiming, base(measureTiming, depth))
+    console.log(`
+    The closest index of ${timing} in
+    [${measureTimings.join(', ')}]
+    is ${iTimingInMeasureTimings} at depth of ${depth}
+    `)
+    const timingDepth = timing === measureTiming ? depth : Number.parseInt(depth / iTimingInMeasureTimings)
+
     if (reverse) {
       return (
         baseY() -
         (timing === 4
-          ? noteSpacing[timing + endChar] * (line / timings[curMeasure.length].length)
-          : noteSpacing[timing + endChar] * depth)
+          ? depth4th
+          : noteSpacing[timing + endChar] * (Math.max(1, timingDepth)))
       );
     }
 
     return (
       baseY() +
       (timing === 4
-        ? noteSpacing[timing + endChar] * (line / timings[curMeasure.length].length)
-        : noteSpacing[timing + endChar] * depth)
+        ? depth4th
+        : noteSpacing[timing + endChar] * (Math.max(1, timingDepth)))
     );
   };
 
@@ -281,19 +318,19 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
         // Look every char from the line
         const noteType = curLine[char];
         const noteX = 44 + NoteSkin.styleconfig.modeSpacing[curLane];
-        let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
+        // let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
 
         if (noteType === '}' || noteType === ']') modstring = false; // note attack declaration ended, OPEN THE DOORS.
 
         if (modstring) continue; // We're inside a note attack declaration, ignore everything while this is true.
 
-        if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32;
+        //if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32;
 
         switch (noteType) {
           case '1': // TapNote
             {
               const note = await NoteSkin.collectAsset('tapNote', timing, endChar, noteType, curLane);
-
+              let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
               background.blit(note, noteX, noteY);
             }
             break;
@@ -716,10 +753,17 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
               modstring = true; // It's actually a keysound but I won't create another var for it
             }
             break;
-          default: // bad file
+          default: // Unknown char
             // It's either a 0 or a note attack argument.
             break;
         }
+
+        // We have reached the max supported lanes, ignore everything else.
+        if (curLane === NoteSkin.styleconfig.modeSpacing.length - 1) {
+          char = curLine.length;
+          continue;
+        }
+
         curLane++;
       }
 
