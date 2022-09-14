@@ -247,11 +247,6 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
     const measureTimings = timings[measureTiming]
     const allIndexOfTiming = getAllIndexes(measureTimings, timing)
     const iTimingInMeasureTimings = closest(allIndexOfTiming, base(measureTiming, depth))
-    console.log(`
-    The closest index of ${timing} in
-    [${measureTimings.join(', ')}]
-    is ${iTimingInMeasureTimings} at depth of ${depth}
-    `)
     const timingDepth = timing === measureTiming ? depth : Number.parseInt(depth / iTimingInMeasureTimings)
 
     if (reverse) {
@@ -318,19 +313,19 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
         // Look every char from the line
         const noteType = curLine[char];
         const noteX = 44 + NoteSkin.styleconfig.modeSpacing[curLane];
-        // let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
+        let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
 
         if (noteType === '}' || noteType === ']') modstring = false; // note attack declaration ended, OPEN THE DOORS.
 
         if (modstring) continue; // We're inside a note attack declaration, ignore everything while this is true.
 
-        //if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32;
+        if (curMode === 'gdgf' && curLane === NoteSkin.styleconfig.modeSpacing.length - 1) noteY -= 32;
 
         switch (noteType) {
           case '1': // TapNote
             {
               const note = await NoteSkin.collectAsset('tapNote', timing, endChar, noteType, curLane);
-              let noteY = calculateNoteY(curMode, curStyle, measure, timing, endChar, depth, line, curMeasure, curLane);
+
               background.blit(note, noteX, noteY);
             }
             break;
