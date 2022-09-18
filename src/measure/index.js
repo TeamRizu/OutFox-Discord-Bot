@@ -148,27 +148,21 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
     return noteSpacing[timingString];
   };
 
-  const closest = (arr, goal) => {
-    const found = arr.reduce((prev, curr) => {
-      return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
-    });
-
-    return found
-  }
-
-  const getAllIndexes = (arr, val) => {
-    var indexes = [], i = -1;
-    while ((i = arr.indexOf(val, i+1)) != -1){
-        indexes.push(i);
-    }
-    return indexes;
-  }
-
-  const base = (baseN, numberToBase) => {
+  /**
+   * Limits given number to a base.
+   * @param {number} baseN - The number which will be used as a base, numberToBase can't be equal or higher.
+   * @param {number} numberToBase - The number to base.
+   * @param {boolean} returnBases - If the number of bases should also return, this will make the return a array if true.
+   * @returns {number | number[]}
+   */
+  const base = (baseN, numberToBase, returnBases) => {
     for (let i = 1;; i++) {
-      if ((numberToBase - (baseN * i)) > baseN) continue
 
-      return numberToBase - (baseN * i)
+      if (baseN > numberToBase) return returnBases ? [numberToBase, 0]: numberToBase
+
+      if ((numberToBase - (baseN * i)) >= baseN) continue
+
+      return returnBases ? [numberToBase - (baseN * i), i] : numberToBase - (baseN * i)
     }
   }
 
@@ -186,10 +180,46 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
     48: [4, 48, 24, 16, 12, 48, 8, 48, 12, 16, 24, 48],
     64: [4, 64, 32, 64, 16, 64, 32, 64, 8, 64, 32, 64, 16, 64, 32, 64],
     192: [
-      4, 192, 192, 64, 48, 192, 32, 192, 24, 64, 192, 192, 16, 192, 192, 64, 12, 192, 32, 192, 48, 64, 192, 192, 8, 192,
-      192, 64, 48, 192, 32, 192, 12, 64, 192, 192, 16, 192, 192, 64, 24, 192, 32, 192, 48, 64, 192, 192
+      4, 192, 192, 64, 48, 192, 32, 192, 24, 64, 192, 192, 16, 192, 192, 64, 12, 192, 32, 192, 48, 64, 192, 192, 8,
+      192, 192, 64, 48, 192, 32, 192, 12, 64, 192, 192, 16, 192, 192, 64, 24, 192, 32, 192, 48, 64, 192, 192
     ]
   };
+
+  const timingsInitialSpacing = {
+    4:  [
+      0
+    ],
+    8:  [
+      0, 32
+    ],
+    12: [
+      0, 21, 42
+    ],
+    16: [
+      0, 16, 32,
+      48
+    ],
+    24: [
+      0, 10, 21, 32,
+      42, 53
+    ],
+    32: [
+      0, 8, 16, 24, 32,
+      40, 48, 56
+    ],
+    48: [
+      0, 5, 10, 16, 21, 26, 32,
+      37, 42, 48, 52, 58
+    ],
+    64: [
+      0, 4, 8, 12, 16, 20, 24, 28, 32,
+      36, 40, 44, 48, 52, 56, 60
+    ],
+    192: [
+      0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 20, 21, 22, 24, 25, 26, 28, 29, 30, 32,
+      33, 34, 36, 37, 38, 40, 41, 42, 44, 45, 46, 48, 49, 50, 52, 53, 54, 56, 57, 58, 60, 61, 62
+    ]
+  }
 
   /**
    *
@@ -245,16 +275,16 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
 
     const measureTiming = curMeasure.length
     const measureTimings = timings[measureTiming]
-    const allIndexOfTiming = getAllIndexes(measureTimings, timing)
-    const iTimingInMeasureTimings = closest(allIndexOfTiming, base(measureTiming, depth))
-    const timingDepth = timing === measureTiming ? depth : Number.parseInt(depth / iTimingInMeasureTimings)
+    const measureSpacings = timingsInitialSpacing[measureTiming]
+    const [timingIndex, bases] = base(measureTimings.length, depth, true)
+    const timingDepth = [0, 64, 128, 192][bases] + measureSpacings[timingIndex]
 
     if (reverse) {
       return (
         baseY() -
         (timing === 4
           ? depth4th
-          : noteSpacing[timing + endChar] * (Math.max(1, timingDepth)))
+          : timingDepth)
       );
     }
 
@@ -262,7 +292,7 @@ const main = async ({ reverse = false, curMode = 'dance', style, showMeasureLine
       baseY() +
       (timing === 4
         ? depth4th
-        : noteSpacing[timing + endChar] * (Math.max(1, timingDepth)))
+        : timingDepth)
     );
   };
 
