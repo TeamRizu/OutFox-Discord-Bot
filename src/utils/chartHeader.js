@@ -52,8 +52,12 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
     this.#stopTags = ['stops', 'freezes']
   }
 
+  /**
+   *
+   * @param {string} file
+   */
   parse(file) {
-    const lines = file.split('\r\n')
+    const lines = file.split('\n')
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
 
@@ -182,6 +186,11 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
     return line
   }
 
+  /**
+   *
+   * @param {string} line
+   * @returns
+   */
   removeCommentFromLine(line) {
     const split = line.split('//')[0]
 
@@ -197,14 +206,14 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
   }
 
   pushChanges(bgtag, value) {
-    value = this.removeCommentFromLine(value)
+    value = this.removeCommentFromLine(value) // FIXME: This is broken
 
     if (value.split('=').length === 5) {
       this.headerData[bgtag].push(value)
       return true
     }
 
-    if (value.split('=').length !== 11) {
+    if (value.split('=').length !== 10) {
       return false
     }
 
