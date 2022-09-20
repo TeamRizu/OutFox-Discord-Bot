@@ -27,7 +27,6 @@ exports.ChartStepFile = class ChartStep {
       offset: '',
       timesignatures: []
     }
-    this.acceptedNotes = ['0', '1', '2', '3', '4', 'M', 'K', 'L', 'F']
 
     this.#currentState = ''
     this.#currentMeasure = 0
@@ -35,6 +34,10 @@ exports.ChartStepFile = class ChartStep {
     this.#stopTags = ['stops', 'freezes']
   }
 
+  /**
+   *
+   * @param {string} stepLines
+   */
   parse(stepLines) {
     for (let i = 0; i < stepLines.length; i++) {
       const line = stepLines[i]
@@ -193,6 +196,7 @@ exports.ChartStepFile = class ChartStep {
   pushMeasureLine(line) {
     if (!this.stepData.notes[this.#currentMeasure]) this.stepData.notes[this.#currentMeasure] = []
 
+    // FIXME: Not sure if this is working correctly, I think it's sees everything as a single measure.
     this.stepData.notes[this.#currentMeasure].push(line)
 
     return true

@@ -1,3 +1,4 @@
+const { EmbedBuilder } = require('discord.js');
 const { SlashCommand, CommandOptionType, CommandContext } = require('slash-create');
 const { ChartHeaderFile } = require('../utils/chartHeader')
 exports.default = class PreviewCommand extends SlashCommand {
@@ -33,12 +34,19 @@ exports.default = class PreviewCommand extends SlashCommand {
     if (!file) return 'Could no get file text.'
 
     const chartHeader = new ChartHeaderFile()
-    try {
-      chartHeader.parse(file)
-      console.log(chartHeader.headerData)
-    } catch (e) {
-      console.error(e)
-    }
+    chartHeader.parse(file)
+    const header = chartHeader.headerData
+
+    const embed = new EmbedBuilder()
+    embed.setTitle(header.title?.slice(0, 256) || 'Title not defined.')
+    embed.setAuthor({
+      name: header.artist ? `Song by ${header.artist.slice(0, 256)}` : 'Unknown Song Artist',
+    })
+
+    ctx.send({
+      embeds: [embed]
+    })
+    console.log(chartHeader.headerData.notes[0].stepData)
 
     return 'console';
   }
