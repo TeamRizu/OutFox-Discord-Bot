@@ -36,7 +36,7 @@ exports.ChartStepFile = class ChartStep {
 
   /**
    *
-   * @param {string} stepLines
+   * @param {string[]} stepLines
    */
   parse(stepLines) {
     for (let i = 0; i < stepLines.length; i++) {
