@@ -168,7 +168,7 @@ exports.ChartHeaderFile = class ChartHeaderInstance {
           this.pushTickcounts(line)
         break
         case 'chart':
-          this.#temporaryNotes.push(line)
+          this.#temporaryNotes.push(line.replace('\r', ''))
         break
       }
     }
