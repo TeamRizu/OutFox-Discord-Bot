@@ -1,7 +1,7 @@
 {
   "c82532bbbe": {
     "date": "20221012",
-    "name": "Project OutFox Alpha V RC23",
+    "name": "Project OutFox Alpha V RC023",
     "buildtype": "testbuild",
     "exclusive": null,
     "notes": [
@@ -13,7 +13,7 @@
   },
   "cc412b7070": {
     "date": "20220826",
-    "name": "Project OutFox Alpha V RC14",
+    "name": "Project OutFox Alpha V RC014",
     "buildtype": "testbuild",
     "exclusive": null,
     "notes": [
@@ -84,7 +84,7 @@
   },
   "96e6c41be6": {
     "date": "20220728",
-    "name": "Project OutFox ALpha V RC002",
+    "name": "Project OutFox Alpha V RC002",
     "buildtype": "testbuild",
     "exclusive": null,
     "notes": [
@@ -94,6 +94,123 @@
       {
         "type": "notice",
         "description": "This is the first Alpha V testbuild."
+      }
+    ]
+  },
+  "a0e8bd87f4": {
+    "date": "20221015",
+    "name": "Project OutFox Alpha 0.4.18.0 RC13",
+    "buildtype": "testbuild",
+    "exlusive": "windows",
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build covers RC14"
+      }
+    ]
+  },
+  "27f92788ff": {
+    "date": "20221011",
+    "name": "Project OutFox Alpha 0.4.18.0 RC12",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
+  "4cd06bd793": {
+    "date": "20221011",
+    "name": "Project OutFox Alpha 0.4.18.0 RC10",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build covers RC11"
+      }
+    ]
+  },
+  "2457122acc": {
+    "date": "20221009",
+    "name": "Project OutFox Alpha 0.4.18.0 RC7",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build covers RC8"
+      }
+    ]
+  },
+  "46fa91a0ea": {
+    "date": "20221005",
+    "name": "Project OutFox Alpha 0.4.18.0 RC6",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "There was another build exclusive to Linux Modern that fixed the crashlog system."
+      }
+    ]
+  },
+  "ddd35582ab": {
+    "date": "20221004",
+    "name": "Project OutFox Alpha 0.4.18.0 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
+  "1fed46ba40": {
+    "date": "20220926",
+    "name": "Project OutFox Alpha 0.4.18.0 RC4",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
+  "e200985623": {
+    "date": "20220923",
+    "name": "Project OutFox Alpha 0.4.18.0 RC2",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build covers RC3"
+      }
+    ]
+  },
+  "a4ae90c0cf": {
+    "date": "20220919",
+    "name": "Project OutFox Alpha 0.4.18.0 RC0",
+    "buildtype": "testbuild",
+    "exlusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build covers RC1"
+      }
+    ]
+  },
+  "db70cb4f67": {
+    "date": "20220917",
+    "name": "Project OutFox Alpha 0.4.17.1 RC5",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build covers RC6"
+      }
+    ]
+  },
+  "d9c034ed09": {
+    "date": "20220916",
+    "name": "Project OutFox Alpha 0.4.17.1 RC4",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build had another special build meant to test AVX2 implementation, here are some notes:\n```PLEASE ENSURE YOUR CPU IS AT LEAST AN INTEL CORE 4600 (HASWELL) OR NEWER (2013 ->) AND THAT YOUR AMD IS AN EXCAVATOR OR ZEN (2016 OR NEWER)\n\nTHIS BUILD WILL NOT WORK ON ANYTHING OTHER THAN WINDOWS 10 AND 11!!!\n\nENSURE YOU SET THE RENDERER TO GLAD IN THE PREFERENCE.INI FOR BETTER PERFORMANCE\n```"
       }
     ]
   },
