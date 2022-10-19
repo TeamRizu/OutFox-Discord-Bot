@@ -1,4 +1,11 @@
 {
+  "0516a0c977": {
+    "date": "20221017",
+    "name": "Project OutFox Alpha V RC024",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
   "c82532bbbe": {
     "date": "20221012",
     "name": "Project OutFox Alpha V RC023",
