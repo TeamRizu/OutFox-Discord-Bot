@@ -86,7 +86,7 @@
     {
       "name": "footswiches",
       "properName": "Footswitches",
-      "explanation": "You’re hitting the same arrow using different feet. Thoso can look like doublesteps, but if you do it properly, you can still walk through the chart alternating feet.",
+      "explanation": "You’re hitting the same arrow using different feet. Those can look like doublesteps, but if you do it properly, you can still walk through the chart alternating feet.",
       "decorations": {
         "image": "https://cdn.discordapp.com/attachments/953800884549189662/971854933118824508/unknown.png"
       }
@@ -121,7 +121,7 @@
     {
       "name": "testbuild",
       "properName": "Test Build",
-      "explanation": "Usually used to mention a Project OutFox Alpha Tester build, those builds are the extreme point of availabla latest code and features, but will also have the most bugs."
+      "explanation": "Usually used to mention a Project OutFox Alpha Tester build, those builds are the extreme point of available latest code and features, but will also have the most bugs."
     },
     {
       "name": "alphatester",
@@ -206,7 +206,7 @@
         "spinal shark collective": "Spinal Shark Collective"
       },
       "aliases": ["spinal shark collective"],
-      "explanation": "Team SSC, started most of the work on StepMania 5 Engine and later left production due to community conflits.",
+      "explanation": "Team SSC, started most of the work on StepMania 5 Engine and later left production due to community conflicts.",
       "references": [
         {
           "type": "url",
@@ -347,7 +347,7 @@
     {
       "name": "openitg",
       "properName": "OpenITG",
-      "explanation": "An open-source rhythm dancing game which is a fork of StepMania 3.95 with the goal of adding arcade-like ITG-style behavior and serving as a drop-in replacement for the ITG binary on arcade cabinents.",
+      "explanation": "An open-source rhythm dancing game which is a fork of StepMania 3.95 with the goal of adding arcade-like ITG-style behavior and serving as a drop-in replacement for the ITG binary on arcade cabinets.",
       "references": [
         {
           "type": "url",
