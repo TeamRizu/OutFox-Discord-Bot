@@ -108,7 +108,7 @@
     "date": "20221015",
     "name": "Project OutFox Alpha 0.4.18.0 RC13",
     "buildtype": "testbuild",
-    "exlusive": "windows",
+    "exclusive": "windows",
     "notes": [
       {
         "type": "notice",
@@ -189,7 +189,7 @@
     "date": "20220919",
     "name": "Project OutFox Alpha 0.4.18.0 RC0",
     "buildtype": "testbuild",
-    "exlusive": null,
+    "exclusive": null,
     "notes": [
       {
         "type": "notice",
@@ -400,7 +400,7 @@
   },
   "9e9a4933fc6": {
     "date": "20220519",
-    "name": "Project OutFox Alpha 0.4.15.0 RC0 FOXBLOCK",
+    "name": "Project OutFox Alpha 0.4.15.0 RC0 FOXCLOCK",
     "buildtype": "testbuild",
     "exclusive": null,
     "notes": [
@@ -433,7 +433,7 @@
     "date": "20220505",
     "name": "Project Outfox Alpha 0.4.14.2 RC3 FOXCLOCK",
     "buildtype": "testbuild",
-    "exlusive": null,
+    "exclusive": null,
     "notes": [
       {
         "type": "release_candidate"
