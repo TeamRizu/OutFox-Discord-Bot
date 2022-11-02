@@ -104,6 +104,22 @@
       }
     ]
   },
+  "438801a9b6": {
+    "date": "20221031",
+    "name": "Project OutFox Alpha 0.4.18.1 LTS",
+    "buildtype": "public",
+    "exclusive": null,
+    "notes": [
+      {
+        "type": "notice",
+        "description": "This build includes a new NSIS Installer with updated languages (removing ones that were not updated)."
+      },
+      {
+        "type": "notice",
+        "description": "This build added more support for pt-BR naming scheme."
+      }
+    ]
+  },
   "7d4c1691d5": {
     "date": "20221026",
     "name": "Project OutFox Alpha 0.4.18.0",
