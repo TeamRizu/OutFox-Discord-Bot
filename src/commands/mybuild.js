@@ -50,7 +50,7 @@ module.exports = class MyBuildCommand extends SlashCommand {
 
         notes += `- ${hashBuildNoteToDescription[currentNote.type]}\n`;
       }
-      return notes;
+      return notes || 'No notes for this build.';
     };
 
     const formatDate = (build) => {
