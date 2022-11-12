@@ -1,4 +1,25 @@
 {
+  "b205d6e1b3": {
+    "date": "20221112",
+    "name": "Project OutFox Alpha V RC030",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
+  "b68d95c776": {
+    "date": "20221108",
+    "name": "Project OutFox Alpha V RC028",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
+  "b43f981b49": {
+    "date": "20221025",
+    "name": "Project OutFox Alpha V RC026",
+    "buildtype": "testbuild",
+    "exclusive": null,
+    "notes": []
+  },
   "0516a0c977": {
     "date": "20221017",
     "name": "Project OutFox Alpha V RC024",
