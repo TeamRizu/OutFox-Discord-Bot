@@ -7,9 +7,5 @@ exports.main = () => {
     .setColor('#782024')
     .setURL('https://projectoutfox.com/outfox-serenity/volume-ii')
     .setThumbnail('https://projectoutfox.com/storage/app/media/uploaded-files/serenity-2-jk-small.png')
-    .addFields({
-      name: 'OutFox Serenity Server',
-      value: '[https://discord.gg/mNcFU67mK7](https://discord.gg/mNcFU67mK7)'
-    })
     .setImage('https://raw.githubusercontent.com/TeamRizu/OutFox-Serenity/v2/OutFox%20Serenity%20Volume%202/banner.png')
 }

@@ -5,11 +5,11 @@ exports.main = ({ engine, sectionTitle, sectionMembers } = { engine: 'Stepmania'
   return new EmbedBuilder()
     .setTitle(`StepMania Archive - Credits - **${sectionTitle}**`)
     .setThumbnail('https://cdn.discordapp.com/icons/514194672441229323/2ceada703d6a65b57eb3e072ed741185.webp')
-    .setURL(`https://josevarela.net/SMArchive/Builds/Credits.html#${encodeURIComponent(creditsEngineID[engine])}`)
+    .setURL(`https://josevarela.net/SMArchive/Builds/Credits.php#${encodeURIComponent(creditsEngineID[engine])}`)
     .setColor('#30c3c4')
     .setFooter({
       text: 'StepMania Archive made by Jose_Varela',
-      iconURL: 'https://josevarela.net/SMArchive/Builds/VersionIcon/SM40.png'
+      iconURL: 'https://josevarela.net/SMArchive/VersionIcon/SM40.png'
     })
     .setDescription(
       `
