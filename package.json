@@ -1,31 +1,46 @@
 {
-  "name": "outfox-discord-bot",
+  "name": "outfox-discord-new",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "run": "node src/index.js --debug",
     "sync": "slash-up sync",
     "sync:dev": "slash-up sync -e development",
-    "start": "node src/index.js"
+    "test": "jest",
+    "jestcache": "jest --clearCache"
+  },
+  "standard": {
+    "globals": [
+      "jest",
+      "describe",
+      "it",
+      "test",
+      "expect",
+      "beforeAll",
+      "afterEach"
+    ]
+  },
+  "author": "Jorge Luiz Souza Xavier",
+  "license": "Apache License 2.0",
+  "devDependencies": {
+    "@types/jest": "^29.2.2",
+    "eslint": "^8.27.0",
+    "jest": "^29.3.1",
+    "prettier": "^2.7.1",
+    "slash-up": "^1.2.1",
+    "standard": "^17.0.0"
   },
   "dependencies": {
-    "cat-loggr": "^1.1.0",
-    "discord.js": "^14.3.0",
-    "dotenv": "^8.2.0",
-    "fastify": "^3.9.2",
-    "google-spreadsheet": "^3.2.0",
-    "jimp": "^0.16.1",
+    "axios": "^1.2.2",
+    "cat-loggr": "^1.2.2",
+    "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.9.2",
+    "google-spreadsheet": "^3.3.0",
     "node-uri": "^1.1.1",
     "node-vibrant": "^3.2.1-alpha.1",
-    "request-promise": "^4.2.6",
-    "slash-create": "^5.9.0",
+    "slash-create": "^5.10.0",
     "string-similarity": "^4.0.4"
-  },
-  "devDependencies": {
-    "eslint": "^7.15.0",
-    "eslint-config-prettier": "^7.0.0",
-    "eslint-plugin-prettier": "^3.3.0",
-    "prettier": "^2.2.1",
-    "slash-up": "^1.2.0"
   }
 }

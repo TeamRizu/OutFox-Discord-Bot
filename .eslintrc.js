@@ -1,30 +1,19 @@
 module.exports = {
   env: {
+    node: true,
+    jest: true,
     commonjs: true,
-    es6: true,
-    node: true
+    es2021: true
   },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-  globals: {},
-  plugins: 'prettier',
+  extends: 'eslint:recommended',
+  overrides: [],
   parserOptions: {
-    ecmaVersion: 6,
-    sourceType: 'module'
+    ecmaVersion: 'latest'
   },
   rules: {
-    'prettier/prettier': 'warn',
-    'no-cond-assign': [2, 'except-parens'],
-    'no-unused-vars': 0,
-    'no-empty': ['error', { allowEmptyCatch: true }],
-    'prefer-const': ['warn', { destructuring: 'all' }],
-    'spaced-comment': 'warn'
-  },
-  overrides: [
-    {
-      files: ['slash-up.config.js'],
-      env: {
-        node: true
-      }
-    }
-  ]
-};
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'windows'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'never']
+  }
+}
