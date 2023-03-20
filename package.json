@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "run": "node src/index.js --debug",
+    "run": "node src/index.js",
     "sync": "slash-up sync",
     "sync:dev": "slash-up sync -e development",
     "test": "jest",
