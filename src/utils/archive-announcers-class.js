@@ -7,16 +7,10 @@ exports.ArchiveAnnouncersClass = class ArchiveAnnouncersClass {
      */
     this.sourceURL =
       'https://cdn.jsdelivr.net/gh/JoseVarelaP/StepMania-Archive/Announcers/db.json'
-    /**
-     * @type {import('../types/tsTypes/types').ArchiveAnnouncers}
-     */
     this.mainObject = null
   }
 
   async setup () {
-    /**
-     * @type {import('../types/tsTypes/types').ArchiveAnnouncers}
-     */
     const body = await axios.get(this.sourceURL)
 
     this.mainObject = body.data
