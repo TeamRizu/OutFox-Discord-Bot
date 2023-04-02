@@ -40,7 +40,7 @@ const {
 const fs = require('fs')
 const path = require('path')
 const commandsFolderPath = path.join(__dirname, '../')
-const commands = fs.readdirSync(commandsFolderPath).filter((e) => e !== 'tests')
+const commands = fs.readdirSync(commandsFolderPath).filter((e) => e !== 'tests' && !e.includes('README'))
 const componentFilesStart = ['button-', 'select-menu']
 
 /**
