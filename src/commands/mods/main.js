@@ -27,7 +27,7 @@ exports.main = async (ctx) => {
     const modfileAuthor = modfile.author ?? 'Unknown Author'
     let modfileEngineEmoji = '<SM5:959944386567897138>'
 
-    if (['outfox', '5.3', '5.3+'].includes(modfile.support.toLowerCase())) {
+    if (['outfox', '5.3', '5.3+', 'outfox av'].includes(modfile.support.toLowerCase())) {
       modfileEngineEmoji = '<OUTFOX:959944386609840148>'
     }
 
