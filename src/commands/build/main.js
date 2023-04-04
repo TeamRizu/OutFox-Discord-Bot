@@ -47,7 +47,7 @@ exports.main = async (ctx) => {
       let listID = ''
 
       if (isPageSwitch) listID = component.split('+')[2]
-      if (isBackFromLoopUp) listID = component.split('+')[1]
+      if (isBackFromLoopUp) listID = component.split('+')[1].toUpperCase()
       if (!isBackFromLoopUp && !isPageSwitch) listID = cCtx.values[0]
       // Number casting is used here otherwise when we overwrite the page property of the class it will mess up with the next page switch.
       const page = isPageSwitch ? Number(component.split('+')[1]) : 0
