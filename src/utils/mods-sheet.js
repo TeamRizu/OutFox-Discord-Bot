@@ -23,11 +23,11 @@ exports.ModsSheetClass = class {
 
     await this.sheet.loadInfo()
 
-    this.convertedMods = this.sheet.sheetsByTitle['Converted to SM5']
-    this.requestedMods = this.sheet.sheetsByTitle.Requests
-    this.impossibleMods = this.sheet.sheetsByTitle['Impossible Requests']
-    this.packMods = this.sheet.sheetsByTitle['Whole Pack Madness']
-    this.forbiddenMods = this.sheet.sheetsByTitle.Forbidden
+    this.convertedMods = this.sheet.sheetsByTitle['Converted to SM5 & OutFox']
+    // this.requestedMods = this.sheet.sheetsByTitle['Single Release Surplus'] TODO: This particupar sheer has been modified in a way that would need a bit more work to support than I'm willing right now.
+    // this.impossibleMods = this.sheet.sheetsByTitle['Impossible Requests'] TODO: Same as above, not even sure which sheet this would apply to now.
+    // this.packMods = this.sheet.sheetsByTitle['Whole Pack Madness'] TODO: Same as above.
+    // this.forbiddenMods = this.sheet.sheetsByTitle.Forbidden // This seems to be working...for now.
 
     this.sheetLoaded = true
     return this.sheet
@@ -39,8 +39,8 @@ exports.ModsSheetClass = class {
       return null
     }
 
-    const objectsToSearch = [this.convertedMods.getRows(), this.requestedMods.getRows(), this.impossibleMods.getRows/*, this.forbiddenMods.getRows() */]
-    const chartPossibleStatus = ['converted', 'requested', 'impossible'/*, 'forbidden' */]
+    const objectsToSearch = [this.convertedMods.getRows()/*, this.requestedMods.getRows(), this.impossibleMods.getRows, this.forbiddenMods.getRows() */]
+    const chartPossibleStatus = ['converted'/*, 'requested', 'impossible', 'forbidden' */]
     let chartFound = null
     let chartStatus = 'unknown'
 
@@ -80,13 +80,13 @@ exports.ModsSheetClass = class {
       return null
     }
 
-    const objectsToSearch = [await this.convertedMods.getRows(), await this.requestedMods.getRows(), await this.impossibleMods.getRows()/* , this.forbiddenMods.getRows() */]
-    const chartPossibleStatus = ['converted', 'requested', 'impossible'/*, 'forbidden' */]
+    const objectsToSearch = [await this.convertedMods.getRows()/*, await this.requestedMods.getRows(), await this.impossibleMods.getRows(), this.forbiddenMods.getRows() */]
+    const chartPossibleStatus = ['converted', /*'requested', 'impossible', 'forbidden' */]
     const charts = {
-      converted: [],
-      requested: [],
+      converted: []
+      /*requested: [],
       impossible: []
-      // forbidden: []
+      forbidden: []*/
     }
 
     for (let i = 0; i < objectsToSearch.length; i++) {
