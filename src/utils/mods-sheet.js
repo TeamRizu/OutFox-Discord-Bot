@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line no-unused-vars
 const { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } = require('google-spreadsheet')
-
+const googleSecrets = require('../../google-secrets.json')
 exports.ModsSheetClass = class {
   constructor () {
     this.sheet = null
@@ -18,7 +18,7 @@ exports.ModsSheetClass = class {
 
     await this.sheet.useServiceAccountAuth({
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\n/g, '\n')
+      private_key: googleSecrets['private-key'].replace(/\\n/g, '\n')
     })
 
     await this.sheet.loadInfo()
