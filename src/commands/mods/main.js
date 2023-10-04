@@ -19,7 +19,15 @@ exports.main = async (ctx) => {
   TextSelectMenuBuilderClass.menuSelectPlaceholder = 'Select Modfile'
   TextSelectMenuBuilderClass.separator = '+'
 
-  const charts = await ModsSheetClass.charts()
+  const charts = await ModsSheetClass.charts().catch((e) => {
+    console.log('Failed to collect charts')
+    return {
+      converted: [],
+      /*requested: [],
+      impossible: [],
+      forbidden: []*/
+    }
+  })
   const convertedMods = charts.converted
 
   for (let i = 0; i < convertedMods.length; i++) {
