@@ -51,7 +51,7 @@ const compareWithMain = async (chart) => {
   if (Array.isArray(requestedSong.bpm)) {
     const [lowest, highest] = requestedSong.bpm
 
-    if (lowest !== chart.bpms.lowest() || highest !== chart.bpms.highest()) {
+    if (lowest !== chart.bpms.lowest(chart) || highest !== chart.bpms.highest(chart)) {
       return [false, '`#BPMS` does no match.']
     }
   }
@@ -109,9 +109,9 @@ const resumeSMSSC = async (chart, { skipCompare } = {}) => {
   
     if (!step.meter && !step.meterf) {
       chartProblems += ' No meter was applied to this chart.'
-      chartMessage += '(Lv. ?, '
+      chartMessage += 'Lv. ?, '
     } else {
-      chartMessage += `(Lv. ${step.meter || step.meterf}, `
+      chartMessage += `Lv. ${step.meter || step.meterf}, `
     }
 
     if (step.chartname || step.description) {
@@ -122,14 +122,14 @@ const resumeSMSSC = async (chart, { skipCompare } = {}) => {
       chartProblems += ' No credit was applied.'
       chartMessage += '**Missing Credit**'
     } else {
-      chartMessage += `Credited as \`${step.credit}\`) `
+      chartMessage += `Credited as \`${step.credit}\` `
     }
 
     if (!step.notes) {
       chartProblems += ' No notes detected.'
     }
 
-    chartMessage += chartProblems ? ' - ' + chartProblems : ''
+    chartMessage += chartProblems ? ' - (' + chartProblems  + ' )': ''
     finalMessage += chartMessage + '\n'
   }
 
@@ -155,14 +155,14 @@ const parseSMData = (data) => {
     reports: [],
     bpms: {
       raw: '',
-      at: (fSeconds) => {
-        const rawData = finalObj.bpms.raw
+      at: (chartObj, fSeconds) => {
+        const rawData = chartObj.bpms.raw
 
         if (!rawData) {
           return 0
         }
 
-        const bpmLines = rawData.split(/\r\n|\n|\r/)
+        const bpmLines = rawData.split(',')
         let latestBPM = 0
 
         for (let i = 0; i < bpmLines.length; i++) {
@@ -183,55 +183,55 @@ const parseSMData = (data) => {
 
         return latestBPM
       },
-      highest: () => {
-        const rawData = finalObj.bpms.raw
+      highest: (chartObj) => {
+        const rawData = chartObj.bpms.raw
 
         if (!rawData) {
           return 0
         }
 
-        const bpmLines = rawData.split(/\r\n|\n|\r/)
-        let highestBPM = 0
+        const bpmLines = rawData.split(',')
+        const bpms = []
 
         for (let i = 0; i < bpmLines.length; i++) {
           const splitLine = bpmLines[i].split('=')
-          const bpm = Number(splitLine[0])
+          const bpm = Number(splitLine[1])
 
-          if (bpm > highestBPM) highestBPM = bpm
+          bpms.push(bpm)
         }
 
-        return highestBPM
+        return Number.isFinite(Math.max(...bpms)) ? Math.max(...bpms) : 0 
       },
       lowest: () => {
-        const rawData = finalObj.bpms.raw
+        const rawData = chartObj.bpms.raw
 
         if (!rawData) {
           return 0
         }
 
-        const bpmLines = rawData.split(/\r\n|\n|\r/)
-        let lowestBPM = 0
+        const bpmLines = rawData.split(',')
+        const bpms = []
 
         for (let i = 0; i < bpmLines.length; i++) {
           const splitLine = bpmLines[i].split('=')
-          const bpm = Number(splitLine[0])
+          const bpm = Number(splitLine[1])
 
-          if (lowestBPM > bpm) lowestBPM = bpm
+          bpms.push(bpm)
         }
 
-        return lowestBPM
+        return Number.isFinite(Math.min(...bpms)) ? Math.min(...bpms) : 0 
       },
     },
     stops: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.stops.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.stops.raw
 
         if (!rawData) {
           return 0
         }
 
-        const stopLines = rawData.split(/\r\n|\n|\r/)
+        const stopLines = rawData.split(',')
 
         for (let i = 0; i < stopLines.length; i++) {
           const splitLine = stopLines[i].split('=')
@@ -247,15 +247,15 @@ const parseSMData = (data) => {
       },
     },
     timesignatures: {
-      raw: '4/4',
-      at: (fBeat) => {
-        const rawData = finalObj.timesignatures.raw
+      raw: '',
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.timesignatures.raw
 
         if (!rawData) {
           return '4/4'
         }
 
-        const timeSigLines = rawData.split(/\r\n|\n|\r/)
+        const timeSigLines = rawData.split(',')
         let latestValues = ''
 
         for (let i = 0; i < timeSigLines.length; i++) {
@@ -264,11 +264,11 @@ const parseSMData = (data) => {
           const numerator = splitLine[1]
           const denominator = splitLine[2]
 
-          if (time > fSeconds) {
+          if (time > fBeat) {
             return latestValues
           }
 
-          if (time === fSeconds) {
+          if (time === fBeat) {
             return `${numerator}=${denominator}`
           }
 
@@ -280,15 +280,15 @@ const parseSMData = (data) => {
     },
     combos: {
       raw: '',
-      at: (fBeat) => {
+      at: (chartObj, fBeat) => {
         // FIXME: This func is prob wrong, I don't really know how this works.
-        const rawData = finalObj.combos.raw
+        const rawData = chartObj.combos.raw
 
         if (!rawData) {
           return 0
         }
 
-        const comboLines = rawData.split(/\r\n|\n|\r/)
+        const comboLines = rawData.split(',')
 
         for (let i = 0; i < comboLines.length; i++) {
           const splitLine = comboLines[i].split('=')
@@ -318,14 +318,14 @@ const parseSMData = (data) => {
     labels: {
       raw: '',
       // I'm guessing the first param is in beats.
-      at: (fBeat) => {
-        const rawData = finalObj.labels.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.labels.raw
 
         if (!rawData) {
           return ''
         }
 
-        const labelLines = rawData.split(/\r\n|\n|\r/)
+        const labelLines = rawData.split(',')
         let latestLabel = ''
 
         for (let i = 0; i < labelLines.length; i++) {
@@ -376,14 +376,14 @@ const parseSMData = (data) => {
     selectable: true,
     bpms: {
       raw: '',
-      at: (fSeconds) => {
-        const rawData = finalObj.bpms.raw
+      at: (chartObj, fSeconds) => {
+        const rawData = chartObj.bpms.raw
 
         if (!rawData) {
           return 0
         }
 
-        const bpmLines = rawData.split(/\r\n|\n|\r/)
+        const bpmLines = rawData.split(',')
         let latestBPM = 0
 
         for (let i = 0; i < bpmLines.length; i++) {
@@ -404,49 +404,48 @@ const parseSMData = (data) => {
 
         return latestBPM
       },
-      highest: () => {
-        const rawData = finalObj.bpms.raw
+      highest: (chartObj) => {
+        const rawData = chartObj.bpms.raw
 
         if (!rawData) {
           return 0
         }
 
-        const bpmLines = rawData.split(/\r\n|\n|\r/)
-        let highestBPM = 0
+        const bpmLines = rawData.split(',')
+        const bpms = []
 
         for (let i = 0; i < bpmLines.length; i++) {
           const splitLine = bpmLines[i].split('=')
-          const bpm = Number(splitLine[0])
+          const bpm = Number(splitLine[1])
 
-          if (bpm > highestBPM) highestBPM = bpm
+          bpms.push(bpm)
         }
 
-        return highestBPM
+        return Number.isFinite(Math.max(...bpms)) ? Math.max(...bpms) : 0 
       },
-      lowest: () => {
-        const rawData = finalObj.bpms.raw
+      lowest: (chartObj) => {
+        const rawData = chartObj.bpms.raw
 
         if (!rawData) {
           return 0
         }
 
-        const bpmLines = rawData.split(/\r\n|\n|\r/)
-        let lowestBPM = 0
+        const bpmLines = rawData.split(',')
+        const bpms = []
 
         for (let i = 0; i < bpmLines.length; i++) {
           const splitLine = bpmLines[i].split('=')
-          const bpm = Number(splitLine[0])
+          const bpm = Number(splitLine[1])
 
-          if (lowestBPM > bpm) lowestBPM = bpm
+          bpms.push(bpm)
         }
-
-        return lowestBPM
+        return Number.isFinite(Math.min(...bpms)) ? Math.min(...bpms) : 0 
       },
     },
     stops: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.stops.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.stops.raw
 
         if (!rawData) {
           return 0
@@ -469,8 +468,8 @@ const parseSMData = (data) => {
     },
     freezes: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.freezes.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.freezes.raw
 
         if (!rawData) {
           return 0
@@ -493,8 +492,8 @@ const parseSMData = (data) => {
     },
     delays: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.delays.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.delays.raw
 
         if (!rawData) {
           return 0
@@ -517,9 +516,9 @@ const parseSMData = (data) => {
     },
     warps: {
       raw: '',
-      at: (fBeat) => {
+      at: (chartObj, fBeat) => {
         // FIXME: This func is prob wrong, I don't really know how warps work.
-        const rawData = finalObj.warps.raw
+        const rawData = chartObj.warps.raw
 
         if (!rawData) {
           return 0
@@ -541,9 +540,9 @@ const parseSMData = (data) => {
       },
     },
     timesignatures: {
-      raw: '4/4',
-      at: (fBeat) => {
-        const rawData = finalObj.timesignatures.raw
+      raw: '',
+      at: (chartObj, fSeconds) => {
+        const rawData = chartObj.timesignatures.raw
 
         if (!rawData) {
           return '4/4'
@@ -574,9 +573,9 @@ const parseSMData = (data) => {
     },
     tickcounts: {
       raw: '',
-      at: (fBeat) => {
+      at: (chartObj, fBeat) => {
         // FIXME: This func is prob wrong, I don't really know how tickcounts work.
-        const rawData = finalObj.tickcounts.raw
+        const rawData = chartObj.tickcounts.raw
 
         if (!rawData) {
           return 0
@@ -599,9 +598,9 @@ const parseSMData = (data) => {
     },
     combos: {
       raw: '',
-      at: (fBeat) => {
+      at: (chartObj, fBeat) => {
         // FIXME: This func is prob wrong, I don't really know how this works.
-        const rawData = finalObj.combos.raw
+        const rawData = chartObj.combos.raw
 
         if (!rawData) {
           return 0
@@ -637,8 +636,8 @@ const parseSMData = (data) => {
     labels: {
       raw: '',
       // I'm guessing the first param is in beats.
-      at: (fBeat) => {
-        const rawData = finalObj.labels.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.labels.raw
 
         if (!rawData) {
           return ''
@@ -668,8 +667,8 @@ const parseSMData = (data) => {
     },
     bgchanges: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.bgchanges.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.bgchanges.raw
 
         if (!rawData) {
           return ''
@@ -695,8 +694,8 @@ const parseSMData = (data) => {
     },
     bgchanges2: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.bgchanges2.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.bgchanges2.raw
 
         if (!rawData) {
           return ''
@@ -722,8 +721,8 @@ const parseSMData = (data) => {
     },
     bgchanges3: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.bgchanges3.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.bgchanges3.raw
 
         if (!rawData) {
           return ''
@@ -749,8 +748,8 @@ const parseSMData = (data) => {
     },
     animations: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.animations.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.animations.raw
 
         if (!rawData) {
           return ''
@@ -776,8 +775,8 @@ const parseSMData = (data) => {
     },
     fgchanges: {
       raw: '',
-      at: (fBeat) => {
-        const rawData = finalObj.fgchanges.raw
+      at: (chartObj, fBeat) => {
+        const rawData = chartObj.fgchanges.raw
 
         if (!rawData) {
           return ''
@@ -838,7 +837,6 @@ const parseSMData = (data) => {
     if (!line) continue
 
     if (
-      line.startsWith('//---------------') ||
       (line.startsWith('#NOTES') && splitLines[i + 1].startsWith('     '))
     ) {
       if (splitLines[i + 1].includes('NOTEDATA')) {
@@ -912,7 +910,7 @@ const parseSMData = (data) => {
 
       if (cleanLineValue !== '') {
         if (typeof editingObj[lineHeader] === 'object') {
-          editingObj[lineHeader].raw += cleanLineValue + '\n'
+          editingObj[lineHeader].raw += cleanLineValue
         } else {
           if (['YES', 'NO'].includes(cleanLineValue)) {
             editingObj[lineHeader] = 'YES' === cleanLineValue
@@ -929,6 +927,7 @@ const parseSMData = (data) => {
       }
 
       currentHeader = lineHeader
+      continue
     }
 
     if (line.startsWith('// measure') || line.startsWith('//measure')) {
@@ -955,6 +954,7 @@ const parseSMData = (data) => {
           if (currentHeader === 'meter') {
             editingObj.meterf = Number(value)
           }
+
           smNotesHeaderIndex++
         }
       }
