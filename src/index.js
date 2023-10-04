@@ -44,7 +44,7 @@ const start = async () => {
 
   client.once(Events.ClientReady, c => {
     console.log('Discord.JS client is up.')
-    hundredthMembersAtStartup = c.guilds.cache.get(process.env.DEVELOPMENT_GUILD_ID || outfoxServer).memberCount || 2354
+    hundredthMembersAtStartup = getThirdFromRight(c.guilds.cache.get(outfoxServer).memberCount) || 0
   })
 
   
