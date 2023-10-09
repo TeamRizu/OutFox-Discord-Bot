@@ -28,6 +28,7 @@ exports.main = async (ctx) => {
       forbidden: []*/
     }
   })
+
   const convertedMods = charts.converted
 
   for (let i = 0; i < convertedMods.length; i++) {
