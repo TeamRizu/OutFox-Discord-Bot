@@ -3,10 +3,12 @@ const { SlashCreator, FastifyServer } = require('slash-create')
 const { Client, Events, GatewayIntentBits, EmbedBuilder, Message, Attachment, PermissionFlagsBits } = require('discord.js');
 const { parseSMSSC, resumeSMSSC } = require('./utils/sm-ssc-helpers.js')
 const { parseLog, resumeLog } = require('./utils/log-helpers.js')
+const { handleLeaderboardUpdate } = require('./utils/serenity-leaderboard.js')
 
 const axios = require('axios')
 const path = require('path')
 const CatLoggr = require('cat-loggr')
+const fs = require('fs').promises
 
 let hundredthMembersAtStartup = 0
 
@@ -24,6 +26,7 @@ const start = async () => {
   })
 
   const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers ] });
+  
   const outfoxServer = '422897054386225173'
   const outfoxStaffChannel = '672182750521851923'
   const outfoxStaffSpam = '688182781263609868'
@@ -42,9 +45,43 @@ const start = async () => {
     '1070335225047023656' // alpha4-bug-reporting
   ]
 
-  client.once(Events.ClientReady, c => {
+  const isLastUpdateOldEnough = (timestamp) => {
+    const lastDate = new Date(timestamp)
+    const now = new Date()
+
+    if (lastDate.getDate() !== now.getDate()) return true
+
+    if (lastDate.getHours() !== now.getHours()) return true
+
+    return false
+  }
+
+  client.once(Events.ClientReady, async c => {
     console.log('Discord.JS client is up.')
-    hundredthMembersAtStartup = getThirdFromRight(c.guilds.cache.get(outfoxServer).memberCount) || 0
+    if (process.env.OUTFOX_SERVER_INTEGRATIONS !== 'false') hundredthMembersAtStartup = getThirdFromRight(c.guilds.cache.get(outfoxServer).memberCount) || 0
+
+    const file = await fs.readFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'))
+    const serenityLeaderboardMessages = JSON.parse(file)
+    const serenityLeaderboardChannel = '1161052396672262154'
+    const channel = c.channels.cache.get(serenityLeaderboardChannel)
+
+    if (!serenityLeaderboardMessages[serenityLeaderboardChannel]) {
+      serenityLeaderboardMessages[serenityLeaderboardChannel] = {
+        lastUpdate: 0,
+        messages: {}
+      }
+    }
+    
+    if (!serenityLeaderboardMessages[serenityLeaderboardChannel].lastUpdate || isLastUpdateOldEnough(serenityLeaderboardMessages[serenityLeaderboardChannel].lastUpdate)) {
+      await handleLeaderboardUpdate(serenityLeaderboardMessages[serenityLeaderboardChannel], channel, c)
+      serenityLeaderboardMessages[serenityLeaderboardChannel].lastUpdate = Date.now()
+      await fs.writeFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'), JSON.stringify(serenityLeaderboardMessages, null, 4))
+    }
+
+    setInterval(async () => {
+      await handleLeaderboardUpdate(serenityLeaderboardMessages[serenityLeaderboardChannel], channel, c)
+      await fs.writeFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'), JSON.stringify(serenityLeaderboardMessages, null, 4))
+    }, 86400000) // 24H
   })
 
   
@@ -115,6 +152,7 @@ const start = async () => {
 
 
   client.on('guildMemberAdd', (gMember) => {
+    if (process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return
     if (gMember.guild.id !== outfoxServer) return
 
     const channelToAnnounceHundredthMember = client.channels.cache.get(outfoxStaffChannel)
@@ -216,6 +254,8 @@ const start = async () => {
   client.on('error', e => {
     console.error(`Something Wrong Happened!\n\n${e}`)
     try {
+      if (process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return;
+
       const channelToReportErrors = client.channels.cache.get(outfoxStaffSpam)
       const embed = new EmbedBuilder()
         .setColor('Red')
