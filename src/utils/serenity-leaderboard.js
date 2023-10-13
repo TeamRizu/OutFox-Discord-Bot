@@ -1,20 +1,8 @@
 const { EmbedBuilder, Client, Message, TextChannel } = require('discord.js')
 const { Ofline } = require('./ofline.js')
 const OFline = new Ofline()
-const Vibrant = require('node-vibrant')
-
-/**
- * 
- * @param {string} str 
- * @returns {string}
- */
-const capitalize = (str) => {
-  return str[0].toUpperCase() + str.substring(1, str.length)
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+const { capitalize, discordMessageLink } = require('./string-manipulation.js')
+const { rgbFromImgURL } = require('./colors.js')
 
 /**
  * 
@@ -42,30 +30,7 @@ const handleLeaderboardUpdate = async (
 
   for (let i = 0; i < intros.length; i++) {
     const volume = intros[i]
-    const vibrantColor = new Map()
-    const colorObj = await Vibrant.from(volume.graphics.background.link).getPalette((err, palette) => {
-      if (err) {
-        console.warn(err)
-        return false
-      }
-
-      const rgb = palette.Vibrant._rgb
-      const componentToHex = (c) => {
-        // Credits: https://stackoverflow.com/a/5624139
-        const hex = c.toString(16)
-        return hex.length === 1 ? '0' + hex : hex
-      }
-
-      vibrantColor.set(
-        'value',
-        `#${
-          componentToHex(rgb[0]) +
-          componentToHex(rgb[1]) +
-          componentToHex(rgb[2])
-        }`
-      )
-      return true
-    })
+    const imageColor = await rgbFromImgURL(volume.graphics.background.link)
 
     const introEmbed = new EmbedBuilder()
       .setAuthor({
@@ -82,7 +47,7 @@ const handleLeaderboardUpdate = async (
         iconURL: 'https://cdn.discordapp.com/role-icons/945697589574123550/23790f1f17e6b0bcf5a29964c6ec27f8.webp?size=16&quality=lossless'
       })
 
-    if (colorObj) introEmbed.setColor(vibrantColor.get('value'))
+    if (imageColor) introEmbed.setColor(imageColor)
 
     const volumeObjectTitle = `Intro_${volume.abrev}`
     const messageIDForVolume = channelLeaderboardObj.messages[volumeObjectTitle]
@@ -111,8 +76,9 @@ const handleLeaderboardUpdate = async (
           reachedAnotherVolume = true
           continue
         }
-        // https://canary.discord.com/channels/490329576300609536/953800884549189662/1160982851752300574
-        volumeSongsHyperlinks += '- [' + currentMessage + ']' + '(' + `https://discord.com/channels/${channel.guildId}/${channel.id}/${channelLeaderboardObj.messages[currentMessage]}` + ')\n'
+
+        const messageLink = discordMessageLink(channel.guildId, channel.id, channelLeaderboardObj.messages[currentMessage])
+        volumeSongsHyperlinks += '- [' + currentMessage + ']' + '(' + messageLink + ')\n'
       }
 
       introEmbed.setDescription(introEmbed.data.description + '\n\n' + '**Click on the song title bellow to go to its leaderboard!**' + '\n\n' + volumeSongsHyperlinks)
@@ -134,29 +100,7 @@ const handleLeaderboardUpdate = async (
     for (let s = 0; s < songs.length; s++) {
       const song = songs[s]
 
-      const songColor = await Vibrant.from(song.graphics.background.link).getPalette((err, palette) => {
-        if (err) {
-          console.warn(err)
-          return false
-        }
-  
-        const rgb = palette.Vibrant._rgb
-        const componentToHex = (c) => {
-          // Credits: https://stackoverflow.com/a/5624139
-          const hex = c.toString(16)
-          return hex.length === 1 ? '0' + hex : hex
-        }
-  
-        vibrantColor.set(
-          'value',
-          `#${
-            componentToHex(rgb[0]) +
-            componentToHex(rgb[1]) +
-            componentToHex(rgb[2])
-          }`
-        )
-        return true
-      })
+      const songColor = await rgbFromImgURL(song.graphics.background.link)
       
       const setUpBasicSongEmbed = () => {
         const newEmbed = new EmbedBuilder()
@@ -172,7 +116,7 @@ const handleLeaderboardUpdate = async (
             iconURL: 'https://cdn.discordapp.com/emojis/1160389112461791385.webp?size=96&quality=lossless'
           })
 
-        if (songColor) newEmbed.setColor(vibrantColor.get('value'))
+        if (songColor) newEmbed.setColor(songColor)
 
         return newEmbed
       }
@@ -229,35 +173,6 @@ const handleLeaderboardUpdate = async (
             fieldObj.value += OFline.scoresToFormattedString(songScores) + '\n\n'
           }
         }
-        /**
-         * @type {import('./types.js').ModeStyles<import('./types.js').Mode>}
-         */
-        // const styles = Object.keys(scores[mode])
-        // const fieldObj = {
-        //   name: mode,
-        //   value: ''
-        // }
-
-        // for (let st = 0; st < styles.length; st++) {
-        //   const style = styles[st]
-        //   /**
-        //    * @type {import('./types.js').Difficulty[]}
-        //    */
-        //   const difficulties = Object.keys(scores[mode][style])
-
-        //   for (let d = 0; d < difficulties.length; d++) {
-        //     const difficulty = difficulties[d]
-        //     let charts = scores[mode][style][difficulty]
-
-        //     if (!charts || 0 >= charts.length) continue
-
-        //     fieldObj.value += '**======== ' + difficulty.toUpperCase() + ' ========**\n\n'
-
-        //     fieldObj.value += '**=== ' + capitalize(style) + ' ' + charts[0].meter + ` (${charts[0].credit.join ? charts[0].credit.join(', ') : charts[0].credit})` + ' ===**\n\n'
-
-        //     fieldObj.value += OFline.scoresToFormattedString(charts) + '\n\n'
-        //   }
-        // }
 
         if (songEmbed.data.fields?.length === 25) {
           embeds.push(songEmbed)
@@ -286,17 +201,16 @@ const handleLeaderboardUpdate = async (
           embeds
         })
       } else {
+
         /**
-       * @type {Message}
-       */
+        * @type {Message}
+        */
         sentSongEmbed = await channel.send({
           embeds
         })
       }
       
-
       channelLeaderboardObj.messages[song.title] = sentSongEmbed.id
-      // await sleep(60000)
     }
   }
 
