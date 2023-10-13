@@ -109,8 +109,8 @@ export interface AllScores_Score {
 
 export type SongScores = {
     [M in Modes]?: {
-        [S in StylesMap<M>]?: {
-            [D in Difficulty]?: AllScores_Score[]
+        [D in Difficulty]?: {
+            [S in StylesMap<M>]?: AllScores_Score[]
         }
     }
 }
