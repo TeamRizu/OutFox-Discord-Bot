@@ -146,11 +146,7 @@ const parseLog = (logData) => {
 
     if (!line || !line[0] || !line[0]?.length) continue
 
-    if (line[0].startsWith('created log at') || line[0].startsWith('[Time]') || line[0].startsWith('FileSink'))
-      continue
-
-    if (line[0].includes('FoxClock: Game uptime was')) {
-      finalObj.properClose = true
+    if (line[0].startsWith('created log at') || line[0].startsWith('[Time]') || line[0].startsWith('FileSink')) {
       continue
     }
 
@@ -159,6 +155,12 @@ const parseLog = (logData) => {
     // Each if case will have a comment inside of it to show the expected line.
 
     if (!log || typeof log !== 'string') {
+      continue
+    }
+
+    // FoxClock: Game uptime was 9 minutes, 13 seconds
+    if (log.startsWith('FoxClock: Game uptime was')) {
+      finalObj.properClose = true
       continue
     }
 
