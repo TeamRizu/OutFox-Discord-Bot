@@ -3,6 +3,7 @@ const { Ofline } = require('./ofline.js')
 const OFline = new Ofline()
 const { capitalize, discordMessageLink } = require('./string-manipulation.js')
 const { rgbFromImgURL } = require('./colors.js')
+const { SerenityDB: SerenityClass } = require('./serenity-db.js')
 
 /**
  * 
@@ -15,12 +16,18 @@ const handleLeaderboardUpdate = async (
   channel,
   client
 ) => {
-  const firstVolume = await OFline.serenityVolumeFromSong('Abandoned Doll')
-  const firstVolumeWinter = await OFline.serenityVolumeFromSong(
-     'Low End Theory'
-  )
-  const secondVolume = await OFline.serenityVolumeFromSong('Phycietiia')
-  const secondVolumeWinter = await OFline.serenityVolumeFromSong('Halcyon')
+  const SerenityDb = new SerenityClass()
+  const updateStatus = await SerenityDb.updateDB()
+
+  if (!updateStatus) {
+    client.emit('error', 'Failed to collect SerenityDB data, not updating leaderboard.')
+    return
+  }
+
+  const firstVolume = await SerenityDb.getVolume('v1')
+  const firstVolumeWinter = await SerenityDb.getVolume('v1.5')
+  const secondVolume = await SerenityDb.getVolume('v2')
+  const secondVolumeWinter = await SerenityDb.getVolume('v2.5')
   const intros = [
     firstVolume,
     firstVolumeWinter,
@@ -92,7 +99,6 @@ const handleLeaderboardUpdate = async (
       })
     }
     
-
     channelLeaderboardObj.messages[volumeObjectTitle] = sentMessage.id
 
     const songs = volume.songs
