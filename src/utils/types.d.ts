@@ -114,3 +114,93 @@ export type SongScores = {
         }
     }
 }
+
+// SerenityDB Types
+export type HonorTagRarity = 'unique' | 'rare' | 'basic' | 'leaf'
+
+export type HonorTag = {
+    tag: string,
+    name: string,
+    rarity: HonorTagRarity,
+    explanation: string
+}
+
+export type SocialsObjectSerenity = {
+    [x: string]: string
+}
+
+export type UserSerenity = {
+    name: string,
+    socials?: SocialsObjectSerenity,
+    pretags?: Array<HonorTag>
+}
+
+export type VolumeGraphicObject = {
+    author: string | Array<string>,
+    license: string | Array<string>,
+    link: string
+}
+
+export type VolumeGraphics = {
+    background?: VolumeGraphicObject | null,
+    banner?: VolumeGraphicObject | null,
+    jacket?: VolumeGraphicObject | null,
+    bga?: VolumeGraphicObject | null
+}
+
+export type SerenityOutFoxModes = 'dance' | 'bemu' | 'ez2' | 'gddm' | 'gdgf' | 'gh' | 'maniax' | 'pomu' | 'pump' | 'smx' | 'techno' | 'kb1' | 'kb2' | 'kb3' | 'kb4' | 'kb5' | 'kb6' | 'kb7' | 'kb8' | 'kb9' | 'kb10' | 'kb11' | 'kb12' | 'kb13' | 'kb14' | 'kb15' | 'kb16' | 'kb17' | 'kb18' | 'kb19' | 'ds3ddx' | 'kickbox' | 'bongo' | 'para' | 'rockband' | 'drums' | 'stepstage' | 'taiko' | 'boxing' | 'karaoke'
+
+export type SerenitySongDifficulty = {
+    author: string,
+    meter: number,
+    difficulty: Difficulty,
+    is_modchart: boolean,
+    peak_nps: number,
+    chart_info: {
+        notes: number,
+        mines: number,
+        holds: number,
+        hands?: number,
+        rolls?: number,
+        lifts?: number,
+        fakes?: number 
+    }
+}
+
+export type SongModeObject = {
+    [x in Mode]?: {
+        [x in ModeStyles<Mode>]?: Array<SerenitySongDifficulty>
+    }
+}
+
+export type VolumeSong = {
+    title: string,
+    length: string,
+    bpm: number | [number, number],
+    graphics: VolumeGraphicObject,
+    genre: string,
+    license: string | string[],
+    music_authors: string | string[],
+    graphic_authors: string | string[],
+    chart_authors: string[],
+    charts: SongModeObject
+}
+
+export type VolumeSerenity = {
+    title: string,
+    abrev: string,
+    description: string,
+    graphics: VolumeGraphics,
+    charts_for_modes: Array<SerenityOutFoxModes>,
+    music_authors: Array<string>,
+    graphic_authors: Array<string>,
+    chart_authors: Array<string>,
+    songs: Array<VolumeSong>
+}
+
+export type SerenityDB = {
+    version: string,
+    volumes: Array<VolumeSerenity>,
+    user_hall: Array<UserSerenity>,
+    honor_tags: Array<HonorTag>
+}
