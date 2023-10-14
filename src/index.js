@@ -58,7 +58,9 @@ const start = async () => {
 
   client.once(Events.ClientReady, async c => {
     console.log('Discord.JS client is up.')
-    if (process.env.OUTFOX_SERVER_INTEGRATIONS !== 'false') hundredthMembersAtStartup = getThirdFromRight(c.guilds.cache.get(outfoxServer).memberCount) || 0
+    if (process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return 
+    
+    hundredthMembersAtStartup = getThirdFromRight(c.guilds.cache.get(outfoxServer).memberCount) || 0
 
     const file = await fs.readFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'))
     const serenityLeaderboardMessages = JSON.parse(file)
@@ -169,13 +171,15 @@ const start = async () => {
     const isForced = message.content.toLowerCase() === ('--force')
     const isReplyRequest = !!message.reference && isForced
 
+    if (message.guildId === outfoxServer && process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return
+
     if (message.author.bot || (!isFromAutoChannel && !isForced && !isReplyRequest) || !message.guild.members.cache.get(client.user.id).permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return
 
     const attachment = attachmentFromMessage(message, { isFromAutoChannel, isForced, isReplyRequest })
 
     if (!attachment) return
 
-    if (!acceptedFileTypes.includes(attachment.name.split('.').at(-1))) {
+    if (isForced && !acceptedFileTypes.includes(attachment.name.split('.').at(-1))) {
       message.reply(`The extension type of the attachment you sent is not supported. Only \`${acceptedFileTypes.join('`, `')}\` supported.`)
       return
     }
