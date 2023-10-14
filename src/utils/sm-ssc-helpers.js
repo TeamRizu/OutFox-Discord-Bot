@@ -28,6 +28,7 @@ const compareWithMain = async (chart) => {
     return [false, 'No credit tag.']
   }
 
+  // TODO: Update this to make use of Serenity Utils
   const serenityDBRequest = await axios.get('https://wiki.projectoutfox.com/en/user-guide/meta/serenity_db.json') 
   
   if (!serenityDBRequest || serenityDBRequest?.status !== 200) {
@@ -845,6 +846,7 @@ const parseSMData = (data) => {
 
       finalObj.filetype = 'sm'
       smNotesHeaderIndex = 0
+      currentHeader = ''
 
       if (!passedFirstNotedata) {
         passedFirstNotedata = true
