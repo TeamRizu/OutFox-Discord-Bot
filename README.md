@@ -25,9 +25,16 @@ PORT=8020
 GOOGLE_PRIVATE_KEY=Private key of a google service account, used for the mods command.
 MODS_ID=1P892pQEcfzP59NeSm2aHIKNB1Rv4DqIXtELkcIvJNbM
 GOOGLE_SERVICE_ACCOUNT_EMAIL=The email of the google service account.
+OUTFOX_SERVER_INTEGRATIONS=false
+SERENITY_DB_URL=https://wiki.projectoutfox.com/en/user-guide/meta/serenity_db.json
+DEV_DISCORD_ACCOUNT_ID=Your Discord Account ID
 ```
 
 If you don't want to setup Google secrets then you'll need to remove the mods command and src/utils/mods-sheet.js
+
+### Privileged Gateway Intents
+
+The integration of Serenity Leaderboard, SM-SSC Parsing makes use of message content, this means you'll need to enable `MESSAGE CONTENT INTENT` and `SERVER MEMBERS INTENT` before trying to run the bot. If you don't want to do that, then remove those gateway requirements on `src/index` and any code which makes use of `message.content` and `guild.members`.
 
 ### Run App
 
