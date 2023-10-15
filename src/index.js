@@ -56,6 +56,21 @@ const start = async () => {
     return false
   }
 
+  const updateLeaderboard = async (client, channelID) => {
+    const file = await fs.readFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'))
+    const serenityLeaderboardMessages = JSON.parse(file)
+    const channel = client.channels.cache.get(channelID)
+
+    if (!serenityLeaderboardMessages[channelID]) {
+      serenityLeaderboardMessages[channelID] = {
+        lastUpdate: 0,
+        messages: {}
+      }
+    }
+
+    await handleLeaderboardUpdate(serenityLeaderboardMessages[channelID], channel, client)
+  }
+
   client.once(Events.ClientReady, async c => {
     console.log('Discord.JS client is up.')
     if (process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return 
@@ -170,8 +185,13 @@ const start = async () => {
     const isFromAutoChannel = channelIdsToLookFor.includes(message.channel.parentId || message.channel.id)
     const isForced = message.content.toLowerCase() === ('--force')
     const isReplyRequest = !!message.reference && isForced
-
+    
+    
     if (message.guildId === outfoxServer && process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return
+
+    if (message.author.id === process.env.DEV_DISCORD_ACCOUNT_ID && message.content === '--forceLeaderboard') {
+      updateLeaderboard(client, outfoxServer)
+    }
 
     if (message.author.bot || (!isFromAutoChannel && !isForced && !isReplyRequest) || !message.guild.members.cache.get(client.user.id).permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return
 
@@ -248,7 +268,6 @@ const start = async () => {
           message.reply(resume)
         }
       }
-      
       
     } catch (e) {
       console.error('Error while trying to parse document, ', e)
