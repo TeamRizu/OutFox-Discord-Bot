@@ -76,7 +76,7 @@ const start = async () => {
     if (process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return 
     
     hundredthMembersAtStartup = getThirdFromRight(c.guilds.cache.get(outfoxServer).memberCount) || 0
-
+    
     const file = await fs.readFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'))
     const serenityLeaderboardMessages = JSON.parse(file)
     const serenityLeaderboardChannel = '1161052396672262154'
@@ -90,6 +90,7 @@ const start = async () => {
     }
     
     if (!serenityLeaderboardMessages[serenityLeaderboardChannel].lastUpdate || isLastUpdateOldEnough(serenityLeaderboardMessages[serenityLeaderboardChannel].lastUpdate)) {
+      await new Promise(r => setTimeout(r, 2000)) // Fix some possible race condition
       await handleLeaderboardUpdate(serenityLeaderboardMessages[serenityLeaderboardChannel], channel, c)
       serenityLeaderboardMessages[serenityLeaderboardChannel].lastUpdate = Date.now()
       await fs.writeFile(path.join(__dirname, './data/serenity_leaderboard_messages.json'), JSON.stringify(serenityLeaderboardMessages, null, 4))
@@ -186,12 +187,11 @@ const start = async () => {
     const isForced = message.content.toLowerCase() === ('--force')
     const isReplyRequest = !!message.reference && isForced
     
-    
-    if (message.guildId === outfoxServer && process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return
-
     if (message.author.id === process.env.DEV_DISCORD_ACCOUNT_ID && message.content === '--forceLeaderboard') {
-      updateLeaderboard(client, outfoxServer)
+      updateLeaderboard(client, message.channel.id)
     }
+
+    if (message.guildId === outfoxServer && process.env.OUTFOX_SERVER_INTEGRATIONS === 'false') return
 
     if (message.author.bot || (!isFromAutoChannel && !isForced && !isReplyRequest) || !message.guild.members.cache.get(client.user.id).permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return
 
