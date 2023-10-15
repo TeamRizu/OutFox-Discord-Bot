@@ -5,6 +5,33 @@ const { capitalize, discordMessageLink } = require('./string-manipulation.js')
 const { rgbFromImgURL } = require('./colors.js')
 const { SerenityDB: SerenityClass } = require('./serenity-db.js')
 
+const setUpBasicSongEmbed = (song, songColor) => {
+  const highlightThumbnail = () => {
+    if (song.title === 'Into My Dream') return 'https://projectoutfox.com/storage/app/media/ux/communitypack/v2/banners/Into%20My%20Dream/Into%20My%20Dream-bn.gif'
+
+    if (song.title === 'Heartbeat') return 'https://projectoutfox.com/storage/app/media/ux/communitypack/s1/banners/Heartbeat/heartbeat-bga.gif'
+
+    return song.graphics.banner.link
+  }
+
+  const newEmbed = new EmbedBuilder()
+    .setAuthor({
+      name: song.music_authors.join ? song.music_authors.join(', ') : song.music_authors, // Bandaid for small serenityDB issue which will take a bit of time to correct.
+      iconURL: song.graphics.jacket.link
+    })
+    .setTitle(song.title)
+    .setImage(song.graphics.background.link)
+    .setThumbnail(highlightThumbnail())
+    .setFooter({
+      text: 'OutFox Online',
+      iconURL: 'https://cdn.discordapp.com/emojis/1160389112461791385.webp?size=96&quality=lossless'
+    })
+
+  if (songColor) newEmbed.setColor(songColor)
+
+  return newEmbed
+}
+
 /**
  * 
  * @param {object} channelLeaderboardObj 
@@ -107,27 +134,8 @@ const handleLeaderboardUpdate = async (
       const song = songs[s]
 
       const songColor = await rgbFromImgURL(song.graphics.background.link)
-      
-      const setUpBasicSongEmbed = () => {
-        const newEmbed = new EmbedBuilder()
-          .setAuthor({
-            name: song.music_authors.join ? song.music_authors.join(', ') : song.music_authors, // Bandaid for small serenityDB issue which will take a bit of time to correct.
-            iconURL: song.graphics.jacket.link
-          })
-          .setTitle(song.title)
-          .setImage(song.graphics.background.link)
-          .setThumbnail(song.title === 'Into My Dream' ? 'https://projectoutfox.com/storage/app/media/ux/communitypack/v2/banners/Into%20My%20Dream/Into%20My%20Dream-bn.gif' : song.graphics.banner.link)
-          .setFooter({
-            text: 'OutFox Online',
-            iconURL: 'https://cdn.discordapp.com/emojis/1160389112461791385.webp?size=96&quality=lossless'
-          })
 
-        if (songColor) newEmbed.setColor(songColor)
-
-        return newEmbed
-      }
-
-      let songEmbed = setUpBasicSongEmbed()
+      let songEmbed = setUpBasicSongEmbed(song, songColor)
       const embeds = []
 
       const scores = await OFline.getScoresFromSong(song.title)
