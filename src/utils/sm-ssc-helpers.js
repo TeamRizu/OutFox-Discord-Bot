@@ -9,7 +9,7 @@ const emotesForDif = {
   'unknown': ':grey_question:'
 }
 const acceptedDifs = ['beginner', 'easy', 'medium', 'hard', 'challenge', 'edit']
-
+const { SerenityDB: SerenityClass } = require('./serenity-db.js')
 const fixVolumeCredit = (credit) => {
   if (credit.includes('.5')) {
     return credit.includes('1.5') ? 'OutFox Serenity Volume 1 Winter Update' : 'OutFox Serenity Volume 2 Winter Update'
@@ -19,45 +19,57 @@ const fixVolumeCredit = (credit) => {
 }
 
 const compareWithMain = async (chart) => {
+  let failMessage = ''
 
   if (!chart.title) {
-    return [false, 'No title tag.']
+    failMessage += '❗ No Title.\n'
   }
 
   if (!chart.credit) {
-    return [false, 'No credit tag.']
+    failMessage += '❗ No Credit.\n'
   }
 
   // TODO: Update this to make use of Serenity Utils
-  const serenityDBRequest = await axios.get('https://wiki.projectoutfox.com/en/user-guide/meta/serenity_db.json') 
+  const SerenityDB = new SerenityClass()
+  const serenityDBRequest = await SerenityDB.updateDB()
   
-  if (!serenityDBRequest || serenityDBRequest?.status !== 200) {
-    return [false, 'Could not get file from SerenityDB']
+  if (!serenityDBRequest) {
+    failMessage += '❗ Failed to get data from SerenityDB.'
+    return failMessage
   }
 
-  const serenityDb = serenityDBRequest.data
   const fixedChartCredit = fixVolumeCredit(chart.credit)
-  const requestedVolume = serenityDb.volumes.find(volume => volume.title === fixedChartCredit)
+  const serenityVolumes = await SerenityDB.volumes()
+
+  if (!serenityVolumes) {
+    failMessage += '❗ Failed to get volumes from OutFox Serenity.'
+    return [false, failMessage]
+  }
+
+  const requestedVolume = serenityVolumes.find(volume => volume.title === fixedChartCredit)
 
   if (!requestedVolume) {
-    return [false, '`#CREDIT` tag matches no volume.']
+    failMessage += '❗ `#CREDIT` tag matches no OutFox Serenity volume.'
+    return [false, failMessage]
   }
 
   const requestedSong = requestedVolume.songs.find(song => song.title === chart.title)
 
   if (!requestedSong) {
-    return [false, '`TITLE` tag matches no song.']
+    failMessage += '❗ `#TITLE` tag matches no OutFox Serenity song.'
+    return [false, failMessage]
   }
 
   if (Array.isArray(requestedSong.bpm)) {
     const [lowest, highest] = requestedSong.bpm
 
     if (lowest !== chart.bpms.lowest(chart) || highest !== chart.bpms.highest(chart)) {
-      return [false, '`#BPMS` does no match.']
+      failMessage += '❗ `#BPMS` does not match song header bpm, bpm should only be changed in your difficulty.'
+      return [false, failMessage]
     }
   }
 
-  return [true, '']
+  return failMessage === '' ? [true, ''] : [false, failMessage]
 }
 
 const resumeSMSSC = async (chart, { skipCompare } = {}) => {
@@ -78,7 +90,7 @@ const resumeSMSSC = async (chart, { skipCompare } = {}) => {
   let finalMessage = `## Main Header Check`
 
   if (!sucessStatus) {
-    finalMessage += `\n\n:exclamation: - **${errorMessage}**`
+    finalMessage += `\n\n${errorMessage}`
     return [false, finalMessage]
   }
 
