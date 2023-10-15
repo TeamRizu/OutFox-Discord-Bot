@@ -1466,6 +1466,11 @@ class OFline {
               scoreType: options?.scoreType || 'original',
             },
             port: 8443,
+          }).catch(function (error) {
+            console.error('Error while tring to request chart scores for key: ', key)
+            console.error(error.toJson())
+
+            return {}
           })
 
           if (response?.status !== 200) {
