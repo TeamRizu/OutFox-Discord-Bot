@@ -185,6 +185,7 @@ const handleLeaderboardUpdate = async (
             fieldObj.value += '**=== ' + capitalize(style) + ' ' + songScores[0].meter + ` (${songScores[0].credit.join ? songScores[0].credit.join(', ') : songScores[0].credit})` + ' ===**\n\n'
 
             fieldObj.value += OFline.scoresToFormattedString(songScores) + '\n\n'
+
           }
         }
 

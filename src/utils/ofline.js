@@ -1352,7 +1352,10 @@ class OFline {
       })
     }
 
-    for (let i = 0; i < scores.length; i++) {
+    const maxScores = 5
+    // TODO: We should add as many scores as possible till it can no longer fit the embed, limiting to 5 is too much and just a band aid fix.
+
+    for (let i = 0; i < Math.min(scores.length, maxScores); i++) {
       const score = scores[i]
 
       finalString += `${this.gradeToGradeEmoji(this.scorePointsToGrade(score.score))} \`${
